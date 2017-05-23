@@ -10,7 +10,7 @@ At this moment, it also means I abandoned legacy but helpful functions including
 And the addon mentioned above has only few effects for photo-real purpose such like "cast shadow". So I decided to reproduce and regather  PostProcess focusing "photo-real" purpose and compatible in modern version.
 
 ## Usage
-* copy the /shader directory to /bin
+* copy the shader/ directory to bin/
 * setting OpenGL version in main.cpp
 ```
 int main( ){
@@ -83,3 +83,6 @@ High Dynamic Range + Bloom
 
 Defocus Blur
 * http://pasteall.org/10779
+
+## Author
+[Ayumu Nagamatsu](http://ayumu-nagamatsu.com/)
