@@ -29,6 +29,7 @@ namespace DeferredEffect {
         
         void setDarkness(float darkness){ this->darkness = darkness; };
         void setBlend(float blend){ this->blend = blend; };
+        void setCam(float fov, float near, float far);
         
         void beginShadowMap();
         void endShadowMap();

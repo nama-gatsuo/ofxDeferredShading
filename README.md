@@ -4,7 +4,7 @@
 ## Concept
 ### Modern OpenGL compatible
 I was satidfied with [ofxPostPrpcessing](https://github.com/neilmendoza/ofxPostProcessing) long time. This addon is fabulous and has so many beautiful vfx in it. I really appreciate the author and contributors.
-But there is little problem when I use my own shader with it. IT is not written in "modern" shader version so cannot coexist with like OpenGL 3.2 & GLSL 410.
+But there is little problem when I use my own shader with it. It is not written in "modern" shader version so cannot coexist with like OpenGL 3.2 & GLSL 410.
 At this moment, it also means I abandoned legacy but helpful functions including ofLight, glBegin()-glEnd()...
 ### Photo-realistic in Real-time
 And the addon mentioned above has only few effects for photo-real purpose such like "cast shadow". So I decided to reproduce and regather PostProcesses focusing "photo-real" rendering and compatible in modern version.

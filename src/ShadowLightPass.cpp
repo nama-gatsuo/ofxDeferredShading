@@ -26,7 +26,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     
     // setup camera for shadow map
     // TODO: need to controlable
-    float fov = 60.0, near = 0.1, far = 10000.0;
+    float fov = 75.0, near = 0.1, far = 5000.0;
     
     lightCam.setupPerspective();
     lightCam.setAspectRatio(1.0);
@@ -85,6 +85,12 @@ void ShadowLightPass::endShadowMap(){
     
     // TODO: blur shadow map
     
+}
+
+void ShadowLightPass::setCam(float fov, float near, float far) {
+    lightCam.setFov(fov);
+    lightCam.setNearClip(near);
+    lightCam.setFarClip(far);
 }
 
 void ShadowLightPass::debugDraw(){
