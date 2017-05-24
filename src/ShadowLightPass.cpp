@@ -91,6 +91,11 @@ void ShadowLightPass::setCam(float fov, float near, float far) {
     lightCam.setFov(fov);
     lightCam.setNearClip(near);
     lightCam.setFarClip(far);
+    
+    linearDepthScalar = 1.0 / (far - near);
+    linearDepthShader.begin();
+    linearDepthShader.setUniform1f("linearDepthScalar", linearDepthScalar);
+    linearDepthShader.end();
 }
 
 void ShadowLightPass::debugDraw(){
