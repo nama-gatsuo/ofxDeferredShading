@@ -5,7 +5,6 @@ uniform sampler2DRect lightDepthTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
 
-uniform vec2 res;
 uniform float linearDepthScalar;
 uniform mat4 shadowTransMat;
 uniform vec3 lightPosInViewSpace;
@@ -26,8 +25,8 @@ void main() {
     vec3 normal = texture(normalAndDepthTex, vTexCoord).rgb; // in view space
 
     vec3 lightDir = normalize(lightPosInViewSpace.xyz - vertInViewSpace.xyz);
-    vec3 R = normalize(reflect(lightDir, normal));
-    vec3 V = normalize(vertInViewSpace.xyz);
+    // vec3 R = normalize(reflect(lightDir, normal));
+    // vec3 V = normalize(vertInViewSpace.xyz);
 
     float lambert = max(dot(normal, lightDir), 0.0);
 
@@ -45,8 +44,9 @@ void main() {
     vec3 depth = vertInLightSpace.xyz / vertInLightSpace.w;
     float shadow = 1.0;
 
+    vec2 res = textureSize(lightDepthTex);
     float texel = texture(lightDepthTex, depth.xy * res).r;
-    if (lightDepth - 0.01 > texel) shadow = darkness;
+    if (lightDepth - 0.005 > texel) shadow = 1.0 - darkness;
 
     if (depth.x >= 1.0 || depth.y >= 1.0 || depth.z >= 1.0) shadow = 1.0;
     if (depth.x <= 0.0 || depth.y <= 0.0 || depth.z <= 0.0) shadow = 1.0;
