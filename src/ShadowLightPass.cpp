@@ -48,7 +48,6 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
     shader.begin();
     shader.setUniform1f("linearDepthScalar", linearDepthScalar);
-    shader.setUniform2f("res", res);
     shader.end();
 }
 
