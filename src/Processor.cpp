@@ -17,7 +17,7 @@ void Processor::init(unsigned w, unsigned h) {
     
 }
 
-void Processor::begin(ofCamera& cam) {
+void Processor::begin(ofCamera& cam, bool bUseOwnShader) {
  
     for (auto pass : passes) {
         if (pass->getEnabled()) {
@@ -25,7 +25,7 @@ void Processor::begin(ofCamera& cam) {
         }
     }
     
-    gbuffer.begin(cam);
+    gbuffer.begin(cam, bUseOwnShader);
     
 }
 

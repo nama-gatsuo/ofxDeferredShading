@@ -46,7 +46,9 @@ void main() {
 
     vec2 res = textureSize(lightDepthTex);
     float texel = texture(lightDepthTex, depth.xy * res).r;
-    if (lightDepth - 0.005 > texel) shadow = 1.0 - darkness;
+
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    if (lightDepth - bias > texel) shadow = 1.0 - darkness;
 
     if (depth.x >= 1.0 || depth.y >= 1.0 || depth.z >= 1.0) shadow = 1.0;
     if (depth.x <= 0.0 || depth.y <= 0.0 || depth.z <= 0.0) shadow = 1.0;

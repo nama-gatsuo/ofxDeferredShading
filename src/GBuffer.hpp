@@ -18,7 +18,7 @@ namespace DeferredEffect {
         };
         GBuffer(){}
         void setup(int w = ofGetWidth(), int h = ofGetHeight());
-        void begin(ofCamera& cam, Mode mode = MODE_GEOMETRY);
+        void begin(ofCamera& cam, bool bUseOthreShader = false);
         void end();
         void debugDraw();
         ofTexture& getTexture(int index){

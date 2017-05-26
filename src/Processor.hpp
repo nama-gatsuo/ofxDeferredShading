@@ -28,7 +28,7 @@ namespace DeferredEffect {
         typedef shared_ptr<Processor> Ptr;
         void init(unsigned w = ofGetWidth(), unsigned h = ofGetHeight());
         
-        void begin(ofCamera& cam);
+        void begin(ofCamera& cam, bool bUseOwnShader = false);
         void end(bool autoDraw = true);
         
         void draw(float x = 0., float y = 0.) const;

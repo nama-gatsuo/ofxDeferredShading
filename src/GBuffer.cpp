@@ -22,7 +22,7 @@ void GBuffer::setup(int w, int h){
     debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
 }
 
-void GBuffer::begin(ofCamera &cam, Mode mode) {
+void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
     
     cam.begin();
     cam.end();
@@ -48,9 +48,11 @@ void GBuffer::begin(ofCamera &cam, Mode mode) {
     
     ofMatrix4x4 normalMatrix = ofMatrix4x4::getTransposedOf(cam.getModelViewMatrix().getInverse());
     
-    shader.begin();
-    shader.setUniformMatrix4f("normalMatrix", normalMatrix);
-    shader.setUniform1f("farClip", cam.getFarClip());
+    if (!bUseOtherShader) {
+        shader.begin();
+        shader.setUniformMatrix4f("normalMatrix", normalMatrix);
+        shader.setUniform1f("farClip", cam.getFarClip());
+    }
     
     ofPushStyle();
     ofEnableDepthTest();
