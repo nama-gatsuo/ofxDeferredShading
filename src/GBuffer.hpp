@@ -9,6 +9,7 @@ namespace DeferredEffect {
         ofShader shader;
         ofShader debugShader;
         ofMatrix4x4 prevMvpMat;
+        bool bUseShader;
     public:
         enum Mode {
             MODE_GEOMETRY, MODE_LIGHT

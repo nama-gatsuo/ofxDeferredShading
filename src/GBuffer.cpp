@@ -48,10 +48,12 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
     
     ofMatrix4x4 normalMatrix = ofMatrix4x4::getTransposedOf(cam.getModelViewMatrix().getInverse());
     
-    if (!bUseOtherShader) {
+    bUseShader = !bUseOtherShader;
+    if (bUseShader) {
         shader.begin();
         shader.setUniformMatrix4f("normalMatrix", normalMatrix);
         shader.setUniform1f("farClip", cam.getFarClip());
+        shader.setUniform1f("nearClip", cam.getNearClip());
     }
     
     ofPushStyle();
@@ -64,7 +66,7 @@ void GBuffer::end(){
     ofDisableDepthTest();
     ofPopStyle();
     
-    shader.end();
+    if (bUseShader) shader.end();
     
     ofPopView();
     fbo.end();
@@ -82,8 +84,8 @@ void GBuffer::debugDraw(){
     fbo.getTexture(TYPE_POSITION).draw(ws, hs*3, ws, hs);
     fbo.getTexture(TYPE_DEPTH_NORMAL).draw(ws*2, hs*3, ws, hs);
     
-//    debugShader.begin();
-//    fbo.getTexture(TYPE_DEPTH_NORMAL).draw(ws*3, hs*3, ws, hs);
-//    debugShader.end();
-    fbo.getTexture(TYPE_HDR).draw(ws*3, hs*3, ws, hs);
+    debugShader.begin();
+    fbo.getTexture(TYPE_DEPTH_NORMAL).draw(ws*3, hs*3, ws, hs);
+    debugShader.end();
+//    fbo.getTexture(TYPE_HDR).draw(ws*3, hs*3, ws, hs);
 }
