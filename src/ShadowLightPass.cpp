@@ -43,7 +43,6 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     linearDepthShader.setUniform1f("linearDepthScalar", linearDepthScalar);
     linearDepthShader.end();
     
-    
     // load shader
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
     shader.begin();
@@ -51,7 +50,9 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     shader.end();
 }
 
-void ShadowLightPass::beginShadowMap(){
+void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
+    
+    bUseShader = bUseOwnShader;
     
     // update view matrix of depth camera
     ofVec3f eye = getGlobalPosition();
@@ -63,23 +64,24 @@ void ShadowLightPass::beginShadowMap(){
     
     linearDepthMap.begin();
     
+    ofEnableDepthTest();
     // if you want Exponential Shadow mappong, you need front face culling
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
-    ofEnableDepthTest();
     
     ofClear(0);
     lightCam.begin();
-
-    linearDepthShader.begin();
+    
+    if (!bUseShader) linearDepthShader.begin();
 }
 
 void ShadowLightPass::endShadowMap(){
-    linearDepthShader.end();
+    if (!bUseShader) linearDepthShader.end();
+    
     lightCam.end();
     
-    ofDisableDepthTest();
     glDisable(GL_CULL_FACE);
+    ofDisableDepthTest();
     
     linearDepthMap.end();
     

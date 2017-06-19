@@ -107,7 +107,7 @@ void ofApp::draw(){
     lightingPass->drawLights();
     deferred.end();
     
-    //    shadowLightPass->debugDraw();
+        shadowLightPass->debugDraw();
     //    deferred.debugDraw();
     
     panel.draw();
