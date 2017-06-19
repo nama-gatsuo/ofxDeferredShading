@@ -25,7 +25,6 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     // TODO: blur fbo
     
     // setup camera for shadow map
-    // TODO: need to controlable
     float fov = 75.0, near = 0.1, far = 5000.0;
     
     lightCam.setupPerspective();
@@ -63,26 +62,24 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
     projectionMat = lightCam.getProjectionMatrix();
     
     linearDepthMap.begin();
-    
-    ofEnableDepthTest();
-    // if you want Exponential Shadow mappong, you need front face culling
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
-    
     ofClear(0);
     lightCam.begin();
     
+    ofEnableDepthTest();
+    // if you want Exponential Shadow mappong, you need front face culling
+//    glEnable(GL_CULL_FACE);
+//    glCullFace(GL_FRONT);
+    
     if (!bUseShader) linearDepthShader.begin();
+
 }
 
 void ShadowLightPass::endShadowMap(){
     if (!bUseShader) linearDepthShader.end();
     
-    lightCam.end();
-    
-    glDisable(GL_CULL_FACE);
+//    glDisable(GL_CULL_FACE);
     ofDisableDepthTest();
-    
+    lightCam.end();
     linearDepthMap.end();
     
     // TODO: blur shadow map
