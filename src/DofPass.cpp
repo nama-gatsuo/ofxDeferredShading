@@ -8,7 +8,7 @@ DofPass::DofPass(const ofVec2f& size) : RenderPass(size, "DofPass") {
 
 void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer){
     writeFbo.begin();
-    
+    ofClear(0);
     shader.begin();
     
     shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 1);

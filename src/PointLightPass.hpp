@@ -16,7 +16,6 @@ namespace DeferredEffect {
     protected:
         vector<PointLight> lights;
         ofShader shader;
-        ofMatrix4x4 projectionMatrix;
         ofMatrix4x4 modelViewMatrix;
         ofVboMesh sphere;
         

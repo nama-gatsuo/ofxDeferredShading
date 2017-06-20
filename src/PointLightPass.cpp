@@ -9,16 +9,12 @@ PointLightPass::PointLightPass(const ofVec2f& size) : RenderPass(size, "PointLig
     sphere.clearColors();
     for (int i = 0; i < sphere.getNumNormals(); i++) {
         ofVec3f n = sphere.getNormal(i);
-//        sphere.setNormal(i, - n);
         sphere.addColor(ofFloatColor(1.05));
     }
 }
 
 void PointLightPass::update(ofCamera &cam){
-    ofRectangle viewport(0, 0, size.x, size.y);
-    projectionMatrix = cam.getProjectionMatrix(viewport);
     modelViewMatrix = cam.getModelViewMatrix();
-    
 }
 
 void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer){
@@ -59,7 +55,6 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer){
 
 void PointLightPass::drawLights(){
     
-    
     for (auto light : lights) {
         ofPushMatrix();
         ofTranslate(light.position);
@@ -69,5 +64,4 @@ void PointLightPass::drawLights(){
 
         ofPopMatrix();
     }
-//
 }
