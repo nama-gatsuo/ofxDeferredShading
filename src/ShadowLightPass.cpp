@@ -66,9 +66,9 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
     lightCam.begin();
     
     ofEnableDepthTest();
-    // if you want Exponential Shadow mappong, you need front face culling
-//    glEnable(GL_CULL_FACE);
-//    glCullFace(GL_FRONT);
+    // if you want Exponential Shadow mapping, you need front face culling
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     
     if (!bUseShader) linearDepthShader.begin();
 
@@ -77,7 +77,7 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
 void ShadowLightPass::endShadowMap(){
     if (!bUseShader) linearDepthShader.end();
     
-//    glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
     ofDisableDepthTest();
     lightCam.end();
     linearDepthMap.end();
