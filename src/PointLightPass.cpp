@@ -4,6 +4,7 @@ using namespace DeferredEffect;
 
 PointLightPass::PointLightPass(const ofVec2f& size) : RenderPass(size, "PointLightPass"){
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/PointLight.frag");
+    lightShader.load("shader/gbuffer.vert", "shader/customShader.frag");
     
     sphere = ofMesh::sphere(50);
     sphere.clearColors();
@@ -64,4 +65,21 @@ void PointLightPass::drawLights(){
 
         ofPopMatrix();
     }
+    
+}
+
+void PointLightPass::drawLights(ofCamera& cam, bool isShadow){
+   
+    ofMatrix4x4 normalMatrix = ofMatrix4x4::getTransposedOf(cam.getModelViewMatrix().getInverse());
+        
+    lightShader.begin();
+    lightShader.setUniform1i("isShadow", isShadow?1:0);
+    lightShader.setUniformMatrix4f("normalMatrix", normalMatrix);
+    lightShader.setUniform1f("farClip", cam.getFarClip());
+    lightShader.setUniform1f("nearClip", cam.getNearClip());
+        
+    drawLights();
+    
+    lightShader.end();
+
 }

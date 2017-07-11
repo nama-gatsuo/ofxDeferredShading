@@ -18,6 +18,7 @@ namespace DeferredEffect {
         ofShader shader;
         ofMatrix4x4 modelViewMatrix;
         ofVboMesh sphere;
+        ofShader lightShader;
         
     public:
         typedef shared_ptr<PointLightPass> Ptr;
@@ -36,5 +37,6 @@ namespace DeferredEffect {
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
         
         void drawLights();
+        void drawLights(ofCamera& cam, bool isShadow = false);
     };
 }
