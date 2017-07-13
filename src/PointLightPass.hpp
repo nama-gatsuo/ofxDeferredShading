@@ -36,7 +36,7 @@ namespace DeferredEffect {
         void update(ofCamera& cam);
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
         
-        void drawLights();
-        void drawLights(ofCamera& cam, bool isShadow = false);
+        void drawLights(ofPolyRenderMode mode = OF_MESH_FILL);
+        void drawLights(ofCamera& cam, bool isShadow = false, ofPolyRenderMode mode = OF_MESH_FILL);
     };
 }

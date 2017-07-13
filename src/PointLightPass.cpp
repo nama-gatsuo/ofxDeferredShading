@@ -54,21 +54,21 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer){
     writeFbo.end();
 }
 
-void PointLightPass::drawLights(){
+void PointLightPass::drawLights(ofPolyRenderMode mode){
     
     for (auto light : lights) {
         ofPushMatrix();
         ofTranslate(light.position);
         ofScale(light.intensity, light.intensity, light.intensity);
-    
-        sphere.draw();
+        
+        sphere.draw(mode);
 
         ofPopMatrix();
     }
     
 }
 
-void PointLightPass::drawLights(ofCamera& cam, bool isShadow){
+void PointLightPass::drawLights(ofCamera& cam, bool isShadow, ofPolyRenderMode mode){
    
     ofMatrix4x4 normalMatrix = ofMatrix4x4::getTransposedOf(cam.getModelViewMatrix().getInverse());
         
@@ -78,7 +78,7 @@ void PointLightPass::drawLights(ofCamera& cam, bool isShadow){
     lightShader.setUniform1f("farClip", cam.getFarClip());
     lightShader.setUniform1f("nearClip", cam.getNearClip());
         
-    drawLights();
+    drawLights(mode);
     
     lightShader.end();
 
