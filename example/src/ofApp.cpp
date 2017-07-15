@@ -77,7 +77,7 @@ void ofApp::update(){
     lightingPass->getLightRef(1).radius = pl2_rad.get();
     
     ssaoPass->setOcculusionRadius(ao_rad.get());
-    ssaoPass->setDrakness(ao_dark.get());
+    ssaoPass->setDarkness(ao_dark.get());
     
     shadowLightPass->setAmbientColor(ofFloatColor(sha_amb.get()));
     shadowLightPass->setDiffuseColor(ofFloatColor(sha_dif.get()));

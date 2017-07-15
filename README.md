@@ -10,7 +10,7 @@ At this moment, it also means I abandoned legacy but helpful functions including
 And the addon mentioned above has only few effects for photo-real purpose such like "cast shadow". So I decided to reproduce and regather PostProcesses focusing "photo-real" rendering and compatible in modern version.
 
 ## Usage
-* copy the shader/ directory to bin/
+* copy the ```shader/``` directory to your ```bin/```
 * setting OpenGL version in main.cpp
 ```
 int main( ){
@@ -44,7 +44,7 @@ vfx4 = deferred.createPass<ofxDeferredShading::HdrBloomPass>().get();
 * set parameters via reference
 ```C++
 vfx1->setOcculusionRadius(5.0);
-vfx1->setDrakness(1.0);
+vfx1->setDarkness(1.0);
 ```
 * draw objects between begin() and end().
 * If you want to HDR color, just specify vertex color more than 1.0 in ofFloatColor's parameters.

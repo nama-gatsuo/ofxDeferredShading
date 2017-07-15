@@ -15,7 +15,7 @@ namespace DeferredEffect {
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
         void update(ofCamera& cam);
         void setOcculusionRadius(float radius){ this->radius = radius; }
-        void setDrakness(float darkness){ this->darkness = darkness; }
+        void setDarkness(float darkness){ this->darkness = darkness; }
         
     };
 }
