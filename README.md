@@ -3,15 +3,15 @@
 
 ## Concept
 ### Modern OpenGL compatible
-I was satidfied with [ofxPostPrpcessing](https://github.com/neilmendoza/ofxPostProcessing) long time, which is fabulous and has so many beautiful vfx in it. I really appreciate the author and contributors.
+I was satisfied with [ofxPostPrpcessing](https://github.com/neilmendoza/ofxPostProcessing) long time, which is fabulous and has so many beautiful vfx in it. I really appreciate the author and contributors.
 But there is little problem when I use my own shader with it. It is not written in "modern" shader version so cannot coexist with like OpenGL 3.2 & GLSL 410.
-At this moment, it also means I abandoned legacy but helpful functions including ofLight, glBegin()-glEnd()...
+At this moment, however it also means I abandoned legacy but helpful functions including ```ofLight```, ```glBegin()```-```glEnd()```...
 ### Photo-realistic in Real-time
-And the addon mentioned above has only few effects for photo-real purpose such like "cast shadow". So I decided to reproduce and regather PostProcesses focusing "photo-real" rendering and compatible in modern version.
+And the addon mentioned above has only few effects for photo-real purpose such like "casting shadow". So I decided to reproduce and regather PostProcesses focusing "photo-real" rendering and compatible in modern version.
 
 ## Usage
 * copy the ```shader/``` directory to your ```bin/```
-* setting OpenGL version in main.cpp
+* specify modern version of OpenGL in main.cpp
 ```
 int main( ){
     ofGLWindowSettings settings;
@@ -46,10 +46,10 @@ vfx4 = deferred.createPass<ofxDeferredShading::HdrBloomPass>().get();
 vfx1->setOcculusionRadius(5.0);
 vfx1->setDarkness(1.0);
 ```
-* draw objects between begin() and end().
-* If you want to HDR color, just specify vertex color more than 1.0 in ofFloatColor's parameters.
-* if you want to use cast shadow (ShadowLightPass), you need another draw-objects call.
-```
+* draw objects between ```begin()``` and ```end()```.
+* If you want to HDR color, just specify vertex color more than 1.0 in ```ofFloatColor```'s parameters.
+* if you want to use cast shadow (```ShadowLightPass```), you need another draw-objects call.
+```C++
 // for shadow map
 shadowLightPass->beginShadowMap();
     drawObjs(); // draw something
@@ -75,8 +75,8 @@ Point light with attenuation
 * https://github.com/jacres/of-DeferredRendering
 
 Casting shadow light (Shadow Map)
-* tiny implementation of "shadow map" (not exponential, not blurred)
-* https://github.com/jacres/of-ESMShadowMapping
+* tiny implementation of "shadow map" (not exponential, not blurred) from  https://github.com/jacres/of-ESMShadowMapping
+* Percentage Closer Filtering
 
 High Dynamic Range + Bloom
 * https://learnopengl.com/#!Advanced-Lighting/Bloom
