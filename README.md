@@ -12,7 +12,7 @@ And the addon mentioned above has only few effects for photo-real purpose such l
 ## Usage
 * copy the ```shader/``` directory to your ```bin/```
 * specify modern version of OpenGL in main.cpp
-```
+```C++
 int main( ){
     ofGLWindowSettings settings;
     settings.setGLVersion(3, 2); // now we use OpenGL 3.2
