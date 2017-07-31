@@ -10,7 +10,7 @@ At this moment, however it also means I abandoned legacy but helpful functions i
 And the addon mentioned above has only few effects for photo-real purpose such like "casting shadow". So I decided to reproduce and regather PostProcesses focusing "photo-real" rendering and compatible in modern version.
 
 ## Usage
-* copy the ```shader/``` directory to your ```bin/```
+* copy the ```shader/``` directory under your ```bin/data/```
 * specify modern version of OpenGL in main.cpp
 ```C++
 int main( ){
