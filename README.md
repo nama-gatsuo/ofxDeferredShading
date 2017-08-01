@@ -1,5 +1,7 @@
 # ofxDeferredShading
-![](./screenshot.png)
+![](./screenshot.jpg)
+
+Here is [demo](https://www.youtube.com/watch?v=xhm2CdpSpcI).
 
 ## Concept
 ### Modern OpenGL compatible
