@@ -39,8 +39,8 @@ ofxDeferredShading::HdrBloomPass* vfx4;
 ```C++
 deferred.init(ofGetWidth(), ofGetHeight());
 vfx1 = deferred.createPass<ofxDeferredShading::SsaoPass>().get();
-vfx2 = deferred.createPass<ofxDeferredShading::ShadowLightPass>().get();
-vfx3 = deferred.createPass<ofxDeferredShading::PointLightPass>().get();    
+vfx2 = deferred.createPass<ofxDeferredShading::PointLightPass>().get();
+vfx3 = deferred.createPass<ofxDeferredShading::ShadowLightPass>().get();    
 vfx4 = deferred.createPass<ofxDeferredShading::HdrBloomPass>().get();
 ```
 * set parameters via reference
