@@ -47,7 +47,7 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
     ofSetMatrixMode(OF_MATRIX_MODELVIEW);
     ofLoadMatrix(cam.getModelViewMatrix());
     
-    ofMatrix4x4 normalMatrix = ofMatrix4x4::getTransposedOf(cam.getModelViewMatrix().getInverse());
+    glm::mat4 normalMatrix = glm::inverse(glm::transpose(cam.getModelViewMatrix()));
     
     bUseShader = !bUseOtherShader;
     if (bUseShader) {

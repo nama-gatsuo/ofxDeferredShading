@@ -70,7 +70,7 @@ void PointLightPass::drawLights(ofPolyRenderMode mode){
 
 void PointLightPass::drawLights(ofCamera& cam, bool isShadow, ofPolyRenderMode mode){
    
-    ofMatrix4x4 normalMatrix = ofMatrix4x4::getTransposedOf(cam.getModelViewMatrix().getInverse());
+    glm::mat4 normalMatrix = glm::inverse(glm::transpose(cam.getModelViewMatrix()));
         
     lightShader.begin();
     lightShader.setUniform1i("isShadow", isShadow?1:0);

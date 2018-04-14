@@ -24,17 +24,19 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     
     // TODO: blur fbo
     // setup camera for shadow map
-    float fov = 75.0, near = 0.1, far = 1500.0;
+	float fov_ = 75.0;
+	float near_ = 0.1;
+	float far_ = 1500.0;
     
     setupPerspective();
     setAspectRatio(1.0);
     
     linearDepthShader.load("shader/vfx/linearDepth");
     setPosition(0, 800, 700);
-    setFov(fov);
-    setNearClip(near);
-    setFarClip(far);
-    linearDepthScalar = 1.0 / (far - near);
+    setFov(fov_);
+    setNearClip(near_);
+    setFarClip(far_);
+    linearDepthScalar = 1.0 / (far_ - near_);
     // load shader
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
     shader.begin();
@@ -98,7 +100,7 @@ void ShadowLightPass::update(ofCamera &cam){
     ofMatrix4x4 invCamMat = ofMatrix4x4::getInverseOf(cam.getModelViewMatrix());
     shadowTransMat = invCamMat * viewMat * projectionMat * biasMat;
     
-    posInViewSpace = getGlobalPosition() * cam.getModelViewMatrix();
+    posInViewSpace = cam.getModelViewMatrix() * glm::vec4(getGlobalPosition(), 1.f);
     
 }
 
