@@ -79,11 +79,6 @@ void ofApp::update(){
     ssaoPass->setOcculusionRadius(ao_rad.get());
     ssaoPass->setDarkness(ao_dark.get());
     
-    shadowLightPass->setAmbientColor(ofFloatColor(sha_amb.get()));
-    shadowLightPass->setDiffuseColor(ofFloatColor(sha_dif.get()));
-    shadowLightPass->setDarkness(sha_dark.get());
-    shadowLightPass->setBlend(sha_blend.get());
-    
     shadowLightPass->setPosition(cos(ofGetElapsedTimef())*1000, 3000.0, sin(ofGetElapsedTimef())*1000);
     shadowLightPass->lookAt(ofVec3f(0.0));
     
@@ -107,8 +102,8 @@ void ofApp::draw(){
     lightingPass->drawLights();
     deferred.end();
     
-//        shadowLightPass->debugDraw();
-//        deferred.debugDraw();
+    shadowLightPass->debugDraw();
+    deferred.debugDraw();
     
     panel.draw();
 }

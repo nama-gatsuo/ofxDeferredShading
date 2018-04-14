@@ -39,7 +39,7 @@ void main() {
     }
 
     vec4 vertInLightSpace = shadowTransMat * vertInViewSpace;
-    float lightDepth = length(vertInViewSpace.xyz - lightPosInViewSpace) * linearDepthScalar;
+    float lightDepth = distance(vertInViewSpace.xyz, lightPosInViewSpace) * linearDepthScalar;
 
     vec3 depth = vertInLightSpace.xyz / vertInLightSpace.w;
     float shadow = 1.0;
@@ -58,6 +58,6 @@ void main() {
     if (depth.x >= 1.0 || depth.y >= 1.0 || depth.z >= 1.0) shadow = 1.0;
     if (depth.x <= 0.0 || depth.y <= 0.0 || depth.z <= 0.0) shadow = 1.0;
 
-    outputColor = mix(vec4(amb + dif), read, blend) * shadow;
+    outputColor = mix(vec4(amb + dif), read, 0.7) * shadow;
     outputColor.a = 1.0;
 }

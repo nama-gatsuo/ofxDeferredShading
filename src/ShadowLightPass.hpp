@@ -3,9 +3,8 @@
 #include "Processor.hpp"
 
 namespace DeferredEffect {
-    class ShadowLightPass : public RenderPass, public ofLight {
+    class ShadowLightPass : public RenderPass, public ofCamera {
     private:
-        ofCamera lightCam;
         ofShader shader;
         
         ofFbo linearDepthMap;
@@ -20,17 +19,11 @@ namespace DeferredEffect {
                                                 0.5, 0.5, 0.5, 1.0);
         ofMatrix4x4 shadowTransMat;
         ofVec3f posInViewSpace;
-        float darkness = 0.4;
-        float blend;
+        
         bool bUseShader = false;
     public:
         typedef shared_ptr<ShadowLightPass> Ptr;
         ShadowLightPass(const ofVec2f& size);
-        
-        void setDarkness(float darkness){ this->darkness = darkness; };
-        void setBlend(float blend){ this->blend = blend; };
-        void setCam(float fov, float near, float far);
-        ofCamera getCam() { return lightCam; };
         
         void beginShadowMap(bool bUseOwnShader = false);
         void endShadowMap();

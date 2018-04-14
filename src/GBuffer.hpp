@@ -11,9 +11,7 @@ namespace DeferredEffect {
         ofMatrix4x4 prevMvpMat;
         bool bUseShader;
     public:
-        enum Mode {
-            MODE_GEOMETRY, MODE_LIGHT
-        };
+        
         enum BufferType {
             TYPE_ALBEDO = 0, TYPE_POSITION = 1, TYPE_DEPTH_NORMAL = 2, TYPE_HDR = 3
         };

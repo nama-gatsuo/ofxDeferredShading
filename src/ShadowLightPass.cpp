@@ -8,12 +8,12 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     ofVec2f res = ofVec2f(1024); // power of 2
     
     ofFbo::Settings s;
-    s.width = res.x;  // TODO: need to controlable
-    s.height = res.y; // TODO: need to controlable
+    s.width = res.x;
+    s.height = res.y;
     s.minFilter = GL_LINEAR;
     s.maxFilter = GL_LINEAR;
-    s.wrapModeVertical = GL_CLAMP_TO_BORDER;
-    s.wrapModeHorizontal = GL_CLAMP_TO_BORDER;
+    s.wrapModeVertical = GL_WRAP_BORDER;
+    s.wrapModeHorizontal = GL_WRAP_BORDER;
     s.internalformat = GL_R32F;
     s.useDepth = true;
     s.useStencil = true;
@@ -23,30 +23,24 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     linearDepthMap.getTexture().getTextureData().bFlipTexture = true;
     
     // TODO: blur fbo
-    
     // setup camera for shadow map
-    float fov = 75.0, near = 0.1, far = 5000.0;
+    float fov = 75.0, near = 0.1, far = 1500.0;
     
-    lightCam.setupPerspective();
-    lightCam.setAspectRatio(1.0);
-    lightCam.setFov(fov);
-    lightCam.setNearClip(near);
-    lightCam.setFarClip(far);
+    setupPerspective();
+    setAspectRatio(1.0);
     
-    lightCam.setParent(*this);
-    lightCam.setPosition(0, 0, 0);
-    
-    linearDepthScalar = 1.0 / (far - near);
     linearDepthShader.load("shader/vfx/linearDepth");
-    linearDepthShader.begin();
-    linearDepthShader.setUniform1f("linearDepthScalar", linearDepthScalar);
-    linearDepthShader.end();
-    
+    setPosition(0, 800, 700);
+    setFov(fov);
+    setNearClip(near);
+    setFarClip(far);
+    linearDepthScalar = 1.0 / (far - near);
     // load shader
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
     shader.begin();
     shader.setUniform1f("linearDepthScalar", linearDepthScalar);
     shader.end();
+    
 }
 
 void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
@@ -59,18 +53,24 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
     ofVec3f up = getUpDir();
     viewMat.makeLookAtViewMatrix(eye, center, up);
     
-    projectionMat = lightCam.getProjectionMatrix();
+    projectionMat = getProjectionMatrix();
     
     linearDepthMap.begin();
     ofClear(0);
-    lightCam.begin();
+    
+    begin();
+    ofBackground(255,0,0);
+    
     
     ofEnableDepthTest();
-    // if you want Exponential Shadow mapping, you need front face culling
+    
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     
-    if (!bUseShader) linearDepthShader.begin();
+    if (!bUseShader) {
+        linearDepthShader.begin();
+        linearDepthShader.setUniform1f("linearDepthScalar", linearDepthScalar);
+    }
 
 }
 
@@ -79,34 +79,27 @@ void ShadowLightPass::endShadowMap(){
     
     glDisable(GL_CULL_FACE);
     ofDisableDepthTest();
-    lightCam.end();
+    
+    end();
     linearDepthMap.end();
     
     // TODO: blur shadow map
     
 }
 
-void ShadowLightPass::setCam(float fov, float near, float far) {
-    lightCam.setFov(fov);
-    lightCam.setNearClip(near);
-    lightCam.setFarClip(far);
-    
-    linearDepthScalar = 1.0 / (far - near);
-    linearDepthShader.begin();
-    linearDepthShader.setUniform1f("linearDepthScalar", linearDepthScalar);
-    linearDepthShader.end();
-}
-
 void ShadowLightPass::debugDraw(){
-    linearDepthMap.draw(0,0,256,256);
+    linearDepthMap.draw(0,0, 128, 128);
 }
 
 void ShadowLightPass::update(ofCamera &cam){
+    
+    linearDepthScalar = 1.0 / (getFarClip() - getNearClip());
     
     ofMatrix4x4 invCamMat = ofMatrix4x4::getInverseOf(cam.getModelViewMatrix());
     shadowTransMat = invCamMat * viewMat * projectionMat * biasMat;
     
     posInViewSpace = getGlobalPosition() * cam.getModelViewMatrix();
+    
 }
 
 void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, DeferredEffect::GBuffer &gbuffer){
@@ -114,18 +107,17 @@ void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, DeferredEffect::GB
     writeFbo.begin();
     
     ofClear(0);
-
+    
     shader.begin();
     shader.setUniformTexture("lightDepthTex", linearDepthMap.getTexture(), 1);
     shader.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 2);
     shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
     shader.setUniformMatrix4f("shadowTransMat", shadowTransMat);
     shader.setUniform3f("lightPosInViewSpace", posInViewSpace);
+    linearDepthShader.setUniform1f("linearDepthScalar", linearDepthScalar);
     
-    shader.setUniform4f("ambient", getAmbientColor());
-    shader.setUniform4f("diffuse", getDiffuseColor());
-    shader.setUniform1f("darkness", darkness);
-    shader.setUniform1f("blend", blend);
+    shader.setUniform4f("ambient", ofFloatColor(0.2));
+    shader.setUniform4f("diffuse", ofFloatColor(0.8));
     readFbo.draw(0,0);
     
     shader.end();

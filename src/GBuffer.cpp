@@ -20,6 +20,7 @@ void GBuffer::setup(int w, int h){
     
     shader.load("shader/gbuffer");
     debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
+    
 }
 
 void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
@@ -29,14 +30,14 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
     
     fbo.begin();
     
-    vector<int> bufferInt;
+    std::vector<int> bufferInt;
     bufferInt.push_back(TYPE_ALBEDO);
     bufferInt.push_back(TYPE_POSITION);
     bufferInt.push_back(TYPE_DEPTH_NORMAL);
     bufferInt.push_back(TYPE_HDR);
     fbo.setActiveDrawBuffers(bufferInt);
 
-    ofClear(0);
+    ofClear(0,0);
     ofPushView();
 
     ofRectangle viewPort(0, 0, fbo.getWidth(), fbo.getHeight());
