@@ -14,7 +14,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     s.maxFilter = GL_LINEAR;
     s.wrapModeVertical = GL_WRAP_BORDER;
     s.wrapModeHorizontal = GL_WRAP_BORDER;
-    s.internalformat = GL_R32F;
+    s.internalformat = GL_R16F;
     s.useDepth = true;
     s.useStencil = true;
     s.depthStencilAsTexture = true;
@@ -24,22 +24,21 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     
     // TODO: blur fbo
     // setup camera for shadow map
-    float fov = 75.0, near = 0.1, far = 1500.0;
+    float fov = 75.0f, near = 0.1f, far = 1800.f;
     
-    setupPerspective();
+    //setupPerspective();
     setAspectRatio(1.0);
-    
-    linearDepthShader.load("shader/vfx/linearDepth");
-    setPosition(0, 800, 700);
     setFov(fov);
     setNearClip(near);
     setFarClip(far);
+    setVFlip(true);
+    setPosition(0, 800, 700);
+    
     linearDepthScalar = 1.0 / (far - near);
+    
     // load shader
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
-    shader.begin();
-    shader.setUniform1f("linearDepthScalar", linearDepthScalar);
-    shader.end();
+    linearDepthShader.load("shader/vfx/linearDepth");
     
 }
 
@@ -47,20 +46,11 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
     
     bUseShader = bUseOwnShader;
     
-    // update view matrix of depth camera
-    ofVec3f eye = getGlobalPosition();
-    ofVec3f center = eye + getLookAtDir();
-    ofVec3f up = getUpDir();
-    viewMat.makeLookAtViewMatrix(eye, center, up);
-    
-    projectionMat = getProjectionMatrix();
-    
     linearDepthMap.begin();
     ofClear(0);
     
     begin();
     ofBackground(255,0,0);
-    
     
     ofEnableDepthTest();
     
@@ -94,12 +84,8 @@ void ShadowLightPass::debugDraw(){
 void ShadowLightPass::update(ofCamera &cam){
     
     linearDepthScalar = 1.0 / (getFarClip() - getNearClip());
-    
-    ofMatrix4x4 invCamMat = ofMatrix4x4::getInverseOf(cam.getModelViewMatrix());
-    shadowTransMat = invCamMat * viewMat * projectionMat * biasMat;
-    
+    shadowTransMat = cam.getModelViewMatrix().getInverse() * getModelViewProjectionMatrix() * biasMat;
     posInViewSpace = getGlobalPosition() * cam.getModelViewMatrix();
-    
 }
 
 void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, DeferredEffect::GBuffer &gbuffer){
@@ -114,7 +100,7 @@ void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, DeferredEffect::GB
     shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
     shader.setUniformMatrix4f("shadowTransMat", shadowTransMat);
     shader.setUniform3f("lightPosInViewSpace", posInViewSpace);
-    linearDepthShader.setUniform1f("linearDepthScalar", linearDepthScalar);
+    shader.setUniform1f("linearDepthScalar", linearDepthScalar);
     
     shader.setUniform4f("ambient", ofFloatColor(0.2));
     shader.setUniform4f("diffuse", ofFloatColor(0.8));
