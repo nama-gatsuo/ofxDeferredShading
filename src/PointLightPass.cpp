@@ -7,10 +7,8 @@ PointLightPass::PointLightPass(const ofVec2f& size) : RenderPass(size, "PointLig
     lightShader.load("shader/gbuffer.vert", "shader/customShader.frag");
     
     sphere = ofMesh::sphere(50);
-    sphere.clearColors();
-    for (int i = 0; i < sphere.getNumNormals(); i++) {
-        ofVec3f n = sphere.getNormal(i);
-        sphere.addColor(ofFloatColor(1.05));
+    for (int i = 0; i < sphere.getNumVertices(); i++) {
+        sphere.addColor(ofFloatColor(1.05f));
     }
 }
 
@@ -21,7 +19,7 @@ void PointLightPass::update(ofCamera &cam){
 void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer){
     
     shader.begin();
-    shader.setUniform1f("lAttenuation", 1.0);
+    shader.setUniform1f("lAttenuation", 1.f);
     shader.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 1);
     shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 2);
     shader.setUniformTexture("readFbo", readFbo.getTexture(0), 4);
@@ -37,8 +35,7 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer){
     shader.begin();
     for (PointLight& light : lights) {
         
-        ofVec3f lightPosInViewSpace = light.position * modelViewMatrix;
-        shader.setUniform3f("lPosition", lightPosInViewSpace);
+        shader.setUniform3f("lPosition", modelViewMatrix * glm::vec4(light.position, 1.f)); // light position in view space
         shader.setUniform4f("lAmbient", light.ambientColor);
         shader.setUniform4f("lDiffuse", light.diffuseColor);
         shader.setUniform4f("lSpecular", light.specularColor);
@@ -62,7 +59,6 @@ void PointLightPass::drawLights(ofPolyRenderMode mode){
         ofScale(light.intensity, light.intensity, light.intensity);
         
         sphere.draw(mode);
-
         ofPopMatrix();
     }
     

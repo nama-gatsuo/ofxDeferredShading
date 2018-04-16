@@ -6,7 +6,7 @@ namespace DeferredEffect {
     class SsaoPass : public RenderPass {
     protected:
         ofShader shader;
-        ofMatrix4x4 projection;
+        glm::mat4 projection;
         float radius = 2.0;
         float darkness = 0.8;
     public:

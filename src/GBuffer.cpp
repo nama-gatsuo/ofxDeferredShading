@@ -47,12 +47,10 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
     ofSetMatrixMode(OF_MATRIX_MODELVIEW);
     ofLoadMatrix(cam.getModelViewMatrix());
     
-    glm::mat4 normalMatrix = glm::inverse(glm::transpose(cam.getModelViewMatrix()));
-    
     bUseShader = !bUseOtherShader;
     if (bUseShader) {
         shader.begin();
-        shader.setUniformMatrix4f("normalMatrix", normalMatrix);
+        shader.setUniformMatrix4f("normalMatrix", glm::inverse(glm::transpose(cam.getModelViewMatrix())));
         shader.setUniform1f("farClip", cam.getFarClip());
         shader.setUniform1f("nearClip", cam.getNearClip());
     }
@@ -88,5 +86,5 @@ void GBuffer::debugDraw(){
     debugShader.begin();
     fbo.getTexture(TYPE_DEPTH_NORMAL).draw(ws*3, hs*3, ws, hs);
     debugShader.end();
-//    fbo.getTexture(TYPE_HDR).draw(ws*3, hs*3, ws, hs);
+    //fbo.getTexture(TYPE_HDR).draw(ws*3, hs*3, ws, hs);
 }
