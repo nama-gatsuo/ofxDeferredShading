@@ -2,7 +2,7 @@
 #include "ofMain.h"
 #include "GBuffer.hpp"
 
-namespace DeferredEffect {
+namespace ofxDeferredShading {
     
     class RenderPass {
     public:
@@ -25,7 +25,7 @@ namespace DeferredEffect {
     
     class Processor : public ofBaseDraws {
     public:
-        typedef shared_ptr<Processor> Ptr;
+        using Ptr = std::shared_ptr<Processor>;
         void init(unsigned w = ofGetWidth(), unsigned h = ofGetHeight());
         
         void begin(ofCamera& cam, bool bUseOwnShader = false);

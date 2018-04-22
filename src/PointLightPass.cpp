@@ -1,6 +1,6 @@
 #include "PointLightPass.hpp"
 
-using namespace DeferredEffect;
+using namespace ofxDeferredShading;
 
 PointLightPass::PointLightPass(const ofVec2f& size) : RenderPass(size, "PointLightPass"){
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/PointLight.frag");

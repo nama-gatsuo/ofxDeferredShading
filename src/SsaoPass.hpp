@@ -2,7 +2,7 @@
 #include "ofMain.h"
 #include "Processor.hpp"
 
-namespace DeferredEffect {
+namespace ofxDeferredShading {
     class SsaoPass : public RenderPass {
     protected:
         ofShader shader;

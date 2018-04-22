@@ -1,6 +1,6 @@
 #include "SsaoPass.hpp"
 
-using namespace DeferredEffect;
+using namespace ofxDeferredShading;
 
 SsaoPass::SsaoPass(const ofVec2f& size) : RenderPass(size, "SsaoPass"){
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/Ssao.frag");
@@ -10,7 +10,7 @@ void SsaoPass::update(ofCamera& cam) {
     projection = cam.getProjectionMatrix();
 }
 
-void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, DeferredEffect::GBuffer &gbuffer) {
+void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
     
     writeFbo.begin();
     ofPushStyle();

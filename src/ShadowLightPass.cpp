@@ -1,6 +1,6 @@
 #include "ShadowLightPass.hpp"
 
-using namespace DeferredEffect;
+using namespace ofxDeferredShading;
 
 ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "ShadowLightPass"){
     
@@ -22,7 +22,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     // TODO: blur fbo
     // setup camera for shadow map
 	nearClip = 0.f;
-    farClip = 5000.f;
+    farClip = 3000.f;
     projection = glm::ortho(left, right, bottom, top, nearClip, farClip);
     
     // load shader
@@ -73,7 +73,7 @@ void ShadowLightPass::update(ofCamera &cam){
     posInViewSpace = (cam.getModelViewMatrix() * glm::vec4(getGlobalPosition(), 1.f)).xyz;
 }
 
-void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, DeferredEffect::GBuffer &gbuffer){
+void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer){
     
     writeFbo.begin();
     

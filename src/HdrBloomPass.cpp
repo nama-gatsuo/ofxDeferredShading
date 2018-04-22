@@ -1,6 +1,6 @@
 #include "HdrBloomPass.hpp"
 
-using namespace DeferredEffect;
+using namespace ofxDeferredShading;
 
 HdrBloomPass::HdrBloomPass(const ofVec2f& size) : RenderPass(size, "HdrBloomPass"){
     blurShader.load("shader/vfx/PassThru.vert", "shader/vfx/Blur.frag");
@@ -12,7 +12,7 @@ void HdrBloomPass::update(ofCamera& cam) {
     
 }
 
-void HdrBloomPass::render(ofFbo &readFbo, ofFbo &writeFbo, DeferredEffect::GBuffer &gbuffer) {
+void HdrBloomPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
     
     // vertical blur
     blurFbo[0].begin();

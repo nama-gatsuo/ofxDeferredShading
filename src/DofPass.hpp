@@ -1,7 +1,7 @@
 #pragma once
 #include "Processor.hpp"
 
-namespace DeferredEffect {
+namespace ofxDeferredShading {
     class DofPass : public RenderPass {
     private:
         ofShader shader;

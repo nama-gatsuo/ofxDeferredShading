@@ -7,5 +7,4 @@
 #include "HdrBloomPass.hpp"
 #include "DofPass.hpp"
 
-namespace ofxDeferredShading = DeferredEffect;
-typedef ofxDeferredShading::Processor ofxDeferredProcessing;
+using ofxDeferredProcessing = ofxDeferredShading::Processor;
