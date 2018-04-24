@@ -42,6 +42,7 @@ namespace ofxDeferredShading {
         void endShadowMap();
         
         void debugDraw();
+        ofFbo& getShadowMap() { return shadowMap; };
         
         void update(ofCamera& cam);
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
@@ -50,7 +51,7 @@ namespace ofxDeferredShading {
         void setFar(float _farClip) { farClip = _farClip; }
         void setNear(float _nearClip) { nearClip = _nearClip; }
         void setDirection(const glm::vec3& dir) {
-            setGlobalPosition(dir * distance);
+            setGlobalPosition(- dir * distance);
         }
         void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
         void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }

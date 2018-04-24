@@ -23,6 +23,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     // setup camera for shadow map
 	nearClip = 0.f;
     farClip = 5000.f;
+    distance = 3000.f;
     
     // load shader
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
