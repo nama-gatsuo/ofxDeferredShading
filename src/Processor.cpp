@@ -51,7 +51,6 @@ void Processor::draw(float x, float y, float w, float h) const {
     pingPong[currentReadFbo].draw(0, 0, w, h);
 }
 
-
 void Processor::debugDraw() {
     gbuffer.debugDraw();
 }
@@ -68,6 +67,5 @@ void Processor::process(){
         }
         
     }
-    
     
 }

@@ -8,7 +8,7 @@ namespace ofxDeferredShading {
         ofShader blurShader;
         ofFbo blurFbo[2];
     public:
-        typedef shared_ptr<HdrBloomPass> Ptr;
+        using Ptr = shared_ptr<HdrBloomPass>;
         HdrBloomPass(const ofVec2f& size);
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
         void update(ofCamera& cam);

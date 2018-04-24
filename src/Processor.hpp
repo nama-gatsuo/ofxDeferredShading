@@ -6,7 +6,7 @@ namespace ofxDeferredShading {
     
     class RenderPass {
     public:
-        typedef shared_ptr<RenderPass> Ptr;
+        using Ptr = std::shared_ptr<RenderPass>;
         
         RenderPass(const ofVec3f& sz, const string& n) : size(sz), name(n), enabled(true) {}
         virtual void update(ofCamera& cam) = 0;
@@ -14,7 +14,8 @@ namespace ofxDeferredShading {
         
         void setEnabled(bool enabled) { this->enabled = enabled; }
         bool getEnabled() const { return enabled; }
-    
+        string getName() const { return name; }
+        
     protected:
         void textureQuad(float x, float y, float w, float h, float s = 1.0, float t = 1.0);
         
@@ -24,6 +25,7 @@ namespace ofxDeferredShading {
     };
     
     class Processor : public ofBaseDraws {
+        friend class ofxDeferredParams;
     public:
         using Ptr = std::shared_ptr<Processor>;
         void init(unsigned w = ofGetWidth(), unsigned h = ofGetHeight());
@@ -49,6 +51,7 @@ namespace ofxDeferredShading {
         RenderPass::Ptr operator[](unsigned i) const { return passes[i]; }
         vector<RenderPass::Ptr>& getPasses() { return passes; }
         unsigned getNumProcessedPasses() const { return numProcessedPasses; }
+        GBuffer* getGBuffer() { return &gbuffer; }
         
     private:
         void process();

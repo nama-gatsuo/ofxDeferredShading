@@ -21,6 +21,7 @@ namespace ofxDeferredShading {
         
         float nearClip;
         float farClip;
+        float distance;
         
         // view port
         float left = -1024.f;
@@ -33,7 +34,7 @@ namespace ofxDeferredShading {
         ofFloatColor specularColor;
         
     public:
-        typedef shared_ptr<ShadowLightPass> Ptr;
+        using Ptr = shared_ptr<ShadowLightPass>;
         ShadowLightPass(const ofVec2f& size);
         
         void beginShadowMap(bool bUseOwnShader = false);
@@ -44,9 +45,14 @@ namespace ofxDeferredShading {
         void update(ofCamera& cam);
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
         
-        void setAmbientColor(const ofFloatColor& color) { ambientColor = color; };
-        void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; };
-        void setSpecularColor(const ofFloatColor& color) { specularColor = color; };
+        void setFar(float _farClip) { farClip = _farClip; }
+        void setNear(float _nearClip) { nearClip = _nearClip; }
+        void setDirection(const glm::vec3& dir) {
+            setGlobalPosition(dir * distance);
+        }
+        void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
+        void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }
+        
     };
     
 }   

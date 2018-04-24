@@ -21,7 +21,7 @@ namespace ofxDeferredShading {
         ofShader lightShader;
         
     public:
-        typedef shared_ptr<PointLightPass> Ptr;
+        using Ptr = shared_ptr<PointLightPass>;
         PointLightPass(const ofVec2f& size);
         
         void addLight(PointLight light) {

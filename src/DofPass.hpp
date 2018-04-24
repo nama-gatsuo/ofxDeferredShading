@@ -9,7 +9,7 @@ namespace ofxDeferredShading {
         float aperture;
         float maxBlur;
     public:
-        typedef shared_ptr<DofPass> Ptr;
+        using Ptr = shared_ptr<DofPass>;
         
         DofPass(const ofVec2f& size);
         void update(ofCamera& cam){};
