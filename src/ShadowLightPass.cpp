@@ -85,6 +85,7 @@ void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer){
     shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
     shader.setUniformMatrix4f("shadowTransMat", shadowTransMat);
     shader.setUniform3f("lightPosInViewSpace", posInViewSpace);
+    shader.setUniform1f("darkness", darkness);
     
     shader.setUniform4f("ambient", ambientColor);
     shader.setUniform4f("diffuse", diffuseColor);

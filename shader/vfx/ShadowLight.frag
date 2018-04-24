@@ -37,7 +37,7 @@ void main() {
     float texel = texture(lightDepthTex, shadowCoord.xy*res).r;
 
     float bias = 0.0001 * tan(acos(dot(normal, lightDir)));
-    if (texel < dist - bias) shadow = 0.5;
+    if (texel < dist - bias) shadow -= darkness;
 
     outputColor = read * ambient + read * diffuse * dot(normal, lightDir) * shadow;
     outputColor.a = 1.0;

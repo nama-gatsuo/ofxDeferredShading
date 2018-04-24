@@ -8,7 +8,7 @@ namespace ofxDeferredShading {
     public:
         using Ptr = std::shared_ptr<RenderPass>;
         
-        RenderPass(const ofVec3f& sz, const string& n) : size(sz), name(n), enabled(true) {}
+        RenderPass(const glm::vec2& sz, const string& n) : size(sz), name(n), enabled(true) {}
         virtual void update(ofCamera& cam) = 0;
         virtual void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) = 0;
         
@@ -42,7 +42,7 @@ namespace ofxDeferredShading {
         
         template<class T>
         shared_ptr<T> createPass(){
-            shared_ptr<T> pass = shared_ptr<T>(new T(ofVec2f(width, height)));
+            shared_ptr<T> pass = make_shared<T>(glm::vec2(width, height));
             passes.push_back(pass);
             return pass;
         }

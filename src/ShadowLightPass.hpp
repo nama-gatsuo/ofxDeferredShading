@@ -29,6 +29,7 @@ namespace ofxDeferredShading {
         float bottom = -1024.f;
         float top = 1024.f;
         
+        float darkness = 0.f;
         ofFloatColor ambientColor;
         ofFloatColor diffuseColor;
         ofFloatColor specularColor;
@@ -45,6 +46,7 @@ namespace ofxDeferredShading {
         void update(ofCamera& cam);
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
         
+        void setDarkness(float _darkness) { darkness = _darkness; }
         void setFar(float _farClip) { farClip = _farClip; }
         void setNear(float _nearClip) { nearClip = _nearClip; }
         void setDirection(const glm::vec3& dir) {
