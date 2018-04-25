@@ -25,7 +25,6 @@ namespace ofxDeferredShading {
     };
     
     class Processor : public ofBaseDraws {
-        friend class ofxDeferredParams;
     public:
         using Ptr = std::shared_ptr<Processor>;
         void init(unsigned w = ofGetWidth(), unsigned h = ofGetHeight());
