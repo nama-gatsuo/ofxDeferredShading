@@ -26,10 +26,11 @@ private:
     GenCells cells;
     
     ofxDeferredProcessing deferred;
-    PointLightPass* lightingPass;
-    SsaoPass* ssaoPass;
-    ShadowLightPass* shadowLightPass;
-    DofPass* dofPass;
+    std::shared_ptr<PointLightPass> lightingPass;
+	std::shared_ptr<SsaoPass> ssaoPass;
+	std::shared_ptr<ShadowLightPass> shadowLightPass;
+	std::shared_ptr<DofPass> dofPass;
+	std::shared_ptr<HdrBloomPass> hdrPass;
     
     // gui
     bool isShowPanel;

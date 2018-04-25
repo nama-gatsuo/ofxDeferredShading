@@ -13,7 +13,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     shadowLightPass->setPosition(cos(ofGetElapsedTimef())*1000, 3000.0, sin(ofGetElapsedTimef())*1000);
-    shadowLightPass->lookAt(ofVec3f(0.0));
+    shadowLightPass->lookAt(glm::vec3(0.0));
     
     updateDeferred();
 }
@@ -43,12 +43,12 @@ void ofApp::draw(){
 
 void ofApp::setupDeferred(){
     deferred.init(ofGetWidth(), ofGetHeight());
-    ssaoPass = deferred.createPass<SsaoPass>().get();
+    ssaoPass = deferred.createPass<SsaoPass>();
     
-    shadowLightPass = deferred.createPass<ShadowLightPass>().get();
+    shadowLightPass = deferred.createPass<ShadowLightPass>();
     shadowLightPass->lookAt(ofVec3f(0.0));
     
-    lightingPass = deferred.createPass<PointLightPass>().get();
+    lightingPass = deferred.createPass<PointLightPass>();
     ofxDeferredShading::PointLight dlight;
     dlight.ambientColor = ofFloatColor(0.005);
     lightingPass->addLight(dlight);
@@ -56,8 +56,8 @@ void ofApp::setupDeferred(){
     dlight.ambientColor = ofFloatColor(0.0);
     lightingPass->addLight(dlight);
     
-    deferred.createPass<HdrBloomPass>();
-    dofPass = deferred.createPass<DofPass>().get();
+    hdrPass = deferred.createPass<HdrBloomPass>();
+    dofPass = deferred.createPass<DofPass>();
 }
 
 void ofApp::updateDeferred(){
