@@ -3,26 +3,28 @@
 uniform int horizontal;
 uniform sampler2DRect tex;
 
+uniform int sampleSize;
+uniform float coefficients[33];
+uniform float offsets[32];
+
 in vec2 vTexCoord;
 out vec4 outputColor;
 
-const float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
+const int NUM = 33;
 
 void main(){
 
-    vec2 texOffset = vec2(3.0);
-    vec3 result = texture(tex, vTexCoord).rgb * weight[0];
-
+    vec2 texOffset = vec2(.0);
     if (horizontal == 1) {
-        for (int i = 0; i < 5; i++) {
-            result += texture(tex, vTexCoord + vec2(texOffset.x * i, 0.0)).rgb * weight[i];
-            result += texture(tex, vTexCoord - vec2(texOffset.x * i, 0.0)).rgb * weight[i];
-        }
+        texOffset.x = 1.;
     } else {
-        for (int i = 0; i < 5; i++) {
-            result += texture(tex, vTexCoord + vec2(0.0, texOffset.y * i)).rgb * weight[i];
-            result += texture(tex, vTexCoord - vec2(0.0, texOffset.y * i)).rgb * weight[i];
-        }
+        texOffset.y = 1.;
+    }
+
+    vec3 result = texture(tex, vTexCoord).rgb * coefficients[0];
+    for (int i = 1; i < NUM; i++) {
+        result += texture(tex, vTexCoord + vec2(texOffset * offsets[i-1])).rgb * coefficients[i];
+        result += texture(tex, vTexCoord - vec2(texOffset * offsets[i-1])).rgb * coefficients[i];
     }
 
     outputColor = vec4(result, 1.0);

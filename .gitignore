@@ -33,3 +33,6 @@ xcuserdata/
 *.iobj
 *.exe
 *.exp
+*.db
+*.pdb
+*.ilk
