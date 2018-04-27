@@ -17,9 +17,9 @@ void GBuffer::setup(int w, int h){
     s.useStencil = true;
     
     fbo.allocate(s);
-    
-    shader.load("shader/gbuffer");
-    debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
+	
+	shader.load("shader/gbuffer");
+	debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
     
 }
 
@@ -49,7 +49,7 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
     
     bUseShader = !bUseOtherShader;
     if (bUseShader) {
-        shader.begin();
+		shader.begin();
         shader.setUniformMatrix4f("normalMatrix", glm::inverse(glm::transpose(cam.getModelViewMatrix())));
         shader.setUniform1f("farClip", cam.getFarClip());
         shader.setUniform1f("nearClip", cam.getNearClip());

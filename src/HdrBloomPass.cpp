@@ -13,7 +13,6 @@ HdrBloomPass::HdrBloomPass(const ofVec2f& size) : RenderPass(size, "HdrBloomPass
 	for (int i = 1; i < gaussian.size(); i+=2) {
 		float weightSum = gaussian[i] + gaussian[i+1];
 		coefficients.push_back(weightSum);
-		ofLog() << "coefficients: " + ofToString(weightSum);
 	}
 	offsets = createOffsets(gaussian);
 }
@@ -44,7 +43,6 @@ vector<float> HdrBloomPass::createOffsets(vector<float>& gaussian) {
 		float l = gaussian[i];
 		float r = gaussian[i + 1];
 		float weightedAvrg = (l * li + r * ri) / (l + r);
-		ofLog() << "offsets" + ofToString(weightedAvrg);
 		offsets.push_back(weightedAvrg);
 	}
 	return offsets;

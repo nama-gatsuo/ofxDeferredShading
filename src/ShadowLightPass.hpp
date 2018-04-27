@@ -5,34 +5,39 @@
 namespace ofxDeferredShading {
     class ShadowLightPass : public RenderPass, public ofNode {
     private:
-        ofShader shader;
-        ofFbo shadowMap;
+		ofShader shader;
+		ofShader linearDepthShader;
+		bool useShader = false;
+		ofFbo shadowMap;
         
-        const glm::mat4 biasMat = ofMatrix4x4(0.5, 0.0, 0.0, 0.0,
-                                                0.0, 0.5, 0.0, 0.0,
-                                                0.0, 0.0, 0.5, 0.0,
-                                                0.5, 0.5, 0.5, 1.0);
+		const glm::mat4 biasMat = glm::mat4(0.5, 0.0, 0.0, 0.0,
+											0.0, 0.5, 0.0, 0.0,
+											0.0, 0.0, 0.5, 0.0,
+											0.5, 0.5, 0.5, 1.0);
         
-        glm::mat4 projection;
-        glm::mat4 modelView;
-        glm::mat4 depthMVP;
-        glm::mat4 shadowTransMat;
-        glm::vec3 posInViewSpace;
+		glm::mat4 projection;
+		glm::mat4 modelView;
+		glm::mat4 depthMVP;
+		glm::mat4 shadowTransMat;
+		glm::vec3 directionInView;
+		float linearDepthScalar;
         
-        float nearClip;
-        float farClip;
-        float distance;
+		float nearClip;
+		float farClip;
+		float distance;
+		glm::vec3 direction;
+		ofCamera lightCamera;
         
-        // view port
-        float left = -1024.f;
-        float right = 1024.f;
-        float bottom = -1024.f;
-        float top = 1024.f;
+		// view port
+		float left = -1024.f;
+		float right = 1024.f;
+		float bottom = -1024.f;
+		float top = 1024.f;
         
-        float darkness = 0.f;
-        ofFloatColor ambientColor;
-        ofFloatColor diffuseColor;
-        ofFloatColor specularColor;
+		float darkness = 0.f;
+		ofFloatColor ambientColor;
+		ofFloatColor diffuseColor;
+		ofFloatColor specularColor;
         
     public:
         using Ptr = shared_ptr<ShadowLightPass>;
@@ -51,8 +56,10 @@ namespace ofxDeferredShading {
         void setFar(float _farClip) { farClip = _farClip; }
         void setNear(float _nearClip) { nearClip = _nearClip; }
         void setDirection(const glm::vec3& dir) {
-            setGlobalPosition(- dir * distance);
+			setGlobalPosition(- dir * distance);
+			direction = dir;
         }
+		ofCamera& getCamera() { return lightCamera; }
         void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
         void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }
         

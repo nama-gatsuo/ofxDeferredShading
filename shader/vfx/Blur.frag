@@ -15,11 +15,8 @@ const int NUM = 33;
 void main(){
 
     vec2 texOffset = vec2(.0);
-    if (horizontal == 1) {
-        texOffset.x = 1.;
-    } else {
-        texOffset.y = 1.;
-    }
+    if (horizontal == 1) texOffset.x = 1.;
+    else texOffset.y = 1.;
 
     vec3 result = texture(tex, vTexCoord).rgb * coefficients[0];
     for (int i = 1; i < NUM; i++) {
