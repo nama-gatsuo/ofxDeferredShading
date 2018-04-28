@@ -1,6 +1,6 @@
 #include "Processor.hpp"
 
-using namespace ofxDeferredShading;
+using namespace ofxDeferred;
 
 void Processor::init(unsigned w, unsigned h) {
     width = w;

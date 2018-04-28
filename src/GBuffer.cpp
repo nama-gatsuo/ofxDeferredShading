@@ -1,6 +1,6 @@
 #include "GBuffer.hpp"
 
-using namespace ofxDeferredShading;
+using namespace ofxDeferred;
 
 void GBuffer::setup(int w, int h){
     ofFbo::Settings s;

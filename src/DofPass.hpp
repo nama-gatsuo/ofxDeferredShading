@@ -1,7 +1,7 @@
 #pragma once
 #include "Processor.hpp"
 
-namespace ofxDeferredShading {
+namespace ofxDeferred {
     class DofPass : public RenderPass {
     private:
         ofShader shader;

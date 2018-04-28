@@ -2,7 +2,7 @@
 #include "ofMain.h"
 #include "Processor.hpp"
 
-namespace ofxDeferredShading {
+namespace ofxDeferred {
     struct PointLight {
         ofFloatColor ambientColor;
         ofFloatColor diffuseColor;

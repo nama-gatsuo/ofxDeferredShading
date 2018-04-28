@@ -1,6 +1,6 @@
 #include "SsaoPass.hpp"
 
-using namespace ofxDeferredShading;
+using namespace ofxDeferred;
 
 SsaoPass::SsaoPass(const ofVec2f& size) : RenderPass(size, "SsaoPass"){
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/Ssao.frag");

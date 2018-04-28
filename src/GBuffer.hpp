@@ -1,7 +1,7 @@
 #pragma once
 #include "ofMain.h"
 
-namespace ofxDeferredShading {
+namespace ofxDeferred {
     
     class GBuffer {
     private:

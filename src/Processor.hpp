@@ -2,7 +2,7 @@
 #include "ofMain.h"
 #include "GBuffer.hpp"
 
-namespace ofxDeferredShading {
+namespace ofxDeferred {
     
     class RenderPass {
     public:

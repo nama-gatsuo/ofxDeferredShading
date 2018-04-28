@@ -1,6 +1,6 @@
 #include "HdrBloomPass.hpp"
 
-using namespace ofxDeferredShading;
+using namespace ofxDeferred;
 
 HdrBloomPass::HdrBloomPass(const ofVec2f& size) : RenderPass(size, "HdrBloomPass"){
     blurShader.load("shader/vfx/PassThru.vert", "shader/vfx/Blur.frag");

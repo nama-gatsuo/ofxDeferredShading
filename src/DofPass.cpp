@@ -1,6 +1,6 @@
 #include "DofPass.hpp"
 
-using namespace ofxDeferredShading;
+using namespace ofxDeferred;
 
 DofPass::DofPass(const ofVec2f& size) : RenderPass(size, "DofPass") {
     shader.load("shader/vfx/PassThru.vert", "shader/vfx/Dof.frag");

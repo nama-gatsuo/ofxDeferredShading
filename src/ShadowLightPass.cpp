@@ -1,6 +1,6 @@
 #include "ShadowLightPass.hpp"
 
-using namespace ofxDeferredShading;
+using namespace ofxDeferred;
 
 ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "ShadowLightPass"){
     
@@ -33,8 +33,8 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     
 	// load shader
 	shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
-	linearDepthShader.load("shader/gbuffer.vert", "shader/vfx/linearDepth.frag");
-	}
+	linearDepthShader.load("shader/gbuffer.vert", "shader/vfx/LinearDetph.frag");
+}
 
 void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
     

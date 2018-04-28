@@ -2,7 +2,7 @@
 #include "ofMain.h"
 #include "Processor.hpp"
 
-namespace ofxDeferredShading {
+namespace ofxDeferred {
     class HdrBloomPass : public RenderPass {
     protected:
 		int blurRadius;
