@@ -12,7 +12,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     s.maxFilter = GL_LINEAR;
     s.wrapModeVertical = GL_WRAP_BORDER;
     s.wrapModeHorizontal = GL_WRAP_BORDER;
-    s.internalformat = GL_R32F;
+    s.internalformat = GL_R16F;
     s.useDepth = true;
     s.useStencil = true;
     s.depthStencilAsTexture = true;
@@ -21,6 +21,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
     
     // TODO: blur fbo
     // setup camera for shadow map
+
 	nearClip = 1.f;
 	farClip = 5000.f;
 	distance = 2000.f;
@@ -38,6 +39,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
 
 void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
     
+
 	useShader = bUseOwnShader;
 
 	// update view matrix of depth camera
@@ -87,11 +89,13 @@ void ShadowLightPass::debugDraw(){
 }
 
 void ShadowLightPass::update(ofCamera &cam){
+
 	lightCamera.setFarClip(farClip);
 	lightCamera.setNearClip(nearClip);
 	linearDepthScalar = 1.0f / (farClip - nearClip);
     shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());
     directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(direction, 0.f)).xyz;
+
 }
 
 void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer){
@@ -105,6 +109,7 @@ void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer){
     shader.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 2);
     shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
     shader.setUniformMatrix4f("shadowTransMat", shadowTransMat);
+
     shader.setUniform3f("lightDir", directionInView);
     shader.setUniform1f("darkness", darkness);
 	shader.setUniform1f("linearDepthScalar", linearDepthScalar);
