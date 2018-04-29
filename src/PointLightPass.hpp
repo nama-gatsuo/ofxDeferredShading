@@ -2,26 +2,26 @@
 #include "ofMain.h"
 #include "Processor.hpp"
 
-namespace DeferredEffect {
+namespace ofxDeferred {
     struct PointLight {
         ofFloatColor ambientColor;
         ofFloatColor diffuseColor;
         ofFloatColor specularColor;
-        ofVec3f position;
-        float intensity = 1.0;
-        float radius = 200.0;
+        glm::vec3 position;
+        float intensity = 1.f;
+        float radius = 200.f;
     };
     
     class PointLightPass : public RenderPass {
     protected:
         vector<PointLight> lights;
         ofShader shader;
-        ofMatrix4x4 modelViewMatrix;
+        glm::mat4 modelViewMatrix;
         ofVboMesh sphere;
         ofShader lightShader;
         
     public:
-        typedef shared_ptr<PointLightPass> Ptr;
+        using Ptr = shared_ptr<PointLightPass>;
         PointLightPass(const ofVec2f& size);
         
         void addLight(PointLight light) {

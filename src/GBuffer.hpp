@@ -1,7 +1,7 @@
 #pragma once
 #include "ofMain.h"
 
-namespace DeferredEffect {
+namespace ofxDeferred {
     
     class GBuffer {
     private:

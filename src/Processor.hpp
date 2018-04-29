@@ -2,19 +2,20 @@
 #include "ofMain.h"
 #include "GBuffer.hpp"
 
-namespace DeferredEffect {
+namespace ofxDeferred {
     
     class RenderPass {
     public:
-        typedef shared_ptr<RenderPass> Ptr;
+        using Ptr = std::shared_ptr<RenderPass>;
         
-        RenderPass(const ofVec3f& sz, const string& n) : size(sz), name(n), enabled(true) {}
+        RenderPass(const glm::vec2& sz, const string& n) : size(sz), name(n), enabled(true) {}
         virtual void update(ofCamera& cam) = 0;
         virtual void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) = 0;
         
         void setEnabled(bool enabled) { this->enabled = enabled; }
         bool getEnabled() const { return enabled; }
-    
+        string getName() const { return name; }
+        
     protected:
         void textureQuad(float x, float y, float w, float h, float s = 1.0, float t = 1.0);
         
@@ -25,7 +26,7 @@ namespace DeferredEffect {
     
     class Processor : public ofBaseDraws {
     public:
-        typedef shared_ptr<Processor> Ptr;
+        using Ptr = std::shared_ptr<Processor>;
         void init(unsigned w = ofGetWidth(), unsigned h = ofGetHeight());
         
         void begin(ofCamera& cam, bool bUseOwnShader = false);
@@ -40,7 +41,7 @@ namespace DeferredEffect {
         
         template<class T>
         shared_ptr<T> createPass(){
-            shared_ptr<T> pass = shared_ptr<T>(new T(ofVec2f(width, height)));
+            shared_ptr<T> pass = make_shared<T>(glm::vec2(width, height));
             passes.push_back(pass);
             return pass;
         }
@@ -49,6 +50,7 @@ namespace DeferredEffect {
         RenderPass::Ptr operator[](unsigned i) const { return passes[i]; }
         vector<RenderPass::Ptr>& getPasses() { return passes; }
         unsigned getNumProcessedPasses() const { return numProcessedPasses; }
+        GBuffer* getGBuffer() { return &gbuffer; }
         
     private:
         void process();

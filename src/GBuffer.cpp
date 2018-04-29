@@ -1,6 +1,6 @@
 #include "GBuffer.hpp"
 
-using namespace DeferredEffect;
+using namespace ofxDeferred;
 
 void GBuffer::setup(int w, int h){
     ofFbo::Settings s;
@@ -17,9 +17,9 @@ void GBuffer::setup(int w, int h){
     s.useStencil = true;
     
     fbo.allocate(s);
-    
-    shader.load("shader/gbuffer");
-    debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
+	
+	shader.load("shader/gbuffer");
+	debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
     
 }
 
@@ -47,12 +47,10 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
     ofSetMatrixMode(OF_MATRIX_MODELVIEW);
     ofLoadMatrix(cam.getModelViewMatrix());
     
-    ofMatrix4x4 normalMatrix = ofMatrix4x4::getTransposedOf(cam.getModelViewMatrix().getInverse());
-    
     bUseShader = !bUseOtherShader;
     if (bUseShader) {
-        shader.begin();
-        shader.setUniformMatrix4f("normalMatrix", normalMatrix);
+		shader.begin();
+        shader.setUniformMatrix4f("normalMatrix", glm::inverse(glm::transpose(cam.getModelViewMatrix())));
         shader.setUniform1f("farClip", cam.getFarClip());
         shader.setUniform1f("nearClip", cam.getNearClip());
     }
@@ -88,5 +86,5 @@ void GBuffer::debugDraw(){
     debugShader.begin();
     fbo.getTexture(TYPE_DEPTH_NORMAL).draw(ws*3, hs*3, ws, hs);
     debugShader.end();
-//    fbo.getTexture(TYPE_HDR).draw(ws*3, hs*3, ws, hs);
+    //fbo.getTexture(TYPE_HDR).draw(ws*3, hs*3, ws, hs);
 }

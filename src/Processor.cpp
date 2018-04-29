@@ -1,6 +1,6 @@
 #include "Processor.hpp"
 
-using namespace DeferredEffect;
+using namespace ofxDeferred;
 
 void Processor::init(unsigned w, unsigned h) {
     width = w;
@@ -51,7 +51,6 @@ void Processor::draw(float x, float y, float w, float h) const {
     pingPong[currentReadFbo].draw(0, 0, w, h);
 }
 
-
 void Processor::debugDraw() {
     gbuffer.debugDraw();
 }
@@ -68,6 +67,5 @@ void Processor::process(){
         }
         
     }
-    
     
 }
