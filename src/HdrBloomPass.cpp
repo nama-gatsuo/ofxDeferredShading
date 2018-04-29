@@ -7,7 +7,7 @@ HdrBloomPass::HdrBloomPass(const ofVec2f& size) : RenderPass(size, "HdrBloomPass
     blurFbo[0].allocate(size.x, size.y, GL_RGB);
     blurFbo[1].allocate(size.x, size.y, GL_RGB);
 
-	vector<float> gaussian = createGaussianWeights(16, 1.f);
+	vector<float> gaussian = createGaussianWeights(16, 0.2f);
 	int center = gaussian.size() / 2;
 	coefficients.push_back(gaussian[center]);
 	for (int i = 1; i < gaussian.size(); i+=2) {
@@ -17,13 +17,13 @@ HdrBloomPass::HdrBloomPass(const ofVec2f& size) : RenderPass(size, "HdrBloomPass
 	offsets = createOffsets(gaussian);
 }
 
-vector<float> HdrBloomPass::createGaussianWeights(int radius, float varianc) {
+vector<float> HdrBloomPass::createGaussianWeights(int radius, float variance) {
 	int rowSize = 1 + 2 * radius;
 	vector<float> row(rowSize, 0.f);
 	float sum = 0.f;
 	for (int i = 0; i < row.size(); i++) {
 		float x = ofMap(i, 0, rowSize-1, -1, 1);
-		row[i] = Gaussian(x, 0, 2.);
+		row[i] = Gaussian(x, 0, variance);
 		sum += row[i];
 	}
 
@@ -50,7 +50,7 @@ vector<float> HdrBloomPass::createOffsets(vector<float>& gaussian) {
 
 float HdrBloomPass::Gaussian(float x, float mean, float variance) {
 	x -= mean;
-	return (1. / sqrt(TWO_PI * variance)) * exp(-(x * x) / (2. * variance));
+	return (1. / sqrt(TWO_PI * variance)) * exp(- (x * x) / (2. * variance));
 }
 
 void HdrBloomPass::update(ofCamera& cam) {

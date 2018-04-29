@@ -60,6 +60,7 @@ namespace ofxDeferred {
 			direction = dir;
         }
 		ofCamera& getCamera() { return lightCamera; }
+		float getLinearScalar() { return linearDepthScalar; }
         void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
         void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }
         
