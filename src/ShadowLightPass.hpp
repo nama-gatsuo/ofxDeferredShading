@@ -29,11 +29,8 @@ namespace ofxDeferred {
 		ofCamera lightCamera;
         
 		// view port
-		float left = -1024.f;
-		float right = 1024.f;
-		float bottom = -1024.f;
-		float top = 1024.f;
-        
+		float viewPortSize = 1024.f;
+
 		float darkness = 0.f;
 		ofFloatColor ambientColor;
 		ofFloatColor diffuseColor;
@@ -63,7 +60,7 @@ namespace ofxDeferred {
 		float getLinearScalar() { return linearDepthScalar; }
         void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
         void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }
-        
+		void setViewPortSize(float size) { viewPortSize = size; }
     };
     
 }   

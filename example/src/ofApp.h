@@ -7,7 +7,7 @@
 #include "GenArchitect.hpp"
 #include "GenCells.hpp"
 
-using namespace ofxDeferredShading;
+using namespace ofxDeferred;
 
 class ofApp : public ofBaseApp{
 public:

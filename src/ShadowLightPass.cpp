@@ -27,10 +27,7 @@ ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "Shadow
 	distance = 2000.f;
 	linearDepthScalar = 1.f / (farClip - nearClip);
 
-	left = -1024.f;
-	right = 1024.f;
-	bottom = -1024.f;
-	top = 1024.f;
+	viewPortSize = 1024.f;
     
 	// load shader
 	shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
@@ -43,7 +40,7 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader){
 	useShader = bUseOwnShader;
 
 	// update view matrix of depth camera
-	projection = glm::ortho(left, right, bottom, top, nearClip, farClip);
+	projection = glm::ortho(-viewPortSize, viewPortSize, -viewPortSize, viewPortSize, nearClip, farClip);
 	modelView = glm::lookAt(getGlobalPosition(), glm::vec3(0,0,0), glm::vec3(0,1,0));
 	depthMVP = projection * modelView;
 	shadowMap.begin();
