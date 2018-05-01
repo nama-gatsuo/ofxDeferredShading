@@ -102,17 +102,10 @@ void main(){
         outputColor0.r = vDepth;
         outputColor0.a = 1.;
     } else {
-
         outputColor0 = vColor;
         outputColor1 = vPos;
         outputColor2 = vec4(vNormal.xyz, vDepth);
-
-        if (dot(vColor, vColor) > dot(vec4(1.0), vec4(1.0))) {
-            outputColor3 = vec4(vColor);
-        } else {
-            outputColor3 = vec4(0.);
-        }
-
+        outputColor3 = any(greaterThan(vColor, vec4(1.))) ? vColor : vec4(0.,0.,0.,1.);
     }
 
 }
