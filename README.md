@@ -22,7 +22,7 @@ now it contains
 
 ## Support
 * openFrameworks 0.10.0~ (using glm library)
-* helper addon: [ofxDeferredParams]()
+* helper addon: [ofxDeferredParams](https://github.com/nama-gatsuo/ofxDeferredParams)
 
 ## Usage
 * copy the ```shader/``` directory under your ```bin/data/```

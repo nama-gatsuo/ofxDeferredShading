@@ -91,7 +91,7 @@ void ShadowLightPass::update(ofCamera &cam) {
 	lightCamera.setNearClip(nearClip);
 	linearDepthScalar = 1.0f / (farClip - nearClip);
 	shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());
-	directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(direction, 0.f)).xyz;
+	directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(direction, 0.f));
 
 }
 
