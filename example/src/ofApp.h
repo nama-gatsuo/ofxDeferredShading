@@ -56,6 +56,7 @@ private:
 	ofParameterGroup shadow;
 	ofParameter<ofFloatColor> sha_amb;
 	ofParameter<ofFloatColor> sha_dif;
+	ofParameter<float> sha_dark;
 
 	ofParameterGroup dof;
 	ofParameter<float> dof_blur;

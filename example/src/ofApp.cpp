@@ -44,6 +44,10 @@ void ofApp::setupDeferred() {
 	deferred.init(ofGetWidth(), ofGetHeight());
 	ssaoPass = deferred.createPass<SsaoPass>();
 
+	shadowLightPass = deferred.createPass<ShadowLightPass>();
+	shadowLightPass->setDarkness(0.9f);
+	shadowLightPass->setViewPortSize(1600.f);
+
 	lightingPass = deferred.createPass<PointLightPass>();
 	ofxDeferred::PointLight dlight;
 	dlight.ambientColor = ofFloatColor(0.005);
@@ -51,10 +55,6 @@ void ofApp::setupDeferred() {
 
 	dlight.ambientColor = ofFloatColor(0.0);
 	lightingPass->addLight(dlight);
-
-	shadowLightPass = deferred.createPass<ShadowLightPass>();
-	shadowLightPass->setDarkness(0.9f);
-	shadowLightPass->setViewPortSize(1600.f);
 
 	hdrPass = deferred.createPass<HdrBloomPass>();
 	dofPass = deferred.createPass<DofPass>();
@@ -78,6 +78,7 @@ void ofApp::updateDeferred() {
 
 	shadowLightPass->setAmbientColor(sha_amb.get());
 	shadowLightPass->setDiffuseColor(sha_dif.get());
+	shadowLightPass->setDarkness(sha_dark.get());
 
 	dofPass->setFocus(dof_focal.get());
 	dofPass->setMaxBlur(dof_blur.get());
@@ -112,6 +113,7 @@ void ofApp::setupGui() {
 	shadow.setName("Shadow Light");
 	shadow.add(sha_amb.set("Ambient", ofFloatColor(0.2)));
 	shadow.add(sha_dif.set("Diffuse", ofFloatColor(0.7)));
+	shadow.add(sha_dark.set("Darkness", 0.5, 0., 1.));
 	panel.add(shadow);
 
 	dof.setName("Defocus Blur");

@@ -3,6 +3,7 @@ precision highp float;
 #pragma include "rand.glslinc.frag"
 
 uniform sampler2DRect tex;
+uniform sampler2DRect colorTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
 uniform mat4 projectionMatrix;
@@ -16,6 +17,11 @@ out vec4 outputColor;
 
 void main() {
     vec4 read = texture(tex, vTexCoord);
+    float stencil = texture(colorTex, vTexCoord).a;
+    if (stencil < 0.001) {
+        outputColor = read;
+        return;
+    }
     vec4 position = texture(positionTex, vTexCoord);
     vec3 normal = texture(normalAndDepthTex, vTexCoord).rgb;
     float depth = texture(normalAndDepthTex, vTexCoord).a;
@@ -36,7 +42,7 @@ void main() {
             offset.y = size.y - offset.y;
 
             float sampleDepth = texture(positionTex, offset.xy).z;
-            
+
             float bias = 0.025;
             float rangeCheck = smoothstep(0.0, 1.0, radius / abs(position.z - sampleDepth));
             occlusion += (sampleDepth >= s.z + bias ? 1.0 : 0.0) * rangeCheck;
