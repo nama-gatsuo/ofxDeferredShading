@@ -21,8 +21,9 @@ void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 	shader.setUniform1f("radius", radius);
 	shader.setUniform1f("darkness", darkness);
 	shader.setUniformMatrix4f("projectionMatrix", projection);
-	shader.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 1);
-	shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 2);
+	shader.setUniformTexture("colorTex", gbuffer.getTexture(GBuffer::TYPE_ALBEDO), 1);
+	shader.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 2);
+	shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
 	readFbo.draw(0, 0);
 	shader.end();
 

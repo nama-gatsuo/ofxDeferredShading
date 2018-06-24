@@ -6,8 +6,15 @@ void Processor::init(unsigned w, unsigned h) {
 	width = w;
 	height = h;
 
+	ofFbo::Settings s;
+	s.width = width;
+	s.height = height;
+	s.internalformat = GL_RGBA;
+	s.useDepth = true;
+	s.useStencil = true;
+
 	for (int i = 0; i < 2; i++) {
-		pingPong[i].allocate(width, height, GL_RGBA);
+		pingPong[i].allocate(s);
 	}
 
 	numProcessedPasses = 0;

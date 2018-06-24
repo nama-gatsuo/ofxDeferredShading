@@ -8,7 +8,7 @@ void GBuffer::setup(int w, int h) {
 	s.height = h;
 	s.minFilter = GL_NEAREST;
 	s.maxFilter = GL_NEAREST;
-	s.colorFormats.push_back(GL_RGB); // color
+	s.colorFormats.push_back(GL_RGBA); // color + stencil
 	s.colorFormats.push_back(GL_RGBA32F); // vertex coord
 	s.colorFormats.push_back(GL_RGBA32F); // depth + normal
 	s.colorFormats.push_back(GL_RGB32F); // HDR map
@@ -61,7 +61,7 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
 
 }
 
-void GBuffer::end() {
+void GBuffer::end() const {
 	ofDisableDepthTest();
 	ofPopStyle();
 
@@ -72,7 +72,7 @@ void GBuffer::end() {
 
 }
 
-void GBuffer::debugDraw() {
+void GBuffer::debugDraw() const {
 	ofDisableAlphaBlending();
 	float w2 = ofGetViewportWidth();
 	float h2 = ofGetViewportHeight();

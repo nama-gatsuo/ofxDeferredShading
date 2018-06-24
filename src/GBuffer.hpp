@@ -18,8 +18,8 @@ namespace ofxDeferred {
 		GBuffer() {}
 		void setup(int w = ofGetWidth(), int h = ofGetHeight());
 		void begin(ofCamera& cam, bool bUseOthreShader = false);
-		void end();
-		void debugDraw();
+		void end() const;
+		void debugDraw() const;
 		ofTexture& getTexture(int index) {
 			return fbo.getTexture(index);
 		}

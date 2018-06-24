@@ -1,7 +1,8 @@
-// modified vesion of http://pasteall.org/10779 
+// modified vesion of http://pasteall.org/10779
 #version 400
 
 uniform sampler2DRect tex;
+uniform sampler2DRect colorTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
 
@@ -22,6 +23,12 @@ const vec4 ambientGlobal = vec4(vec3(0.15), 1.0);
 void main(){
 
     vec4 read = texture(tex, vTexCoord);
+    float stencil = texture(colorTex, vTexCoord).a;
+    if (stencil < 0.001) {
+        outputColor = read;
+        return;
+    }
+
     vec3 position = texture(positionTex, vTexCoord).rgb;
     float linearDepth = texture(normalAndDepthTex, vTexCoord).a;
     vec3 normal = texture(normalAndDepthTex, vTexCoord).rgb;

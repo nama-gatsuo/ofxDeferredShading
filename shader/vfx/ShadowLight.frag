@@ -2,6 +2,7 @@
 precision highp float;
 
 uniform sampler2DRect tex;
+uniform sampler2DRect colorTex;
 uniform sampler2DRect lightDepthTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
@@ -21,6 +22,11 @@ out vec4 outputColor;
 void main() {
 
     vec4 read = texture(tex, vTexCoord);
+    float stencil = texture(colorTex, vTexCoord).a;
+    if (stencil < 0.001) {
+        outputColor = read;
+        return;
+    }
     vec4 position = texture(positionTex, vTexCoord); // in view space
     vec3 normal = texture(normalAndDepthTex, vTexCoord).rgb; // in view space
 
@@ -36,6 +42,6 @@ void main() {
     float bias = 0.0005 * tan(acos(dot(normal, -lightDir)));
     if (texel < dist - bias) shadow -= darkness;
 
-    outputColor = read * ambient + read * diffuse * dot(normal, -lightDir) * shadow;
+    outputColor = read * (ambient + diffuse * dot(normal, -lightDir)) * shadow;
     outputColor.a = 1.0;
 }

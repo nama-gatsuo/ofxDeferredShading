@@ -17,7 +17,6 @@ namespace ofxDeferred {
 		string getName() const { return name; }
 
 	protected:
-		void textureQuad(float x, float y, float w, float h, float s = 1.0, float t = 1.0);
 
 		string name;
 		bool enabled;
