@@ -38,7 +38,7 @@ namespace ofxDeferred {
 
 	public:
 		using Ptr = shared_ptr<ShadowLightPass>;
-		ShadowLightPass(const ofVec2f& size);
+		ShadowLightPass(const glm::vec2& size);
 
 		void beginShadowMap(bool bUseOwnShader = false);
 		void endShadowMap();

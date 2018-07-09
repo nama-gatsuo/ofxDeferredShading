@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-HdrBloomPass::HdrBloomPass(const ofVec2f& size) : RenderPass(size, "HdrBloomPass") {
+HdrBloomPass::HdrBloomPass(const glm::vec2& size) : RenderPass(size, "HdrBloomPass") {
 	blurShader.load("shader/vfx/PassThru.vert", "shader/vfx/Blur.frag");
 	blurFbo[0].allocate(size.x, size.y, GL_RGB);
 	blurFbo[1].allocate(size.x, size.y, GL_RGB);

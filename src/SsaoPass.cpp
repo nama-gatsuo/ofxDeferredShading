@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-SsaoPass::SsaoPass(const ofVec2f& size) : RenderPass(size, "SsaoPass") {
+SsaoPass::SsaoPass(const glm::vec2& size) : RenderPass(size, "SsaoPass") {
 	shader.load("shader/vfx/PassThru.vert", "shader/vfx/Ssao.frag");
 }
 

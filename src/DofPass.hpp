@@ -11,7 +11,7 @@ namespace ofxDeferred {
 	public:
 		using Ptr = shared_ptr<DofPass>;
 
-		DofPass(const ofVec2f& size);
+		DofPass(const glm::vec2& size);
 		void update(ofCamera& cam) {};
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 

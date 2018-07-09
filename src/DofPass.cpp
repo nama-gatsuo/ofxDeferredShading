@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-DofPass::DofPass(const ofVec2f& size) : RenderPass(size, "DofPass") {
+DofPass::DofPass(const glm::vec2& size) : RenderPass(size, "DofPass") {
 	shader.load("shader/vfx/PassThru.vert", "shader/vfx/Dof.frag");
 }
 

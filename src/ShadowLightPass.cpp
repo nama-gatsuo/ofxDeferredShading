@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-ShadowLightPass::ShadowLightPass(const ofVec2f& size) : RenderPass(size, "ShadowLightPass") {
+ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "ShadowLightPass") {
 
 	// create shadow map fbo
 	ofFbo::Settings s;

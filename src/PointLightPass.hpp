@@ -22,7 +22,7 @@ namespace ofxDeferred {
 
 	public:
 		using Ptr = shared_ptr<PointLightPass>;
-		PointLightPass(const ofVec2f& size);
+		PointLightPass(const glm::vec2& size);
 
 		void addLight(PointLight light) {
 			lights.push_back(light);

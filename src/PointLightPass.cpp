@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-PointLightPass::PointLightPass(const ofVec2f& size) : RenderPass(size, "PointLightPass") {
+PointLightPass::PointLightPass(const glm::vec2& size) : RenderPass(size, "PointLightPass") {
 	shader.load("shader/vfx/PassThru.vert", "shader/vfx/PointLight.frag");
 	lightShader.load("shader/gbuffer.vert", "shader/customShader.frag");
 
