@@ -10,8 +10,8 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 	s.height = 1024;
 	s.minFilter = GL_LINEAR;
 	s.maxFilter = GL_LINEAR;
-	s.wrapModeVertical = GL_WRAP_BORDER;
-	s.wrapModeHorizontal = GL_WRAP_BORDER;
+	s.wrapModeVertical = GL_CLAMP_TO_EDGE;
+	s.wrapModeHorizontal = GL_CLAMP_TO_EDGE;
 	s.internalformat = GL_R16F;
 	s.useDepth = true;
 	s.useStencil = true;
@@ -56,8 +56,8 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 	ofSetMatrixMode(OF_MATRIX_MODELVIEW);
 	ofLoadMatrix(modelView);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_FRONT);
 
 	if (!useShader) {
 		linearDepthShader.begin();
@@ -71,7 +71,7 @@ void ShadowLightPass::endShadowMap() {
 
 	if (!useShader) linearDepthShader.end();
 
-	glDisable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
 	ofDisableDepthTest();
 	ofPopView();
 
@@ -82,7 +82,7 @@ void ShadowLightPass::endShadowMap() {
 }
 
 void ShadowLightPass::debugDraw() {
-	shadowMap.getTexture().draw(0, 0, 128, 128);
+	shadowMap.getTexture().draw(0, 0, 256, 256);
 }
 
 void ShadowLightPass::update(ofCamera &cam) {

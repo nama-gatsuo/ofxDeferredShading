@@ -52,6 +52,7 @@ namespace ofxDeferred {
 		void setDarkness(float _darkness) { darkness = _darkness; }
 		void setFar(float _farClip) { farClip = _farClip; }
 		void setNear(float _nearClip) { nearClip = _nearClip; }
+		void setDistance(float _dist) { distance = _dist; }
 		void setDirection(const glm::vec3& dir) {
 			setGlobalPosition(-dir * distance);
 			direction = dir;

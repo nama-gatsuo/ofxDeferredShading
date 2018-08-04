@@ -8,7 +8,7 @@ namespace ofxDeferred {
 		int blurRadius;
 		float blurVariance;
 		ofShader blurShader;
-		ofShader thresShader;
+		
 		ofFbo blurFbo[2];
 		vector<float> coefficients;
 		vector<float> offsets;
