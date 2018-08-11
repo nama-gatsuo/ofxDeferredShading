@@ -85,7 +85,7 @@ void ShadowLightPass::debugDraw() {
 	shadowMap.getTexture().draw(0, 0, 256, 256);
 }
 
-void ShadowLightPass::update(ofCamera &cam) {
+void ShadowLightPass::update(const ofCamera &cam) {
 
 	lightCamera.setFarClip(farClip);
 	lightCamera.setNearClip(nearClip);

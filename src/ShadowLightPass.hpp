@@ -46,7 +46,7 @@ namespace ofxDeferred {
 		void debugDraw();
 		ofFbo& getShadowMap() { return shadowMap; };
 
-		void update(ofCamera& cam);
+		void update(const ofCamera& cam);
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 
 		void setDarkness(float _darkness) { darkness = _darkness; }

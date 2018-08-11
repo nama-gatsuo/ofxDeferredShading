@@ -33,7 +33,7 @@ namespace ofxDeferred {
 		void clear() { lights.clear(); }
 		int getLightsSize() const { return lights.size(); }
 		vector<PointLight>& getLights() { return lights; }
-		void update(ofCamera& cam);
+		void update(const ofCamera& cam);
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 
 		void drawLights(ofPolyRenderMode mode = OF_MESH_FILL);

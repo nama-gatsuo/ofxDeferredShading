@@ -20,7 +20,7 @@ namespace ofxDeferred {
 		using Ptr = shared_ptr<HdrBloomPass>;
 		HdrBloomPass(const glm::vec2& size);
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
-		void update(ofCamera& cam);
+		void update(const ofCamera& cam) {}
 
 	};
 }

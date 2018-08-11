@@ -9,7 +9,7 @@ namespace ofxDeferred {
 		using Ptr = std::shared_ptr<RenderPass>;
 
 		RenderPass(const glm::vec2& sz, const string& n) : size(sz), name(n), enabled(true) {}
-		virtual void update(ofCamera& cam) = 0;
+		virtual void update(const ofCamera& cam) = 0;
 		virtual void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) = 0;
 
 		void setEnabled(bool enabled) { this->enabled = enabled; }
@@ -17,10 +17,9 @@ namespace ofxDeferred {
 		string getName() const { return name; }
 
 	protected:
-
 		string name;
 		bool enabled;
-		ofVec2f size;
+		const glm::vec2 size;
 	};
 
 	class Processor : public ofBaseDraws {

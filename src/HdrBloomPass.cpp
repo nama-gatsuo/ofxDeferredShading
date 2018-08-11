@@ -53,10 +53,6 @@ float HdrBloomPass::Gaussian(float x, float mean, float variance) {
 	return (1. / sqrt(TWO_PI * variance)) * exp(-(x * x) / (2. * variance));
 }
 
-void HdrBloomPass::update(ofCamera& cam) {
-
-}
-
 void HdrBloomPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 
 	// vertical blur

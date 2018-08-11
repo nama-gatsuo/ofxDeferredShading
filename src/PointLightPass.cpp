@@ -12,7 +12,7 @@ PointLightPass::PointLightPass(const glm::vec2& size) : RenderPass(size, "PointL
 	}
 }
 
-void PointLightPass::update(ofCamera &cam) {
+void PointLightPass::update(const ofCamera &cam) {
 	modelViewMatrix = cam.getModelViewMatrix();
 }
 

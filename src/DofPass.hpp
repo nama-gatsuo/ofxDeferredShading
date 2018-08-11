@@ -12,7 +12,7 @@ namespace ofxDeferred {
 		using Ptr = shared_ptr<DofPass>;
 
 		DofPass(const glm::vec2& size);
-		void update(ofCamera& cam) {};
+		void update(const ofCamera& cam) {}
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 
 		void setFocus(float focus) { this->focus = focus; }

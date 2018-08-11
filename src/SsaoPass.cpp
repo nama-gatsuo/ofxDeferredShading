@@ -6,7 +6,7 @@ SsaoPass::SsaoPass(const glm::vec2& size) : RenderPass(size, "SsaoPass") {
 	shader.load("shader/vfx/PassThru.vert", "shader/vfx/Ssao.frag");
 }
 
-void SsaoPass::update(ofCamera& cam) {
+void SsaoPass::update(const ofCamera& cam) {
 	projection = cam.getProjectionMatrix();
 }
 

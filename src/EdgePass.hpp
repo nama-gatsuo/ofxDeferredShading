@@ -16,7 +16,7 @@ namespace ofxDeferred {
 		void setEdgeColor(const ofFloatColor& col) { edgeColor = col; }
 		void setBackground(const ofFloatColor& col) { bgColor = col; }
 		void setUseReadColor(bool active) { useReadColor = active; }
-		void update(ofCamera& cam) {};
+		void update(const ofCamera& cam) {}
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 
 	};

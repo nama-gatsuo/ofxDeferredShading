@@ -13,7 +13,7 @@ namespace ofxDeferred {
 		using Ptr = shared_ptr<SsaoPass>;
 		SsaoPass(const glm::vec2& size);
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
-		void update(ofCamera& cam);
+		void update(const ofCamera& cam);
 		void setOcculusionRadius(float radius) { this->radius = radius; }
 		void setDarkness(float darkness) { this->darkness = darkness; }
 
