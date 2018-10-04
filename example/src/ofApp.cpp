@@ -12,7 +12,8 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	shadowLightPass->setDirection(glm::normalize(glm::vec3(cos(ofGetElapsedTimef()), -1.5f, sin(ofGetElapsedTimef()))));
+	shadowLightPass->setGlobalPosition(normalize(vec3(cos(ofGetElapsedTimef()), 1.5f, sin(ofGetElapsedTimef()))) * 2000.f);
+	shadowLightPass->lookAt(vec3(0));
 
 	updateDeferred();
 }
@@ -50,10 +51,10 @@ void ofApp::setupDeferred() {
 
 	lightingPass = deferred.createPass<PointLightPass>();
 	ofxDeferred::PointLight dlight;
-	dlight.ambientColor = ofFloatColor(0.005);
+	dlight.ambientColor = ofFloatColor(0.f);
 	lightingPass->addLight(dlight);
 
-	dlight.ambientColor = ofFloatColor(0.0);
+	dlight.ambientColor = ofFloatColor(0.f);
 	lightingPass->addLight(dlight);
 
 	hdrPass = deferred.createPass<HdrBloomPass>();
@@ -94,7 +95,7 @@ void ofApp::setupGui() {
 	pl1.add(pl1_diff.set("Diffuse Color", ofFloatColor(0.4)));
 	pl1.add(pl1_spe.set("Specular Color", ofFloatColor(1.0)));
 	pl1.add(pl1_rad.set("Radius", 500, 100, 2000));
-	pl1.add(pl1_int.set("Intensity", 1.2, 0.1, 3.0));
+	pl1.add(pl1_int.set("Intensity", 0.2, 0.1, 3.0));
 	panel.add(pl1);
 
 	pl2.setName("Point light 2");
@@ -102,7 +103,7 @@ void ofApp::setupGui() {
 	pl2.add(pl2_diff.set("Diffuse Color", ofFloatColor(0.4)));
 	pl2.add(pl2_spe.set("Specular Color", ofFloatColor(1.0)));
 	pl2.add(pl2_rad.set("Radius", 500, 100, 2000));
-	pl2.add(pl2_int.set("Intensity", 1.2, 0.1, 3.0));
+	pl2.add(pl2_int.set("Intensity", 0.5, 0.1, 3.0));
 	panel.add(pl2);
 
 	ao.setName("Ambient Occlusion");

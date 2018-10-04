@@ -24,7 +24,7 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 
 	nearClip = 1.f;
 	farClip = 5000.f;
-	distance = 2000.f;
+	
 	linearDepthScalar = 1.f / (farClip - nearClip);
 
 	viewPortSize = 1024.f;
@@ -36,12 +36,11 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 
 void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 
-
 	useShader = bUseOwnShader;
 
 	// update view matrix of depth camera
-	projection = glm::ortho(-viewPortSize, viewPortSize, -viewPortSize, viewPortSize, nearClip, farClip);
-	modelView = glm::lookAt(getGlobalPosition(), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	projection = ortho(-viewPortSize, viewPortSize, viewPortSize, -viewPortSize, nearClip, farClip);
+	modelView = inverse(translate(getGlobalPosition()) * toMat4(getGlobalOrientation()));
 	depthMVP = projection * modelView;
 	shadowMap.begin();
 
@@ -50,19 +49,17 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 	ofEnableDepthTest();
 
 	ofPushView();
-	//ofSetOrientation(ofGetOrientation(), false);
 	ofSetMatrixMode(OF_MATRIX_PROJECTION);
 	ofLoadMatrix(projection);
 	ofSetMatrixMode(OF_MATRIX_MODELVIEW);
 	ofLoadMatrix(modelView);
-
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_FRONT);
+	
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
 
 	if (!useShader) {
 		linearDepthShader.begin();
-		linearDepthShader.setUniform1f("nearClip", nearClip);
-		linearDepthShader.setUniform1f("farClip", farClip);
+		linearDepthShader.setUniform1f("lds", linearDepthScalar);
 	}
 
 }
@@ -71,7 +68,8 @@ void ShadowLightPass::endShadowMap() {
 
 	if (!useShader) linearDepthShader.end();
 
-	//glDisable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
+	
 	ofDisableDepthTest();
 	ofPopView();
 
@@ -87,11 +85,9 @@ void ShadowLightPass::debugDraw() {
 
 void ShadowLightPass::update(const ofCamera &cam) {
 
-	lightCamera.setFarClip(farClip);
-	lightCamera.setNearClip(nearClip);
-	linearDepthScalar = 1.0f / (farClip - nearClip);
-	shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());
-	directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(direction, 0.f));
+	linearDepthScalar = 1.f / (farClip - nearClip);
+	shadowTransMat = biasMat * depthMVP * inverse(cam.getModelViewMatrix());
+	directionInView = (inverse(transpose(cam.getModelViewMatrix())) * vec4(getLookAtDir(), 0.f));
 
 }
 
