@@ -72,8 +72,7 @@ void PointLightPass::drawLights(ofCamera& cam, bool isShadow, ofPolyRenderMode m
 	lightShader.begin();
 	lightShader.setUniform1i("isShadow", isShadow ? 1 : 0);
 	lightShader.setUniformMatrix4f("normalMatrix", normalMatrix);
-	lightShader.setUniform1f("farClip", cam.getFarClip());
-	lightShader.setUniform1f("nearClip", cam.getNearClip());
+	lightShader.setUniform1f("lds", 1. - (cam.getFarClip() - cam.getNearClip()));
 
 	drawLights(mode);
 
