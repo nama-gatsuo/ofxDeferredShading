@@ -7,7 +7,8 @@ SsaoPass::SsaoPass(const glm::vec2& size) : RenderPass(size, "SsaoPass") {
 }
 
 void SsaoPass::update(const ofCamera& cam) {
-	projection = cam.getProjectionMatrix();
+	ofRectangle viewPort(0, 0, size.x, size.y);
+	projection = cam.getProjectionMatrix(viewPort);
 }
 
 void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {

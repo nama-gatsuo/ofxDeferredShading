@@ -17,7 +17,7 @@ void GBuffer::setup(int w, int h) {
 	s.useStencil = true;
 
 	fbo.allocate(s);
-
+	
 	shader.load("shader/gbuffer");
 	debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
 
@@ -51,8 +51,7 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
 	if (bUseShader) {
 		shader.begin();
 		shader.setUniformMatrix4f("normalMatrix", glm::inverse(glm::transpose(cam.getModelViewMatrix())));
-		shader.setUniform1f("farClip", cam.getFarClip());
-		shader.setUniform1f("nearClip", cam.getNearClip());
+		shader.setUniform1f("lds", 1. / (cam.getFarClip() - cam.getNearClip()));
 	}
 
 	ofPushStyle();
@@ -73,12 +72,13 @@ void GBuffer::end() const {
 }
 
 void GBuffer::debugDraw() const {
-	ofDisableAlphaBlending();
+	
 	float w2 = ofGetViewportWidth();
 	float h2 = ofGetViewportHeight();
 	float ws = w2 * 0.25;
 	float hs = h2 * 0.25;
-
+	
+	ofDisableAlphaBlending();
 	fbo.getTexture(TYPE_ALBEDO).draw(0, hs * 3, ws, hs);
 	fbo.getTexture(TYPE_POSITION).draw(ws, hs * 3, ws, hs);
 	fbo.getTexture(TYPE_DEPTH_NORMAL).draw(ws * 2, hs * 3, ws, hs);

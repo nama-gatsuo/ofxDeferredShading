@@ -4,7 +4,7 @@
 
 namespace ofxDeferred {
 	class HdrBloomPass : public RenderPass {
-	protected:
+	private:
 		int blurRadius;
 		float blurVariance;
 		ofShader blurShader;
@@ -14,7 +14,7 @@ namespace ofxDeferred {
 		vector<float> offsets;
 
 		vector<float> createGaussianWeights(int size, float variance);
-		vector<float> createOffsets(vector<float>& gaussian);
+		vector<float> createOffsets(const vector<float>& gaussian);
 		float Gaussian(float x, float mean, float variance);
 	public:
 		using Ptr = shared_ptr<HdrBloomPass>;

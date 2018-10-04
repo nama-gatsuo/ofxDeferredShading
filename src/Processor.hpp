@@ -47,11 +47,13 @@ namespace ofxDeferred {
 		unsigned size() const { return passes.size(); }
 		RenderPass::Ptr operator[](unsigned i) const { return passes[i]; }
 		vector<RenderPass::Ptr>& getPasses() { return passes; }
-		unsigned getNumProcessedPasses() const { return numProcessedPasses; }
-		GBuffer* getGBuffer() { return &gbuffer; }
+		
+		const ofFbo& getFbo() { return pingPong[currentReadFbo]; }
+		GBuffer& getGBuffer() { return gbuffer; }
 
 	private:
 		void process();
+		unsigned getNumProcessedPasses() const { return numProcessedPasses; }
 
 		unsigned currentReadFbo;
 		unsigned numProcessedPasses;

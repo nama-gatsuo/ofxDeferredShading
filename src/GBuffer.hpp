@@ -8,7 +8,7 @@ namespace ofxDeferred {
 		ofFbo fbo;
 		ofShader shader;
 		ofShader debugShader;
-		ofMatrix4x4 prevMvpMat;
+		
 		bool bUseShader;
 	public:
 

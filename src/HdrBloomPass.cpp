@@ -11,7 +11,7 @@ HdrBloomPass::HdrBloomPass(const glm::vec2& size) : RenderPass(size, "HdrBloomPa
 	int center = gaussian.size() / 2;
 	coefficients.push_back(gaussian[center]);
 	for (int i = 1; i < gaussian.size(); i += 2) {
-		float weightSum = gaussian[i] + gaussian[i + 1];
+		float weightSum = (gaussian[i] + gaussian[i + 1]) / 2.;
 		coefficients.push_back(weightSum);
 	}
 	offsets = createOffsets(gaussian);
@@ -33,7 +33,7 @@ vector<float> HdrBloomPass::createGaussianWeights(int radius, float variance) {
 
 	return row;
 }
-vector<float> HdrBloomPass::createOffsets(vector<float>& gaussian) {
+vector<float> HdrBloomPass::createOffsets(const vector<float>& gaussian) {
 	vector<float> offsets;
 
 	int center = gaussian.size() / 2;

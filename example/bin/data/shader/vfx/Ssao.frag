@@ -1,6 +1,6 @@
 #version 400
 precision highp float;
-#pragma include "rand.glslinc.frag"
+#pragma include "../libs/random.frag"
 
 uniform sampler2DRect tex;
 uniform sampler2DRect colorTex;

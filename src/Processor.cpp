@@ -10,8 +10,8 @@ void Processor::init(unsigned w, unsigned h) {
 	s.width = width;
 	s.height = height;
 	s.internalformat = GL_RGBA;
-	s.useDepth = true;
-	s.useStencil = true;
+	//s.useDepth = true;
+	//s.useStencil = true;
 
 	for (int i = 0; i < 2; i++) {
 		pingPong[i].allocate(s);

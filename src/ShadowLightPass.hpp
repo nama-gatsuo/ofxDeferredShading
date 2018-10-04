@@ -10,7 +10,8 @@ namespace ofxDeferred {
 		bool useShader = false;
 		ofFbo shadowMap;
 
-		const glm::mat4 biasMat = glm::mat4(0.5, 0.0, 0.0, 0.0,
+		const glm::mat4 biasMat = glm::mat4(
+			0.5, 0.0, 0.0, 0.0,
 			0.0, 0.5, 0.0, 0.0,
 			0.0, 0.0, 0.5, 0.0,
 			0.5, 0.5, 0.5, 1.0);
