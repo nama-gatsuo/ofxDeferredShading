@@ -1,5 +1,5 @@
 # ofxDeferredShading
-![](./screenshot.jpg)
+![](./screenshot.png)
 
 Here is [demo](https://www.youtube.com/watch?v=xhm2CdpSpcI).
 
