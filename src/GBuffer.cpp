@@ -11,7 +11,7 @@ void GBuffer::setup(int w, int h) {
 	s.colorFormats.push_back(GL_RGBA); // color + stencil
 	s.colorFormats.push_back(GL_RGBA32F); // vertex coord
 	s.colorFormats.push_back(GL_RGBA32F); // depth + normal
-	s.colorFormats.push_back(GL_RGB32F); // HDR map
+	s.colorFormats.push_back(GL_RGBA32F); // HDR map
 	s.depthStencilAsTexture = true;
 	s.useDepth = true;
 	s.useStencil = true;
