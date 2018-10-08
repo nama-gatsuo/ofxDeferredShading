@@ -11,13 +11,13 @@ void GBuffer::setup(int w, int h) {
 	s.colorFormats.push_back(GL_RGBA32F); // color + stencil
 	s.colorFormats.push_back(GL_RGBA32F); // vertex coord
 	s.colorFormats.push_back(GL_RGBA32F); // depth + normal
-	
+
 	s.depthStencilAsTexture = true;
 	s.useDepth = true;
 	s.useStencil = true;
 
 	fbo.allocate(s);
-	
+
 	shader.load("shader/gbuffer");
 	debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
 
@@ -71,12 +71,12 @@ void GBuffer::end() const {
 }
 
 void GBuffer::debugDraw() const {
-	
+
 	float w2 = ofGetViewportWidth();
 	float h2 = ofGetViewportHeight();
 	float ws = w2 * 0.25;
 	float hs = h2 * 0.25;
-	
+
 	ofDisableAlphaBlending();
 	fbo.getTexture(TYPE_ALBEDO).draw(0, hs * 3, ws, hs);
 	fbo.getTexture(TYPE_POSITION).draw(ws, hs * 3, ws, hs);
@@ -85,5 +85,5 @@ void GBuffer::debugDraw() const {
 	debugShader.begin();
 	fbo.getTexture(TYPE_DEPTH_NORMAL).draw(ws * 3, hs * 3, ws, hs);
 	debugShader.end();
-	
+
 }
