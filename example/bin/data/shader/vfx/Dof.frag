@@ -1,79 +1,69 @@
-/* modified vesion of http://pasteall.org/10779 */
 #version 400
-
-uniform sampler2DRect tex; // read fbo
-uniform sampler2DRect normalAndDepthTex;
-
-uniform float aperture;
-uniform float focusDist;
-uniform float maxBlur;
-
-uniform vec2 size;
+#pragma include "../libs/random.frag"
 
 in vec2 vTexCoord;
 out vec4 outputColor;
 
+uniform sampler2DRect tex;
+uniform sampler2DRect normalAndDepthTex;
+
+uniform float zNearStart;
+uniform float zNearEnd;
+uniform float zFarStart;
+uniform float zFarEnd;
+uniform float maxBlur;
+
+uniform vec2 poisson[32];
+const int nSamples = 24;
+
+float mapCoc(float d) {
+    return 1. - smoothstep(zNearEnd, zNearStart, d) * (1. - smoothstep(zFarStart, zFarEnd, d)); //* smoothstep(zEnd, 1., d);
+}
+
 void main() {
 
-    vec2 aspectcorrect = size;
+    vec3 color = texture(tex, vTexCoord).xyz;
+    float depth = texture(normalAndDepthTex, vTexCoord).a; // linear depth 0 ~ 1.
+    float blur = mapCoc(depth); // CoC 0 ~ 1
+    float cocSize = blur * maxBlur;
 
-    float depth = texture(normalAndDepthTex, vTexCoord).a;
-    float factor = depth - focusDist;
+    float theta = 2. * PI * srand(vTexCoord * 0.01);
+    mat2 rot = mat2(
+        cos(theta), sin(theta),
+        - sin(theta), cos(theta)
+    );
 
-    vec2 dofblur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));
+    float totalWeight = 0.;
+    vec3 result = vec3(0);
 
-    vec2 dofblur9 = dofblur * 0.9;
-    vec2 dofblur7 = dofblur * 0.7;
-    vec2 dofblur4 = dofblur * 0.4;
+    //poisson disk sampling with cocSize
+    if (blur > 0.0) {
+        for (int i = 0; i < nSamples; i++) {
 
-    vec4 col = vec4( 0.0 );
+            float radius = length(poisson[i]) * cocSize;
+            vec2 uv = vTexCoord + (rot * poisson[i]) * cocSize;
 
-    col += texture( tex, vTexCoord );
-    col += texture( tex, vTexCoord + ( vec2(  0.0,   0.4  ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.15,  0.37 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.29,  0.29 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2( -0.37,  0.15 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.40,  0.0  ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.37, -0.15 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.29, -0.29 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2( -0.15, -0.37 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.0,  -0.4  ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2( -0.15,  0.37 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2( -0.29,  0.29 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.37,  0.15 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2( -0.4,   0.0  ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2( -0.37, -0.15 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2( -0.29, -0.29 ) * aspectcorrect ) * dofblur );
-    col += texture( tex, vTexCoord + ( vec2(  0.15, -0.37 ) * aspectcorrect ) * dofblur );
+            // sample color
+            float depthSample = texture(normalAndDepthTex, uv).a;
+            float blurSample = mapCoc(depthSample);
+            vec3 colorSample = texture(tex, uv).rgb;
 
-    col += texture( tex, vTexCoord + ( vec2(  0.15,  0.37 ) * aspectcorrect ) * dofblur9 );
-    col += texture( tex, vTexCoord + ( vec2( -0.37,  0.15 ) * aspectcorrect ) * dofblur9 );
-    col += texture( tex, vTexCoord + ( vec2(  0.37, -0.15 ) * aspectcorrect ) * dofblur9 );
-    col += texture( tex, vTexCoord + ( vec2( -0.15, -0.37 ) * aspectcorrect ) * dofblur9 );
-    col += texture( tex, vTexCoord + ( vec2( -0.15,  0.37 ) * aspectcorrect ) * dofblur9 );
-    col += texture( tex, vTexCoord + ( vec2(  0.37,  0.15 ) * aspectcorrect ) * dofblur9 );
-    col += texture( tex, vTexCoord + ( vec2( -0.37, -0.15 ) * aspectcorrect ) * dofblur9 );
-    col += texture( tex, vTexCoord + ( vec2(  0.15, -0.37 ) * aspectcorrect ) * dofblur9 );
+            //
+            float cocWeight = clamp(cocSize + 1. - radius, 0., 1.);
+            float depthWeight = float(depthSample >= depth);
+            float tapWeight = cocWeight * clamp(depthWeight + blurSample, 0., 1.);
 
-    col += texture( tex, vTexCoord + ( vec2(  0.29,  0.29 ) * aspectcorrect ) * dofblur7 );
-    col += texture( tex, vTexCoord + ( vec2(  0.40,  0.0  ) * aspectcorrect ) * dofblur7 );
-    col += texture( tex, vTexCoord + ( vec2(  0.29, -0.29 ) * aspectcorrect ) * dofblur7 );
-    col += texture( tex, vTexCoord + ( vec2(  0.0,  -0.4  ) * aspectcorrect ) * dofblur7 );
-    col += texture( tex, vTexCoord + ( vec2( -0.29,  0.29 ) * aspectcorrect ) * dofblur7 );
-    col += texture( tex, vTexCoord + ( vec2( -0.4,   0.0  ) * aspectcorrect ) * dofblur7 );
-    col += texture( tex, vTexCoord + ( vec2( -0.29, -0.29 ) * aspectcorrect ) * dofblur7 );
-    col += texture( tex, vTexCoord + ( vec2(  0.0,   0.4  ) * aspectcorrect ) * dofblur7 );
+            result += colorSample * tapWeight;
+            totalWeight += tapWeight;
+        }
 
-    col += texture( tex, vTexCoord + ( vec2(  0.29,  0.29 ) * aspectcorrect ) * dofblur4 );
-    col += texture( tex, vTexCoord + ( vec2(  0.4,   0.0  ) * aspectcorrect ) * dofblur4 );
-    col += texture( tex, vTexCoord + ( vec2(  0.29, -0.29 ) * aspectcorrect ) * dofblur4 );
-    col += texture( tex, vTexCoord + ( vec2(  0.0,  -0.4  ) * aspectcorrect ) * dofblur4 );
-    col += texture( tex, vTexCoord + ( vec2( -0.29,  0.29 ) * aspectcorrect ) * dofblur4 );
-    col += texture( tex, vTexCoord + ( vec2( -0.4,   0.0  ) * aspectcorrect ) * dofblur4 );
-    col += texture( tex, vTexCoord + ( vec2( -0.29, -0.29 ) * aspectcorrect ) * dofblur4 );
-    col += texture( tex, vTexCoord + ( vec2(  0.0,   0.4  ) * aspectcorrect ) * dofblur4 );
+        result /= totalWeight;
 
-    outputColor = col / 41.0;
-    outputColor.a = 1.0;
+    } else {
+        result = color.rgb;
+    }
 
+    //result = vec3(blur);
+
+    outputColor = vec4(result, 1.);
 }

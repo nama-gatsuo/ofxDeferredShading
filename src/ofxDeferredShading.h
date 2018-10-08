@@ -4,8 +4,9 @@
 #include "PointLightPass.hpp"
 #include "SsaoPass.hpp"
 #include "ShadowLightPass.hpp"
-#include "HdrBloomPass.hpp"
+#include "BloomPass.hpp"
 #include "DofPass.hpp"
 #include "EdgePass.hpp"
+#include "Blur.h"
 
 using ofxDeferredProcessing = ofxDeferred::Processor;

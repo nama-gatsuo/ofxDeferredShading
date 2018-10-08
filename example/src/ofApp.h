@@ -26,11 +26,11 @@ private:
 	GenCells cells;
 
 	ofxDeferredProcessing deferred;
-	std::shared_ptr<PointLightPass> lightingPass;
-	std::shared_ptr<SsaoPass> ssaoPass;
-	std::shared_ptr<ShadowLightPass> shadowLightPass;
-	std::shared_ptr<DofPass> dofPass;
-	std::shared_ptr<HdrBloomPass> hdrPass;
+	ofPtr<PointLightPass> lightingPass;
+	ofPtr<SsaoPass> ssaoPass;
+	ofPtr<ShadowLightPass> shadowLightPass;
+	ofPtr<DofPass> dofPass;
+	ofPtr<BloomPass> bloomPass;
 
 	// gui
 	bool isShowPanel;
@@ -59,8 +59,11 @@ private:
 	ofParameter<float> sha_dark;
 
 	ofParameterGroup dof;
-	ofParameter<float> dof_blur;
-	ofParameter<float> dof_ape;
-	ofParameter<float> dof_focal;
+	ofParameter<float> dof_focus;
+	ofParameter<vec2> dof_coc;
+
+	ofParameterGroup bloom;
+	ofParameter<float> thres;
+
 };
 

@@ -15,5 +15,5 @@ void main(){
     outputColor0 = vColor;
     outputColor1 = vPosition;
     outputColor2 = vec4(normalize(vNormal), vDepth);
-    outputColor3 = any(greaterThan(vColor, vec4(1.))) ? vColor : vec4(0.,0.,0.,1.);
+    
 }

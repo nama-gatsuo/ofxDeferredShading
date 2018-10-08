@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<group>
+	<Point_light_1>
+		<Position>500, 500, 500</Position>
+		<Diffuse_Color>0.4, 0.4, 0.4, 1</Diffuse_Color>
+		<Specular_Color>1, 1, 1, 1</Specular_Color>
+		<Radius>500</Radius>
+		<Intensity>0.2</Intensity>
+	</Point_light_1>
+	<Point_light_2>
+		<Position>-600, 700, 200</Position>
+		<Diffuse_Color>0.4, 0.4, 0.4, 1</Diffuse_Color>
+		<Specular_Color>1, 1, 1, 1</Specular_Color>
+		<Radius>500</Radius>
+		<Intensity>0.5</Intensity>
+	</Point_light_2>
+	<Ambient_Occlusion>
+		<Occlusion_Radius>5</Occlusion_Radius>
+		<Darkness>0.8</Darkness>
+	</Ambient_Occlusion>
+	<Shadow_Light>
+		<Ambient>0.453353, 0.432528, 0.468971, 1</Ambient>
+		<Diffuse>0.744898, 0.765723, 0.807372, 1</Diffuse>
+		<Darkness>0.5</Darkness>
+	</Shadow_Light>
+	<Bloom>
+		<threshold>0.5</threshold>
+	</Bloom>
+	<Defocus_Blur>
+		<Range>0.109746, 0.187838</Range>
+		<coc>0.833403, 0.729279</coc>
+	</Defocus_Blur>
+</group>
