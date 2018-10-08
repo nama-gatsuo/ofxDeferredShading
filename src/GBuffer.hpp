@@ -13,7 +13,7 @@ namespace ofxDeferred {
 	public:
 
 		enum BufferType {
-			TYPE_ALBEDO = 0, TYPE_POSITION = 1, TYPE_DEPTH_NORMAL = 2, TYPE_HDR = 3
+			TYPE_ALBEDO = 0, TYPE_POSITION = 1, TYPE_DEPTH_NORMAL = 2
 		};
 		GBuffer() {}
 		void setup(int w = ofGetWidth(), int h = ofGetHeight());

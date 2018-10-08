@@ -1,29 +1,32 @@
 #version 400
 
-uniform int horizontal;
+uniform int isHorizontal;
 uniform sampler2DRect tex;
-
-uniform int sampleSize;
-uniform float coefficients[33];
-uniform float offsets[32];
+uniform float sampleStep;
+uniform int preShrink;
+uniform float coefficients[32];
+uniform int blurRes;
 
 in vec2 vTexCoord;
 out vec4 outputColor;
 
-const int NUM = 33;
-
 void main(){
 
     vec2 texOffset = vec2(.0);
-    if (horizontal == 1) texOffset.x = 1.;
+    if (isHorizontal == 1) texOffset.x = 1.;
     else texOffset.y = 1.;
 
-    vec3 result = texture(tex, vTexCoord).rgb * coefficients[0];
-    for (int i = 1; i < NUM; i++) {
-        result += texture(tex, vTexCoord + vec2(texOffset * offsets[i-1])).rgb * coefficients[i];
-        result += texture(tex, vTexCoord - vec2(texOffset * offsets[i-1])).rgb * coefficients[i];
+    vec2 uv = vTexCoord;
+    // center
+    vec4 result = texture(tex, uv) * coefficients[0];
+
+    for (int i = 0; i < 32; i++) {
+        if (i == blurRes) break;
+
+        result += texture(tex, uv + vec2(texOffset * sampleStep * float(i + 1))) * coefficients[i + 1];
+        result += texture(tex, uv - vec2(texOffset * sampleStep * float(i + 1))) * coefficients[i + 1];
     }
 
-    outputColor = vec4(result, 1.0);
+    outputColor = result;
 
 }
