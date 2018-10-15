@@ -16,7 +16,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	shadowLightPass->setGlobalPosition(normalize(vec3(cos(ofGetElapsedTimef() * 0.5), 1.5f, sin(ofGetElapsedTimef() * 0.5))) * 2000.f);
+	shadowLightPass->setGlobalPosition(normalize(vec3(cos(ofGetElapsedTimef() * 0.5), 1.5f, sin(ofGetElapsedTimef() * 0.5))) * 1600.f);
 	shadowLightPass->lookAt(vec3(0));
 
 	updateDeferred();
@@ -52,7 +52,7 @@ void ofApp::setupDeferred() {
 
 	shadowLightPass = deferred.createPass<ShadowLightPass>();
 	shadowLightPass->setDarkness(0.9f);
-	shadowLightPass->setViewPortSize(1600.f);
+	shadowLightPass->setViewPortSize(1440.f);
 
 	lightingPass = deferred.createPass<PointLightPass>();
 	ofxDeferred::PointLight dlight;

@@ -45,7 +45,6 @@ namespace ofxDeferred {
 			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 			read.draw(0, 0, shrunkSize.x, shrunkSize.y);
 			buffer[0].end();
-
 			
 			buffer[1].begin();
 			ofClear(0);

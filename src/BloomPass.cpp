@@ -33,8 +33,8 @@ void BloomPass::render(ofFbo& readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 	{
 		ofPushStyle();
 		ofEnableAlphaBlending();
+		
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
-		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 		readFbo.draw(0, 0);
 		blurred.draw(0, 0);
