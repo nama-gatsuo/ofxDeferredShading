@@ -4,32 +4,31 @@
 
 namespace ofxDeferred {
 
-	using namespace glm;
-
 	class ShadowLightPass : public RenderPass, public ofNode {
 	private:
+
 		ofShader shader;
 		ofShader linearDepthShader;
 		bool useShader = false;
 		ofFbo shadowMap;
 
-		const mat4 biasMat = glm::mat4(
+		const glm::mat4 biasMat = glm::mat4(
 			0.5, 0.0, 0.0, 0.0,
 			0.0, 0.5, 0.0, 0.0,
 			0.0, 0.0, 0.5, 0.0,
 			0.5, 0.5, 0.5, 1.0);
 
-		mat4 projection;
-		mat4 modelView;
-		mat4 depthMVP;
-		mat4 shadowTransMat;
-		vec3 directionInView;
+		glm::mat4 projection;
+		glm::mat4 modelView;
+		glm::mat4 depthMVP;
+		glm::mat4 shadowTransMat;
+		glm::vec3 directionInView;
 		float linearDepthScalar;
 
 		float nearClip;
 		float farClip;
 		
-		vec3 direction;
+		glm::vec3 direction;
 
 		// view port
 		float viewPortSize = 1024.f;

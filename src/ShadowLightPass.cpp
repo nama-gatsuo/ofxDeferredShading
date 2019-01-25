@@ -6,8 +6,8 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 
 	// create shadow map fbo
 	ofFbo::Settings s;
-	s.width = 1024;
-	s.height = 1024;
+	s.width = 2048;
+	s.height = 2048;
 	s.minFilter = GL_LINEAR;
 	s.maxFilter = GL_LINEAR;
 	s.wrapModeVertical = GL_CLAMP_TO_EDGE;
@@ -39,8 +39,8 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 	useShader = bUseOwnShader;
 
 	// update view matrix of depth camera
-	projection = ortho(-viewPortSize, viewPortSize, viewPortSize, -viewPortSize, nearClip, farClip);
-	modelView = inverse(translate(getGlobalPosition()) * toMat4(getGlobalOrientation()));
+	projection = glm::ortho(-viewPortSize, viewPortSize, viewPortSize, -viewPortSize, nearClip, farClip);
+	modelView = glm::inverse(glm::translate(getGlobalPosition()) * toMat4(getGlobalOrientation()));
 	depthMVP = projection * modelView;
 	shadowMap.begin();
 
@@ -54,8 +54,8 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 	ofSetMatrixMode(OF_MATRIX_MODELVIEW);
 	ofLoadMatrix(modelView);
 	
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_FRONT);
 
 	if (!useShader) {
 		linearDepthShader.begin();
@@ -68,7 +68,7 @@ void ShadowLightPass::endShadowMap() {
 
 	if (!useShader) linearDepthShader.end();
 
-	glDisable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
 	
 	ofDisableDepthTest();
 	ofPopView();
@@ -86,8 +86,8 @@ void ShadowLightPass::debugDraw() {
 void ShadowLightPass::update(const ofCamera &cam) {
 
 	linearDepthScalar = 1.f / (farClip - nearClip);
-	shadowTransMat = biasMat * depthMVP * inverse(cam.getModelViewMatrix());
-	directionInView = (inverse(transpose(cam.getModelViewMatrix())) * vec4(getLookAtDir(), 0.f));
+	shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());
+	directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(getLookAtDir(), 0.f));
 
 }
 
@@ -103,10 +103,11 @@ void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) 
 	shader.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 3);
 	shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 4);
 	shader.setUniformMatrix4f("shadowTransMat", shadowTransMat);
-
+	
 	shader.setUniform3f("lightDir", directionInView);
 	shader.setUniform1f("darkness", darkness);
-	shader.setUniform1f("linearDepthScalar", linearDepthScalar);
+	shader.setUniform1f("lds", linearDepthScalar);
+	shader.setUniform1f("near", nearClip);
 
 	shader.setUniform4f("ambient", ambientColor);
 	shader.setUniform4f("diffuse", diffuseColor);

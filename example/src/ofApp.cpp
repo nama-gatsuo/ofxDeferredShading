@@ -10,14 +10,14 @@ void ofApp::setup() {
 
 	setupDeferred();
 	setupGui();
-
+	
 	cam.setFarClip(3000);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	shadowLightPass->setGlobalPosition(normalize(vec3(cos(ofGetElapsedTimef() * 0.5), 1.5f, sin(ofGetElapsedTimef() * 0.5))) * 1600.f);
-	shadowLightPass->lookAt(vec3(0));
+	shadowLightPass->setGlobalPosition(glm::normalize(glm::vec3(cos(ofGetElapsedTimef() * 0.5), 1.5f, sin(ofGetElapsedTimef() * 0.5))) * 1600.f);
+	shadowLightPass->lookAt(glm::vec3(0));
 
 	updateDeferred();
 }
@@ -86,10 +86,11 @@ void ofApp::updateDeferred() {
 	shadowLightPass->setAmbientColor(sha_amb.get());
 	shadowLightPass->setDiffuseColor(sha_dif.get());
 	shadowLightPass->setDarkness(sha_dark.get());
+	shadowLightPass->setNear(300.);
 
 	bloomPass->setThreshold(thres.get());
 
-	dofPass->setFoculRange(vec2(dof_focus.get()));
+	dofPass->setFoculRange(glm::vec2(dof_focus.get()));
 	dofPass->setEndPointsCoC(dof_coc.get());
 	
 }
@@ -132,7 +133,7 @@ void ofApp::setupGui() {
 	dof.setName("Defocus Blur");
 	//dof.add(dof_blur.set("Max Blur", 12.f, 0.0, 100.f));
 	dof.add(dof_focus.set("Focus", 0.2, 0., 1.));
-	dof.add(dof_coc.set("coc", vec2(1., 0.5), vec2(0.), vec2(1.)));
+	dof.add(dof_coc.set("coc", glm::vec2(1., 0.5), glm::vec2(0.), glm::vec2(1.)));
 	panel.add(dof);
 	
 	panel.minimizeAll();
