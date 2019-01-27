@@ -21,7 +21,7 @@ void ofApp::update() {
 	shadowLightPass->lookAt(glm::vec3(0));
 
 	updateDeferred();
-	cam.setFov(fov.get());
+	
 }
 
 //--------------------------------------------------------------
@@ -50,6 +50,12 @@ void ofApp::draw() {
 
 void ofApp::setupDeferred() {
 	deferred.init(ofGetWidth(), ofGetHeight());
+
+	auto bg = deferred.createPass<BgPass>();
+	bg->begin();
+	ofClear(1, 3, 6, 255);
+	bg->end();
+
 	ssaoPass = deferred.createPass<SsaoPass>();
 
 	shadowLightPass = deferred.createPass<ShadowLightPass>();

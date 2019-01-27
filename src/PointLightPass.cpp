@@ -8,7 +8,7 @@ PointLightPass::PointLightPass(const glm::vec2& size) : RenderPass(size, "PointL
 
 	sphere = ofMesh::sphere(50);
 	for (int i = 0; i < sphere.getNumVertices(); i++) {
-		sphere.addColor(ofFloatColor(1.05f));
+		sphere.addColor(ofFloatColor(10.));
 	}
 }
 
