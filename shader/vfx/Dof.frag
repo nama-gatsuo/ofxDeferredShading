@@ -22,7 +22,7 @@ float mapCoc(float d) {
 
 void main() {
 
-    vec3 color = texture(tex, vTexCoord).xyz;
+    vec4 color = texture(tex, vTexCoord);
     float depth = texture(normalAndDepthTex, vTexCoord).a; // linear depth 0 ~ 1.
     float blur = mapCoc(depth); // CoC 0 ~ 1
     float cocSize = blur * maxBlur;
@@ -46,7 +46,7 @@ void main() {
             // sample color
             float depthSample = texture(normalAndDepthTex, uv).a;
             float blurSample = mapCoc(depthSample);
-            vec3 colorSample = texture(tex, uv).rgb;
+            vec4 colorSample = texture(tex, uv);
 
             //
             float cocWeight = clamp(cocSize + 1. - radius, 0., 1.);

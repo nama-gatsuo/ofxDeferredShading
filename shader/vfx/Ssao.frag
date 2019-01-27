@@ -18,7 +18,7 @@ out vec4 outputColor;
 void main() {
     vec4 read = texture(tex, vTexCoord);
     float stencil = texture(colorTex, vTexCoord).a;
-    if (stencil < 0.001) {
+    if (stencil == 0.0) {
         outputColor = read;
         return;
     }

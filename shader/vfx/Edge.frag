@@ -4,6 +4,7 @@ uniform int useReadColor;
 uniform vec4 bgColor;
 uniform vec4 edgeColor;
 
+uniform sampler2DRect tex;
 uniform sampler2DRect colorTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
@@ -26,6 +27,10 @@ out vec4 outputColor;
 void main(){
 
     vec4 col = texture(colorTex, vTexCoord);
+    if (col.a == 0.) {
+        outputColor = texture(tex, vTexCoord);
+        return;
+    }
     float depthEdge = 0.;
     vec3 normalSum = vec3(0.);
     float normalEdge = 0.;

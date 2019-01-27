@@ -10,16 +10,19 @@ void ofApp::setup() {
 
 	setupDeferred();
 	setupGui();
-
+	panel.add(fov.set("fov", 60, 30, 90));
 	cam.setFarClip(3000);
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	shadowLightPass->setGlobalPosition(normalize(vec3(cos(ofGetElapsedTimef() * 0.5), 1.5f, sin(ofGetElapsedTimef() * 0.5))) * 1600.f);
+	//shadowLightPass->setGlobalPosition(normalize(vec3(cos(ofGetElapsedTimef() * 0.5), 1.5f, sin(ofGetElapsedTimef() * 0.5))) * 1600.f);
+	shadowLightPass->setGlobalPosition(normalize(vec3(cos(0.), 1.5f, sin(0.))) * 1600.f);
 	shadowLightPass->lookAt(vec3(0));
 
 	updateDeferred();
+	cam.setFov(fov.get());
 }
 
 //--------------------------------------------------------------

@@ -64,6 +64,8 @@ private:
 
 	ofParameterGroup bloom;
 	ofParameter<float> thres;
+	
+	ofParameter<float> fov;
 
 };
 
