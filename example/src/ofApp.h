@@ -60,12 +60,9 @@ private:
 
 	ofParameterGroup dof;
 	ofParameter<float> dof_focus;
-	ofParameter<vec2> dof_coc;
+	ofParameter<glm::vec2> dof_coc;
 
 	ofParameterGroup bloom;
 	ofParameter<float> thres;
-	
-	ofParameter<float> fov;
 
 };
-

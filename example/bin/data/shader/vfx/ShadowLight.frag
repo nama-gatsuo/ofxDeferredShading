@@ -14,7 +14,8 @@ uniform vec4 ambient;
 uniform vec4 diffuse;
 // uniform vec4 specular;
 uniform float darkness;
-uniform float linearDepthScalar;
+uniform float lds;
+uniform float near;
 
 in vec2 vTexCoord;
 out vec4 outputColor;
@@ -37,10 +38,18 @@ void main() {
     float shadow = 1.0;
 
     vec2 res = textureSize(lightDepthTex);
-    float texel = texture(lightDepthTex, shadowCoord.xy*res).r;
+    vec2 e = vec2(0.001, 0.);
+    vec2 shadowCoords[4] = vec2[](
+        shadowCoord.xy + e,
+        shadowCoord.xy + e.yx,
+        shadowCoord.xy + e.yy,
+        shadowCoord.xy + e.xx
+    );
 
-    float bias = 0.005;
-    if (texel < dist - bias) shadow -= darkness;
+    for (int i = 0; i < 4; i++) {
+        float texel = texture(lightDepthTex, shadowCoords[i] * res).r - near * lds;
+        if (texel < dist - 0.005) shadow -= darkness * 0.25;
+    }
 
     outputColor = read * (ambient + diffuse * dot(normal, -lightDir)) * shadow;
     outputColor.a = 1.0;
