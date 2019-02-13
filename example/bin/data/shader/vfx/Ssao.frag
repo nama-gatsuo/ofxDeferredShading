@@ -49,5 +49,6 @@ void main() {
         }
         occlusion = clamp(1.0 - (occlusion / LoopNum), 0.0, 1.0);
     }
-    outputColor = read * occlusion;
+    outputColor.rgb = read.rgb * occlusion;
+    outputColor.a = 1.;
 }
