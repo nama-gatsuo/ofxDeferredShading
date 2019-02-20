@@ -1,5 +1,5 @@
 # ofxDeferredShading
-![](./screenshot.png)
+![](./screenshot.gif)
 
 Here is [demo](https://www.youtube.com/watch?v=xhm2CdpSpcI).
 
@@ -23,8 +23,6 @@ now it contains
 * openFrameworks 0.10.0~ (using glm library)
 
 ## Usage
-* copy the ```shader/``` directory under your ```bin/data/```
-    * so you can edit them
 * specify modern version of OpenGL in main.cpp
 ```C++
 int main( ){
