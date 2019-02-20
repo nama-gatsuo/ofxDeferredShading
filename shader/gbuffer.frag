@@ -10,10 +10,17 @@ layout (location = 1) out vec4 outputColor1;
 layout (location = 2) out vec4 outputColor2;
 layout (location = 3) out vec4 outputColor3;
 
+// vec3 calcFlatNormal(vec3 posInViewSpace){
+//     vec3 dx = dFdx(posInViewSpace);
+//     vec3 dy = dFdy(posInViewSpace);
+//     vec3 n = normalize(cross(normalize(dx), normalize(dy)));
+//     return - n;
+// }
+
 void main(){
 
     outputColor0 = vColor;
     outputColor1 = vPosition;
-    outputColor2 = vec4(normalize(vNormal), vDepth);
-    
+    outputColor2 = vec4(vNormal, vDepth);
+
 }

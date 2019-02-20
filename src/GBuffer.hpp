@@ -1,7 +1,16 @@
 #pragma once
-#include "ofMain.h"
+#include "ofVectorMath.h"
+#include "ofBaseTypes.h"
+#include "ofFbo.h"
+#include "ofShader.h"
+#include "ofCamera.h"
+#include "ofGraphics.h"
+#include "ofAppRunner.h"
 
 namespace ofxDeferred {
+
+	const std::string shaderPath = "../../../../../addons/ofxDeferredShading/shader/";
+	const std::string passThruPath = shaderPath + "passThru.vert";
 
 	class GBuffer {
 	private:

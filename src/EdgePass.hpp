@@ -10,7 +10,7 @@ namespace ofxDeferred {
 		bool useReadColor;
 
 	public:
-		using Ptr = shared_ptr<EdgePass>;
+		using Ptr = std::shared_ptr<EdgePass>;
 
 		EdgePass(const glm::vec2& size);
 		void setEdgeColor(const ofFloatColor& col) { edgeColor = col; }

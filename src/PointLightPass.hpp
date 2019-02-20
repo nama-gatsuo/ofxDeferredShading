@@ -1,27 +1,26 @@
 #pragma once
-#include "ofMain.h"
 #include "Processor.hpp"
+#include "ofVboMesh.h"
 
 namespace ofxDeferred {
 	struct PointLight {
-		ofFloatColor ambientColor;
 		ofFloatColor diffuseColor;
 		ofFloatColor specularColor;
 		glm::vec3 position;
 		float intensity = 1.f;
-		float radius = 200.f;
+		float radius = 50.f;
 	};
 
 	class PointLightPass : public RenderPass {
 	protected:
-		vector<PointLight> lights;
+		std::vector<PointLight> lights;
 		ofShader shader;
 		glm::mat4 modelViewMatrix;
 		ofVboMesh sphere;
 		ofShader lightShader;
 
 	public:
-		using Ptr = shared_ptr<PointLightPass>;
+		using Ptr = std::shared_ptr<PointLightPass>;
 		PointLightPass(const glm::vec2& size);
 
 		void addLight(PointLight light) {
@@ -32,7 +31,7 @@ namespace ofxDeferred {
 		}
 		void clear() { lights.clear(); }
 		int getLightsSize() const { return lights.size(); }
-		vector<PointLight>& getLights() { return lights; }
+		std::vector<PointLight>& getLights() { return lights; }
 		void update(const ofCamera& cam);
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 

@@ -3,10 +3,10 @@
 using namespace ofxDeferred;
 
 PointLightPass::PointLightPass(const glm::vec2& size) : RenderPass(size, "PointLightPass") {
-	shader.load("shader/vfx/PassThru.vert", "shader/vfx/PointLight.frag");
-	lightShader.load("shader/gbuffer.vert", "shader/customShader.frag");
+	shader.load(passThruPath, shaderPath + "pointLight.frag");
+	lightShader.load(shaderPath + "gbuffer.vert", shaderPath + "customShader.frag");
 
-	sphere = ofMesh::sphere(50);
+	sphere = ofMesh::sphere(20);
 	for (int i = 0; i < sphere.getNumVertices(); i++) {
 		sphere.addColor(ofFloatColor(10.));
 	}
@@ -37,7 +37,6 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	for (PointLight& light : lights) {
 
 		shader.setUniform3f("lPosition", modelViewMatrix * glm::vec4(light.position, 1.f)); // light position in view space
-		shader.setUniform4f("lAmbient", light.ambientColor);
 		shader.setUniform4f("lDiffuse", light.diffuseColor);
 		shader.setUniform4f("lSpecular", light.specularColor);
 		shader.setUniform1f("lIntensity", light.intensity);
@@ -57,8 +56,6 @@ void PointLightPass::drawLights(ofPolyRenderMode mode) {
 	for (auto light : lights) {
 		ofPushMatrix();
 		ofTranslate(light.position);
-		ofScale(light.intensity, light.intensity, light.intensity);
-
 		sphere.draw(mode);
 		ofPopMatrix();
 	}

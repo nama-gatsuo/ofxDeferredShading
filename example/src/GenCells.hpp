@@ -89,13 +89,14 @@ public:
 
 		ofFloatColor c;
 		if (light) c.set(1.5f);
-		else c.setHsb(0.5, 0.1, 0.2);
+		else c.setHsb(0.5, 0.2, 0.3);
 
 		glm::mat4 normMat = glm::inverse(glm::transpose(mat));
 
 		for (int i = 0; i < _mesh.getNumVertices(); i++) {
 			_mesh.setVertex(i, mat * glm::vec4(_mesh.getVertex(i), 1.f));
-			_mesh.setNormal(i, normMat * glm::vec4(_mesh.getNormal(i), 1.f));
+			glm::vec3 n = normMat * glm::vec4(_mesh.getNormal(i), 0.f);
+			_mesh.setNormal(i, glm::normalize(n));
 			_mesh.addColor(c);
 		}
 

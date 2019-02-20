@@ -44,7 +44,7 @@ void Processor::end(bool autoDraw) {
 	ofPushStyle();
 	glPushAttrib(GL_ENABLE_BIT);
 	glDisable(GL_LIGHTING);
-	ofSetColor(255, 255, 255);
+	ofSetColor(255);
 	process();
 	if (autoDraw) draw();
 	glPopAttrib();

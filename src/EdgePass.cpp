@@ -3,7 +3,7 @@
 using namespace ofxDeferred;
 
 EdgePass::EdgePass(const glm::vec2& size) : RenderPass(size, "EdgePass"), useReadColor(false) {
-	shader.load("shader/vfx/PassThru.vert", "shader/vfx/Edge.frag");
+	shader.load(passThruPath, shaderPath + "edge.frag");
 	edgeColor.set(1.);
 	bgColor.set(0.);
 }

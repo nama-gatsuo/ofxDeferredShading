@@ -18,8 +18,8 @@ void GBuffer::setup(int w, int h) {
 	s.numSamples = 8;
 	fbo.allocate(s);
 
-	shader.load("shader/gbuffer");
-	debugShader.load("shader/gbuffer.vert", "shader/alphaFrag.frag");
+	shader.load(shaderPath + "gbuffer");
+	debugShader.load(passThruPath, shaderPath + "alphaFrag.frag");
 
 }
 

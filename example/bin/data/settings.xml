@@ -15,19 +15,20 @@
 		<Intensity>0.5</Intensity>
 	</Point_light_2>
 	<Ambient_Occlusion>
-		<Occlusion_Radius>5</Occlusion_Radius>
+		<Occlusion_Radius>49.0306</Occlusion_Radius>
 		<Darkness>0.8</Darkness>
 	</Ambient_Occlusion>
 	<Shadow_Light>
-		<Ambient>0.453353, 0.432528, 0.468971, 1</Ambient>
-		<Diffuse>0.744898, 0.765723, 0.807372, 1</Diffuse>
-		<Darkness>0.5</Darkness>
+		<Ambient>0.656393, 0.750104, 0.875052, 1</Ambient>
+		<Diffuse>0.927114, 0.890671, 0.906289, 1</Diffuse>
+		<Darkness>0.464286</Darkness>
 	</Shadow_Light>
 	<Bloom>
-		<threshold>0.5</threshold>
+		<threshold>0.838469</threshold>
 	</Bloom>
 	<Defocus_Blur>
 		<Range>0.109746, 0.187838</Range>
-		<coc>0.833403, 0.729279</coc>
+		<coc>0.515827, 1</coc>
+		<Focus>0.387755</Focus>
 	</Defocus_Blur>
 </group>

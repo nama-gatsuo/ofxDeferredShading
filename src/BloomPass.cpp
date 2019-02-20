@@ -6,7 +6,7 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, "BloomPass"), blu
 	blurred.allocate(size.x, size.y, GL_RGBA16F);
 	blur.setup(12, 1.);
 
-	lumaShader.load("shader/vfx/PassThru.vert", "shader/vfx/LumaThres.frag");
+	lumaShader.load(passThruPath, shaderPath + "lumaThres.frag");
 	lumaFbo.allocate(size.x, size.y, GL_RGBA16F);
 
 	lumaThres = 0.5;

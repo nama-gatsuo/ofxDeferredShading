@@ -1,6 +1,6 @@
 #pragma once
-#include "ofMain.h"
 #include "Processor.hpp"
+#include "ofNode.h"
 
 namespace ofxDeferred {
 
@@ -39,7 +39,7 @@ namespace ofxDeferred {
 		ofFloatColor specularColor;
 
 	public:
-		using Ptr = shared_ptr<ShadowLightPass>;
+		using Ptr = std::shared_ptr<ShadowLightPass>;
 		ShadowLightPass(const glm::vec2& size);
 
 		void beginShadowMap(bool bUseOwnShader = false);

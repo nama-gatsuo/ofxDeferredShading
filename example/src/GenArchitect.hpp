@@ -64,11 +64,11 @@ public:
 		for (int i = 0; i < _mesh.getNumVertices(); i++) {
 			_mesh.setVertex(i, mat * glm::vec4(_mesh.getVertex(i), 1.f));
 			_mesh.setNormal(i, normalMatrix * glm::vec4(_mesh.getNormal(i), 1.f));
-			_mesh.addColor(ofFloatColor(1.f, 0.f, 0.5f));
+			_mesh.addColor(ofFloatColor(.9f, .8f, 0.8f));
 		}
 
 		mesh.append(_mesh);
-	};
+	}
 
 private:
 	ofVboMesh mesh;

@@ -1,5 +1,4 @@
 #pragma once
-#include "ofMain.h"
 #include "GBuffer.hpp"
 
 namespace ofxDeferred {
@@ -8,16 +7,16 @@ namespace ofxDeferred {
 	public:
 		using Ptr = std::shared_ptr<RenderPass>;
 
-		RenderPass(const glm::vec2& sz, const string& n) : size(sz), name(n), enabled(true) {}
+		RenderPass(const glm::vec2& sz, const std::string& n) : size(sz), name(n), enabled(true) {}
 		virtual void update(const ofCamera& cam) = 0;
 		virtual void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) = 0;
 
 		void setEnabled(bool enabled) { this->enabled = enabled; }
 		bool getEnabled() const { return enabled; }
-		string getName() const { return name; }
+		std::string getName() const { return name; }
 
 	protected:
-		string name;
+		std::string name;
 		bool enabled;
 		const glm::vec2 size;
 	};
@@ -38,15 +37,15 @@ namespace ofxDeferred {
 		void debugDraw();
 
 		template<class T>
-		shared_ptr<T> createPass() {
-			shared_ptr<T> pass = make_shared<T>(glm::vec2(width, height));
+		std::shared_ptr<T> createPass() {
+			std::shared_ptr<T> pass = std::make_shared<T>(glm::vec2(width, height));
 			passes.push_back(pass);
 			return pass;
 		}
 
 		unsigned size() const { return passes.size(); }
 		RenderPass::Ptr operator[](unsigned i) const { return passes[i]; }
-		vector<RenderPass::Ptr>& getPasses() { return passes; }
+		std::vector<RenderPass::Ptr>& getPasses() { return passes; }
 		
 		const ofFbo& getFbo() { return pingPong[currentReadFbo]; }
 		GBuffer& getGBuffer() { return gbuffer; }
@@ -61,7 +60,7 @@ namespace ofxDeferred {
 
 		GBuffer gbuffer;
 		ofFbo pingPong[2];
-		vector<RenderPass::Ptr> passes;
+		std::vector<RenderPass::Ptr> passes;
 	};
 
 }

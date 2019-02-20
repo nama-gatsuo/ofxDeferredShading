@@ -2,33 +2,72 @@
 
 using namespace ofxDeferred;
 
-SsaoPass::SsaoPass(const glm::vec2& size) : RenderPass(size, "SsaoPass") {
-	shader.load("shader/vfx/PassThru.vert", "shader/vfx/Ssao.frag");
+SsaoPass::SsaoPass(const glm::vec2& size) :
+	RenderPass(size, "SsaoPass"), kernelSize(32), blur(size)
+{
+	for (int i = 0; i < kernelSize; i++) {
+		glm::vec3 sample = glm::normalize(glm::vec3(
+			ofRandom(-1., 1.), ofRandom(-1., 1.), ofRandom(0., 1.)
+		));
+		sample *= ofRandom(1.);
+		float s = float(i) / kernelSize;
+		s = 0.1 + s * s * 0.9;
+		sample *= s;
+		ssaoKernel.push_back(sample);
+	}
+
+	ofFloatPixels pix;
+	pix.allocate(4, 4, ofImageType::OF_IMAGE_COLOR);
+	for (int i = 0; i < 16; i++) {
+		pix[i * 3 + 0] = ofRandom(-1., 1.);
+		pix[i * 3 + 1] = ofRandom(-1., 1.);
+		pix[i * 3 + 2] = 0.;
+	}
+	noiseTex.setFromPixels(pix);
+	noiseTex.update();
+
+	blur.setup(3, 1.f);
+	ssao.allocate(size.x, size.y, GL_R16F);
+	blurred.allocate(size.x, size.y, GL_R16F);
+
+	calcAo.load(passThruPath, shaderPath + "ao/calcAo.frag");
+	applyAo.load(passThruPath, shaderPath + "ao/applyAo.frag");
 }
 
 void SsaoPass::update(const ofCamera& cam) {
-	ofRectangle viewPort(0, 0, size.x, size.y);
-	projection = cam.getProjectionMatrix(viewPort);
+	projection = cam.getProjectionMatrix(ofRectangle(0, 0, size.x, size.y));
 }
 
 void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 
-	writeFbo.begin();
-	ofPushStyle();
+	ssao.begin();
 	ofClear(0);
+	{
+		calcAo.begin();
+		calcAo.setUniform2f("size", size);
+		calcAo.setUniform1f("radius", radius);
+		calcAo.setUniform1f("darkness", darkness);
+		calcAo.setUniformMatrix4f("projectionMatrix", projection);
+		calcAo.setUniformTexture("colorTex", gbuffer.getTexture(GBuffer::TYPE_ALBEDO), 1);
+		calcAo.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 2);
+		calcAo.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
+		calcAo.setUniformTexture("noiseTex", noiseTex.getTexture(), 4);
+		calcAo.setUniform3fv("ssaoKernel", &ssaoKernel[0].x, ssaoKernel.size());
+		readFbo.draw(0, 0);
+		calcAo.end();
+	}
+	ssao.end();
 
-	shader.begin();
-	shader.setUniform2f("size", size);
-	shader.setUniform1f("radius", radius);
-	shader.setUniform1f("darkness", darkness);
-	shader.setUniformMatrix4f("projectionMatrix", projection);
-	shader.setUniformTexture("colorTex", gbuffer.getTexture(GBuffer::TYPE_ALBEDO), 1);
-	shader.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 2);
-	shader.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
-	readFbo.draw(0, 0);
-	shader.end();
+	blur.blur(ssao, blurred);
 
-	ofPopStyle();
+	writeFbo.begin();
+	ofClear(0);
+	{
+		applyAo.begin();
+		applyAo.setUniformTexture("ssao", blurred.getTexture(), 1);
+		readFbo.draw(0, 0);
+		applyAo.end();
+	}
 	writeFbo.end();
 
 }

@@ -23,7 +23,7 @@ namespace ofxDeferred {
 		glm::vec2 foculRange;
 
 	public:
-		using Ptr = shared_ptr<DofPass>;
+		using Ptr = std::shared_ptr<DofPass>;
 
 		DofPass(const glm::vec2& size);
 		void update(const ofCamera& cam) {}

@@ -4,17 +4,17 @@ using namespace ofxDeferred;
 
 DofPass::DofPass(const glm::vec2& size) : RenderPass(size, "DofPass"), blur(size / 4.) {
 
-	shrunk.allocate(size.x / 4., size.y / 4., GL_RGBA16F);
-	shrunkBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA16F);
-	nearCoC.allocate(size.x / 4., size.y / 4., GL_RGBA16F);
-	colorBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA16F);
+	shrunk.allocate(size.x / 4., size.y / 4., GL_RGBA);
+	shrunkBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA);
+	nearCoC.allocate(size.x / 4., size.y / 4., GL_RGBA);
+	colorBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA);
 
 	blur.setup(6, 1.f);
 
-	downSample.load("shader/vfx/PassThru.vert", "shader/vfx/dof/downSample.frag");
-	calcNearCoc.load("shader/vfx/PassThru.vert", "shader/vfx/dof/calcNearCoc.frag");
-	smallBlur.load("shader/vfx/PassThru.vert", "shader/vfx/dof/smallBlur.frag");
-	applyDof.load("shader/vfx/PassThru.vert", "shader/vfx/dof/applyDof.frag");
+	downSample.load(passThruPath, shaderPath + "dof/downSample.frag");
+	calcNearCoc.load(passThruPath, shaderPath + "dof/calcNearCoc.frag");
+	smallBlur.load(passThruPath, shaderPath + "dof/smallBlur.frag");
+	applyDof.load(passThruPath, shaderPath + "dof/applyDof.frag");
 
 	endPointsCoC = glm::vec2(0.9, 0.6);
 	foculRange = glm::vec2(0.1, 0.3);

@@ -20,12 +20,12 @@ namespace ofxDeferred {
 			coefficients = createGaussianWeights(blurRes, 0.2f);
 
 			this->preShrink = preShrink;
-			buffer[0].allocate(size.x / (float)preShrink, size.y / (float)preShrink, GL_RGBA16F);
-			buffer[1].allocate(size.x / (float)preShrink, size.y / (float)preShrink, GL_RGBA16F);
+			buffer[0].allocate(size.x / (float)preShrink, size.y / (float)preShrink, GL_RGBA32F);
+			buffer[1].allocate(size.x / (float)preShrink, size.y / (float)preShrink, GL_RGBA32F);
+			
+			shrinkShader.load(passThruPath, shaderPath + "blur/shrink.frag");
+			blurShader.load(passThruPath, shaderPath + "blur/blur.frag");
 
-			shrinkShader.load("shader/vfx/PassThru.vert", "shader/vfx/Shrink.frag");
-
-			blurShader.load("shader/vfx/PassThru.vert", "shader/vfx/Blur.frag");
 			blurShader.begin();
 			blurShader.setUniform1i("blurRes", blurRes);
 			blurShader.setUniform1f("sampleStep", sampleStep);
@@ -112,7 +112,7 @@ namespace ofxDeferred {
 		}
 
 		std::vector<float> coefficients;
-		vector<float> offsets;
+		std::vector<float> offsets;
 		int preShrink;
 
 		ofShader blurShader;

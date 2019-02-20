@@ -7,8 +7,6 @@
 #include "GenArchitect.hpp"
 #include "GenCells.hpp"
 
-using namespace ofxDeferred;
-
 class ofApp : public ofBaseApp {
 public:
 	void setup();
@@ -26,11 +24,11 @@ private:
 	GenCells cells;
 
 	ofxDeferredProcessing deferred;
-	ofPtr<PointLightPass> lightingPass;
-	ofPtr<SsaoPass> ssaoPass;
-	ofPtr<ShadowLightPass> shadowLightPass;
-	ofPtr<DofPass> dofPass;
-	ofPtr<BloomPass> bloomPass;
+	ofxDeferred::PointLightPass::Ptr lightingPass;
+	ofxDeferred::SsaoPass::Ptr ssaoPass;
+	ofxDeferred::ShadowLightPass::Ptr shadowLightPass;
+	ofxDeferred::DofPass::Ptr dofPass;
+	ofxDeferred::BloomPass::Ptr bloomPass;
 
 	// gui
 	bool isShowPanel;

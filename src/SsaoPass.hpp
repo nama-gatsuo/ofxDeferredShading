@@ -1,16 +1,26 @@
 #pragma once
-#include "ofMain.h"
 #include "Processor.hpp"
+#include "Blur.h"
+#include "ofImage.h"
+#include "ofPixels.h"
 
 namespace ofxDeferred {
 	class SsaoPass : public RenderPass {
-	protected:
-		ofShader shader;
+	private:
+		ofShader calcAo;
+		ofShader applyAo;
 		glm::mat4 projection;
 		float radius = 2.0;
-		float darkness = 0.8;
+		float darkness = 1.;
+		ofFloatImage noiseTex;
+		std::vector<glm::vec3> ssaoKernel;
+		const int kernelSize;
+		
+		Blur blur;
+		ofFbo blurred;
+		ofFbo ssao;
 	public:
-		using Ptr = shared_ptr<SsaoPass>;
+		using Ptr = std::shared_ptr<SsaoPass>;
 		SsaoPass(const glm::vec2& size);
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 		void update(const ofCamera& cam);

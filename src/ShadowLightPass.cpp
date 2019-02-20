@@ -12,15 +12,12 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 	s.maxFilter = GL_LINEAR;
 	s.wrapModeVertical = GL_CLAMP_TO_EDGE;
 	s.wrapModeHorizontal = GL_CLAMP_TO_EDGE;
-	s.internalformat = GL_R16F;
+	s.internalformat = GL_R32F;
 	s.useDepth = true;
 	s.useStencil = true;
 	s.depthStencilAsTexture = true;
 
 	shadowMap.allocate(s);
-
-	// TODO: blur fbo
-	// setup camera for shadow map
 
 	nearClip = 1.f;
 	farClip = 5000.f;
@@ -30,8 +27,8 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 	viewPortSize = 1024.f;
 
 	// load shader
-	shader.load("shader/vfx/PassThru.vert", "shader/vfx/ShadowLight.frag");
-	linearDepthShader.load("shader/gbuffer.vert", "shader/vfx/LinearDetph.frag");
+	shader.load(passThruPath, shaderPath + "shadow/shadowLight.frag");
+	linearDepthShader.load(shaderPath + "gbuffer.vert", shaderPath + "shadow/LinearDetph.frag");
 }
 
 void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
@@ -40,7 +37,7 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 
 	// update view matrix of depth camera
 	projection = glm::ortho(-viewPortSize, viewPortSize, viewPortSize, -viewPortSize, nearClip, farClip);
-	modelView = glm::inverse(glm::translate(getGlobalPosition()) * toMat4(getGlobalOrientation()));
+	modelView = glm::inverse(glm::translate(getGlobalPosition()) * glm::toMat4(getGlobalOrientation()));
 	depthMVP = projection * modelView;
 	shadowMap.begin();
 
@@ -55,7 +52,7 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 	ofLoadMatrix(modelView);
 	
 	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_FRONT);
+	//glCullFace(GL_BACK);
 
 	if (!useShader) {
 		linearDepthShader.begin();
@@ -74,8 +71,6 @@ void ShadowLightPass::endShadowMap() {
 	ofPopView();
 
 	shadowMap.end();
-
-	// TODO: blur shadow map
 
 }
 

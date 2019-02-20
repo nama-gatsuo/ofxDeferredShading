@@ -11,7 +11,7 @@ void ofApp::setup() {
 	setupDeferred();
 	setupGui();
 
-	cam.setFarClip(3000);
+	cam.setFarClip(3000.);
 
 }
 
@@ -51,42 +51,46 @@ void ofApp::draw() {
 void ofApp::setupDeferred() {
 	deferred.init(ofGetWidth(), ofGetHeight());
 
-	auto bg = deferred.createPass<BgPass>();
+	auto bg = deferred.createPass<ofxDeferred::BgPass>();
 	bg->begin();
 	ofClear(1, 3, 6, 255);
 	bg->end();
 
-	ssaoPass = deferred.createPass<SsaoPass>();
+	/*auto e = deferred.createPass<ofxDeferred::EdgePass>();
+	e->setEdgeColor(1.);
+	e->setUseReadColor(true);*/
 
-	shadowLightPass = deferred.createPass<ShadowLightPass>();
+	ssaoPass = deferred.createPass<ofxDeferred::SsaoPass>();
+
+	shadowLightPass = deferred.createPass<ofxDeferred::ShadowLightPass>();
 	shadowLightPass->setDarkness(0.9f);
 	shadowLightPass->setViewPortSize(1440.f);
+	shadowLightPass->setFar(2400.);
+	shadowLightPass->setNear(400.);
 
-	lightingPass = deferred.createPass<PointLightPass>();
+	lightingPass = deferred.createPass<ofxDeferred::PointLightPass>();
 	ofxDeferred::PointLight dlight;
-	dlight.ambientColor = ofFloatColor(0.f);
+	lightingPass->addLight(dlight);
 	lightingPass->addLight(dlight);
 
-	dlight.ambientColor = ofFloatColor(0.f);
-	lightingPass->addLight(dlight);
-
-	bloomPass = deferred.createPass<BloomPass>();
-
-	dofPass = deferred.createPass<DofPass>();
+	bloomPass = deferred.createPass<ofxDeferred::BloomPass>();
+	dofPass = deferred.createPass<ofxDeferred::DofPass>();
 }
 
 void ofApp::updateDeferred() {
-	lightingPass->getLightRef(0).position = pl1_pos.get();
-	lightingPass->getLightRef(0).diffuseColor = pl1_diff.get();
-	lightingPass->getLightRef(0).specularColor = pl1_spe.get();
-	lightingPass->getLightRef(0).radius = pl1_rad.get();
-	lightingPass->getLightRef(0).intensity = pl1_int.get();
+	auto& l1 = lightingPass->getLightRef(0);
+	l1.position = pl1_pos.get();
+	l1.diffuseColor = pl1_diff.get();
+	l1.specularColor = pl1_spe.get();
+	l1.radius = pl1_rad.get();
+	l1.intensity = pl1_int.get();
 
-	lightingPass->getLightRef(1).position = pl2_pos.get();
-	lightingPass->getLightRef(1).diffuseColor = pl2_diff.get();
-	lightingPass->getLightRef(1).specularColor = pl2_spe.get();
-	lightingPass->getLightRef(1).intensity = pl2_int.get();
-	lightingPass->getLightRef(1).radius = pl2_rad.get();
+	auto& l2 = lightingPass->getLightRef(1);
+	l2.position = pl2_pos.get();
+	l2.diffuseColor = pl2_diff.get();
+	l2.specularColor = pl2_spe.get();
+	l2.intensity = pl2_int.get();
+	l2.radius = pl2_rad.get();
 
 	ssaoPass->setOcculusionRadius(ao_rad.get());
 	ssaoPass->setDarkness(ao_dark.get());
@@ -100,7 +104,7 @@ void ofApp::updateDeferred() {
 
 	dofPass->setFoculRange(glm::vec2(dof_focus.get()));
 	dofPass->setEndPointsCoC(dof_coc.get());
-
+	dofPass->setMaxBlur(1.);
 }
 
 void ofApp::setupGui() {
@@ -139,12 +143,12 @@ void ofApp::setupGui() {
 	panel.add(bloom);
 
 	dof.setName("Defocus Blur");
-	//dof.add(dof_blur.set("Max Blur", 12.f, 0.0, 100.f));
 	dof.add(dof_focus.set("Focus", 0.2, 0., 1.));
 	dof.add(dof_coc.set("coc", glm::vec2(1., 0.5), glm::vec2(0.), glm::vec2(1.)));
 	panel.add(dof);
 
 	panel.minimizeAll();
+	panel.loadFromFile("settings.xml");
 
 }
 

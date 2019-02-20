@@ -1,5 +1,4 @@
 #pragma once
-#include "ofMain.h"
 #include "Processor.hpp"
 #include "Blur.h"
 
@@ -15,7 +14,7 @@ namespace ofxDeferred {
 		float lumaThres;
 
 	public:
-		using Ptr = shared_ptr<BloomPass>;
+		using Ptr = std::shared_ptr<BloomPass>;
 		
 		BloomPass(const glm::vec2& size);
 		void update(const ofCamera& cam) {}
