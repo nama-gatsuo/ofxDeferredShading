@@ -1,5 +1,4 @@
 #version 400
-#pragma include "../libs/noise3d.frag"
 uniform int useReadColor;
 uniform vec4 bgColor;
 uniform vec4 edgeColor;
