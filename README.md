@@ -16,13 +16,11 @@ now it contains
 * Casting shadow with directional light
 * Ambient occlusion (SSAO)
 * HDR bloom
-    * blooming when vertex colors are specified greater than 1.0
+    * blooming when vertex color is bright
 * Defocus blur
-    * Imitating "depth of field" effect
 
 ## Support
 * openFrameworks 0.10.0~ (using glm library)
-* helper addon: [ofxDeferredParams](https://github.com/nama-gatsuo/ofxDeferredParams)
 
 ## Usage
 * copy the ```shader/``` directory under your ```bin/data/```
@@ -43,10 +41,10 @@ int main( ){
 ```C++
 // declare in ofApp.h
 ofxDeferredProcessing deferred;
-shared_ptr<ofxDeferred::SsaoPass> ssao;
-shared_ptr<ofxDeferred::PointLightPass> points;
-shared_ptr<ofxDeferred::ShadowLightPass> shadow;
-shared_ptr<ofxDeferred::HdrBloomPass> bloom;
+ofPtr<ofxDeferred::SsaoPass> ssao;
+ofPtr<ofxDeferred::PointLightPass> points;
+ofPtr<ofxDeferred::ShadowLightPass> shadow;
+ofPtr<ofxDeferred::HdrBloomPass> bloom;
 ...
 ```
 * init and create Passes in ofApp::setup(), and get reference of Passes
@@ -94,7 +92,6 @@ in float vDepth;
 layout (location = 0) out vec4 outputColor0; // Color
 layout (location = 1) out vec4 outputColor1; // Position
 layout (location = 2) out vec4 outputColor2; // Normal and Depth
-layout (location = 3) out vec4 outputColor3; // HDR map
 
 void main(){
 
@@ -105,7 +102,6 @@ void main(){
         outputColor0 = vColor;
         outputColor1 = vPos;
         outputColor2 = vec4(vNormal.xyz, vDepth);
-        outputColor3 = any(greaterThan(vColor, vec4(1.))) ? vColor : vec4(0.,0.,0.,1.);
     }
 
 }
@@ -123,7 +119,6 @@ void main(){
  [jacres/of-DeferredRendering](https://github.com/jacres/of-DeferredRendering)
 * Shadow Mapping from [Learn OpenGL](https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping)
 * High Dynamic Range + Bloom from [Learn OpenGL](https://learnopengl.com/#!Advanced-Lighting/Bloom)
-* Defocus Blur from http://pasteall.org/10779
 
 ## Author
 [Ayumu Nagamatsu](http://ayumu-nagamatsu.com/)
