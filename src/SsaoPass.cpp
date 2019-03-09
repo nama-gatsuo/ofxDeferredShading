@@ -46,7 +46,6 @@ void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 		calcAo.begin();
 		calcAo.setUniform2f("size", size);
 		calcAo.setUniform1f("radius", radius);
-		calcAo.setUniform1f("darkness", darkness);
 		calcAo.setUniformMatrix4f("projectionMatrix", projection);
 		calcAo.setUniformTexture("colorTex", gbuffer.getTexture(GBuffer::TYPE_ALBEDO), 1);
 		calcAo.setUniformTexture("positionTex", gbuffer.getTexture(GBuffer::TYPE_POSITION), 2);
@@ -65,6 +64,7 @@ void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 	{
 		applyAo.begin();
 		applyAo.setUniformTexture("ssao", blurred.getTexture(), 1);
+		applyAo.setUniform1f("darkness", darkness);
 		readFbo.draw(0, 0);
 		applyAo.end();
 	}
