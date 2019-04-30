@@ -11,7 +11,7 @@ namespace ofxDeferred {
 		ofShader lumaShader;
 		ofFbo lumaFbo;
 
-		float lumaThres;
+		ofParameter<float> lumaThres;
 
 	public:
 		using Ptr = std::shared_ptr<BloomPass>;

@@ -9,7 +9,7 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, "BloomPass"), blu
 	lumaShader.load(passThruPath, shaderPath + "lumaThres.frag");
 	lumaFbo.allocate(size.x, size.y, GL_RGBA16F);
 
-	lumaThres = 0.5;
+	group.add(lumaThres.set("luma_threshold", 0.5, 0., 1.));
 }
 
 

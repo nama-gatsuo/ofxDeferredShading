@@ -1,34 +1,48 @@
 <?xml version="1.0"?>
 <group>
-	<Point_light_1>
-		<Position>500, 500, 500</Position>
-		<Diffuse_Color>0.4, 0.4, 0.4, 1</Diffuse_Color>
-		<Specular_Color>1, 1, 1, 1</Specular_Color>
-		<Radius>500</Radius>
-		<Intensity>0.2</Intensity>
-	</Point_light_1>
-	<Point_light_2>
-		<Position>-600, 700, 200</Position>
-		<Diffuse_Color>0.4, 0.4, 0.4, 1</Diffuse_Color>
-		<Specular_Color>1, 1, 1, 1</Specular_Color>
-		<Radius>500</Radius>
-		<Intensity>0.5</Intensity>
-	</Point_light_2>
-	<Ambient_Occlusion>
-		<Occlusion_Radius>49.0306</Occlusion_Radius>
-		<Darkness>0.8</Darkness>
-	</Ambient_Occlusion>
-	<Shadow_Light>
-		<Ambient>0.656393, 0.750104, 0.875052, 1</Ambient>
-		<Diffuse>0.927114, 0.890671, 0.906289, 1</Diffuse>
-		<Darkness>0.464286</Darkness>
-	</Shadow_Light>
-	<Bloom>
-		<threshold>0.838469</threshold>
-	</Bloom>
-	<Defocus_Blur>
-		<Range>0.109746, 0.187838</Range>
-		<coc>0.515827, 1</coc>
-		<Focus>0.387755</Focus>
-	</Defocus_Blur>
+	<ofxDeferredShading>
+		<BgPass>
+			<active>1</active>
+		</BgPass>
+		<SsaoPass>
+			<active>1</active>
+			<occlusion_radius>50</occlusion_radius>
+			<darkness>1</darkness>
+		</SsaoPass>
+		<ShadowLightPass>
+			<active>1</active>
+			<near_clip>400</near_clip>
+			<far_clip>2400</far_clip>
+			<view_port_size>1440</view_port_size>
+			<ambient_color>0.6, 0.6, 0.6, 1</ambient_color>
+			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
+			<darkness>0.9</darkness>
+		</ShadowLightPass>
+		<PointLightPass>
+			<active>1</active>
+			<lighst_1>
+				<diffuse_color>0.550071, 0.688507, 0.777746, 1</diffuse_color>
+				<specular_color>0.742949, 0.743864, 0.772851, 1</specular_color>
+				<position>577.175, 544.65, -225.107</position>
+				<radius>356.96</radius>
+				<intensity>0.782191</intensity>
+			</lighst_1>
+			<lighst_2>
+				<diffuse_color>0.528388, 0.468759, 0.533809, 1</diffuse_color>
+				<specular_color>0.70217, 0.456563, 0.634693, 1</specular_color>
+				<position>241.084, 479.6, 577.175</position>
+				<radius>919.714</radius>
+				<intensity>0.580319</intensity>
+			</lighst_2>
+		</PointLightPass>
+		<BloomPass>
+			<active>1</active>
+			<luma_threshold>0.817784</luma_threshold>
+		</BloomPass>
+		<DofPass>
+			<active>1</active>
+			<endpoint_coc>0.9, 0.6</endpoint_coc>
+			<focul_range>0.1, 0.3</focul_range>
+		</DofPass>
+	</ofxDeferredShading>
 </group>

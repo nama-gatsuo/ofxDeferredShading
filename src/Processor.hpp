@@ -7,23 +7,28 @@ namespace ofxDeferred {
 	public:
 		using Ptr = std::shared_ptr<RenderPass>;
 
-		RenderPass(const glm::vec2& sz, const std::string& n) : size(sz), name(n), enabled(true) {}
+		RenderPass(const glm::vec2& sz, const std::string& n);
 		virtual void update(const ofCamera& cam) = 0;
 		virtual void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) = 0;
 
 		void setEnabled(bool enabled) { this->enabled = enabled; }
 		bool getEnabled() const { return enabled; }
-		std::string getName() const { return name; }
+		const std::string& getName() const { return name; }
+
+		ofParameterGroup& getParameters() { return group; }
 
 	protected:
 		std::string name;
-		bool enabled;
+		ofParameterGroup group;
+		ofParameter<bool> enabled;
 		const glm::vec2 size;
 	};
 
 	class Processor : public ofBaseDraws {
 	public:
 		using Ptr = std::shared_ptr<Processor>;
+
+		Processor();
 		void init(unsigned w = ofGetWidth(), unsigned h = ofGetHeight());
 
 		void begin(ofCamera& cam, bool bUseOwnShader = false);
@@ -40,6 +45,7 @@ namespace ofxDeferred {
 		std::shared_ptr<T> createPass() {
 			std::shared_ptr<T> pass = std::make_shared<T>(glm::vec2(width, height));
 			passes.push_back(pass);
+			params.add(pass->getParameters());
 			return pass;
 		}
 
@@ -49,6 +55,8 @@ namespace ofxDeferred {
 		
 		const ofFbo& getFbo() { return pingPong[currentReadFbo]; }
 		GBuffer& getGBuffer() { return gbuffer; }
+
+		ofParameterGroup& getParameters() { return params; }
 
 	private:
 		void process();
@@ -61,6 +69,8 @@ namespace ofxDeferred {
 		GBuffer gbuffer;
 		ofFbo pingPong[2];
 		std::vector<RenderPass::Ptr> passes;
+
+		ofParameterGroup params;
 	};
 
 }

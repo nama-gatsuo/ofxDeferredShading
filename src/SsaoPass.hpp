@@ -10,8 +10,8 @@ namespace ofxDeferred {
 		ofShader calcAo;
 		ofShader applyAo;
 		glm::mat4 projection;
-		float radius = 2.0;
-		float darkness = 1.;
+		ofParameter<float> radius;
+		ofParameter<float> darkness;
 		ofFloatImage noiseTex;
 		std::vector<glm::vec3> ssaoKernel;
 		const int kernelSize;

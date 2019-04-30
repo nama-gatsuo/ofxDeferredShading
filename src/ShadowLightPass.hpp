@@ -25,18 +25,16 @@ namespace ofxDeferred {
 		glm::vec3 directionInView;
 		float linearDepthScalar;
 
-		float nearClip;
-		float farClip;
-		
-		glm::vec3 direction;
+		ofParameter<float> nearClip;
+		ofParameter<float> farClip;
 
 		// view port
-		float viewPortSize = 1024.f;
+		ofParameter<float> viewPortSize;
 
-		float darkness = 0.f;
-		ofFloatColor ambientColor;
-		ofFloatColor diffuseColor;
-		ofFloatColor specularColor;
+		ofParameter<float> darkness;
+		ofParameter<ofFloatColor> ambientColor;
+		ofParameter<ofFloatColor> diffuseColor;
+		ofParameter<ofFloatColor> specularColor;
 
 	public:
 		using Ptr = std::shared_ptr<ShadowLightPass>;

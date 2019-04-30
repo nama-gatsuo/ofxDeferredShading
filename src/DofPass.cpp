@@ -16,8 +16,8 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, "DofPass"), blur(size
 	smallBlur.load(passThruPath, shaderPath + "dof/smallBlur.frag");
 	applyDof.load(passThruPath, shaderPath + "dof/applyDof.frag");
 
-	endPointsCoC = glm::vec2(0.9, 0.6);
-	foculRange = glm::vec2(0.1, 0.3);
+	group.add(endPointsCoC.set("endpoint_coc", glm::vec2(0.9, 0.6), glm::vec2(0.), glm::vec2(1.)));
+	group.add(foculRange.set("focul_range", glm::vec2(0.1, 0.3), glm::vec2(0.), glm::vec2(1.)));
 
 }
 
@@ -31,8 +31,8 @@ void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 		downSample.begin();
 		downSample.setUniformTexture("colorTex", readFbo.getTexture(), 1);
 		downSample.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 2);
-		downSample.setUniform1f("nearEndCoc", endPointsCoC.x);
-		downSample.setUniform1f("foculRangeStart", foculRange.x);
+		downSample.setUniform1f("nearEndCoc", endPointsCoC.get().x);
+		downSample.setUniform1f("foculRangeStart", foculRange.get().x);
 		shrunk.draw(0, 0);
 		downSample.end();
 	}
@@ -76,10 +76,10 @@ void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 		applyDof.setUniformTexture("midBlur", colorBlurred.getTexture(), 1);
 		applyDof.setUniformTexture("largeBlur", shrunkBlurred.getTexture(), 2);
 		applyDof.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
-		applyDof.setUniform1f("nearEndCoc", endPointsCoC.x);
-		applyDof.setUniform1f("foculRangeStart", foculRange.x);
-		applyDof.setUniform1f("foculRangeEnd", foculRange.y);
-		applyDof.setUniform1f("farEndCoc", endPointsCoC.y);
+		applyDof.setUniform1f("nearEndCoc", endPointsCoC.get().x);
+		applyDof.setUniform1f("foculRangeStart", foculRange.get().x);
+		applyDof.setUniform1f("foculRangeEnd", foculRange.get().y);
+		applyDof.setUniform1f("farEndCoc", endPointsCoC.get().y);
 		readFbo.draw(0, 0);
 		applyDof.end();
 	}

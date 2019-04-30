@@ -35,8 +35,7 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 
 	shader.begin();
 	for (PointLight& light : lights) {
-
-		shader.setUniform3f("lPosition", modelViewMatrix * glm::vec4(light.position, 1.f)); // light position in view space
+		shader.setUniform3f("lPosition", modelViewMatrix * glm::vec4(light.position.get(), 1.f)); // light position in view space
 		shader.setUniform4f("lDiffuse", light.diffuseColor);
 		shader.setUniform4f("lSpecular", light.specularColor);
 		shader.setUniform1f("lIntensity", light.intensity);

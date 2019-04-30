@@ -5,9 +5,9 @@ namespace ofxDeferred {
 	class EdgePass : public RenderPass {
 	private:
 		ofShader shader;
-		ofFloatColor edgeColor;
-		ofFloatColor bgColor;
-		bool useReadColor;
+		ofParameter<ofFloatColor> edgeColor;
+		ofParameter<ofFloatColor> bgColor;
+		ofParameter<bool> useReadColor;
 
 	public:
 		using Ptr = std::shared_ptr<EdgePass>;

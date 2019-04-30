@@ -2,6 +2,15 @@
 
 using namespace ofxDeferred;
 
+RenderPass::RenderPass(const glm::vec2& sz, const std::string& n) : size(sz), name(n) {
+	group.setName(name);
+	group.add(enabled.set("active", true));
+}
+
+Processor::Processor() {
+	params.setName("ofxDeferredShading");
+}
+
 void Processor::init(unsigned w, unsigned h) {
 	width = w;
 	height = h;

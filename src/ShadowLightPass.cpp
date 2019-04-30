@@ -19,16 +19,21 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 
 	shadowMap.allocate(s);
 
-	nearClip = 1.f;
-	farClip = 5000.f;
+	group.add(nearClip.set("near_clip", 0., 0., 10000.f));
+	group.add(farClip.set("far_clip", 5000., 1., 10000.f));
 	
 	linearDepthScalar = 1.f / (farClip - nearClip);
 
-	viewPortSize = 1024.f;
+	group.add(viewPortSize.set("view_port_size", 1024.f, 2., 2048.));
+	group.add(darkness.set("darkness", 0.8, 0., 1.));
 
+	group.add(ambientColor.set("ambient_color", ofFloatColor(0.6)));
+	group.add(diffuseColor.set("diffuse_color", ofFloatColor(0.9)));
+	
 	// load shader
 	shader.load(passThruPath, shaderPath + "shadow/shadowLight.frag");
 	linearDepthShader.load(shaderPath + "gbuffer.vert", shaderPath + "shadow/LinearDetph.frag");
+
 }
 
 void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
@@ -36,7 +41,7 @@ void ShadowLightPass::beginShadowMap(bool bUseOwnShader) {
 	useShader = bUseOwnShader;
 
 	// update view matrix of depth camera
-	projection = glm::ortho(-viewPortSize, viewPortSize, viewPortSize, -viewPortSize, nearClip, farClip);
+	projection = glm::ortho<float>(-viewPortSize, viewPortSize, viewPortSize, -viewPortSize, nearClip, farClip);
 	modelView = glm::inverse(glm::translate(getGlobalPosition()) * glm::toMat4(getGlobalOrientation()));
 	depthMVP = projection * modelView;
 	shadowMap.begin();

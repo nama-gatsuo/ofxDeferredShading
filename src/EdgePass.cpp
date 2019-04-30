@@ -2,10 +2,11 @@
 
 using namespace ofxDeferred;
 
-EdgePass::EdgePass(const glm::vec2& size) : RenderPass(size, "EdgePass"), useReadColor(false) {
+EdgePass::EdgePass(const glm::vec2& size) : RenderPass(size, "EdgePass") {
 	shader.load(passThruPath, shaderPath + "edge.frag");
-	edgeColor.set(1.);
-	bgColor.set(0.);
+	group.add(edgeColor.set("edge_color", ofFloatColor(1.)));
+	group.add(bgColor.set("bg_color", ofFloatColor(0.)));
+	group.add(useReadColor.set("use_read_as_bg", false));
 }
 
 void EdgePass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {

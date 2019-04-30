@@ -7,7 +7,7 @@ namespace ofxDeferred {
 		ofFbo bg;
 
 	public:
-		using Ptr = shared_ptr<BgPass>;
+		using Ptr = std::shared_ptr<BgPass>;
 
 		BgPass(const glm::vec2& size) : RenderPass(size, "BgPass") {
 			bg.allocate(size.x, size.y, GL_RGBA);

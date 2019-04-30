@@ -5,6 +5,7 @@ using namespace ofxDeferred;
 SsaoPass::SsaoPass(const glm::vec2& size) :
 	RenderPass(size, "SsaoPass"), kernelSize(32), blur(size)
 {
+	
 	for (int i = 0; i < kernelSize; i++) {
 		glm::vec3 sample = glm::normalize(glm::vec3(
 			ofRandom(-1., 1.), ofRandom(-1., 1.), ofRandom(0., 1.)
@@ -32,6 +33,9 @@ SsaoPass::SsaoPass(const glm::vec2& size) :
 
 	calcAo.load(passThruPath, shaderPath + "ao/calcAo.frag");
 	applyAo.load(passThruPath, shaderPath + "ao/applyAo.frag");
+
+	group.add(radius.set("occlusion_radius", 5., 0., 50.));
+	group.add(darkness.set("darkness", 1., 0., 1.));
 }
 
 void SsaoPass::update(const ofCamera& cam) {
