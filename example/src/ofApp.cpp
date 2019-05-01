@@ -52,9 +52,9 @@ void ofApp::setupDeferred() {
 	ofClear(1, 3, 6, 255);
 	bg->end();
 
-	/*auto e = deferred.createPass<ofxDeferred::EdgePass>();
+	auto e = deferred.createPass<ofxDeferred::EdgePass>();
 	e->setEdgeColor(1.);
-	e->setUseReadColor(true);*/
+	e->setUseReadColor(true);
 
 	deferred.createPass<ofxDeferred::SsaoPass>();
 
@@ -71,10 +71,10 @@ void ofApp::setupDeferred() {
 	deferred.createPass<ofxDeferred::BloomPass>();
 	deferred.createPass<ofxDeferred::DofPass>();
 
-	panel.setBackgroundColor(ofFloatColor(0., 0.5));
-	panel.setHeaderBackgroundColor(ofFloatColor(1., .1, .3, 0.5));
-	panel.setWidthElements(400.);
 	panel.setup();
+	panel.setDefaultBackgroundColor(ofFloatColor(0., 0.5));
+	panel.setDefaultHeaderBackgroundColor(ofFloatColor(0.6, 0.6, 0.3, 0.6));
+	panel.setDefaultFillColor(ofFloatColor(0.3, 0.3, 0.6, 0.6));
 	panel.add(deferred.getParameters());
 	panel.minimizeAll();
 	panel.loadFromFile("settings.xml");

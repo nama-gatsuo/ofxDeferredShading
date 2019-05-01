@@ -3,20 +3,21 @@
 	<ofxDeferredShading>
 		<BgPass>
 			<active>1</active>
+			<fill_color>0.0490782, 0.059703, 0.123452, 1</fill_color>
 		</BgPass>
 		<SsaoPass>
 			<active>1</active>
-			<occlusion_radius>50</occlusion_radius>
-			<darkness>1</darkness>
+			<occlusion_radius>20.5852</occlusion_radius>
+			<darkness>0.833403</darkness>
 		</SsaoPass>
 		<ShadowLightPass>
 			<active>1</active>
-			<near_clip>400</near_clip>
+			<near_clip>0</near_clip>
 			<far_clip>2400</far_clip>
 			<view_port_size>1440</view_port_size>
-			<ambient_color>0.6, 0.6, 0.6, 1</ambient_color>
+			<ambient_color>0.596257, 0.6, 0.6, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<darkness>0.9</darkness>
+			<darkness>0.448147</darkness>
 		</ShadowLightPass>
 		<PointLightPass>
 			<active>1</active>
@@ -25,7 +26,7 @@
 				<specular_color>0.742949, 0.743864, 0.772851, 1</specular_color>
 				<position>577.175, 544.65, -225.107</position>
 				<radius>356.96</radius>
-				<intensity>0.782191</intensity>
+				<intensity>1</intensity>
 			</lighst_1>
 			<lighst_2>
 				<diffuse_color>0.528388, 0.468759, 0.533809, 1</diffuse_color>
@@ -41,8 +42,14 @@
 		</BloomPass>
 		<DofPass>
 			<active>1</active>
-			<endpoint_coc>0.9, 0.6</endpoint_coc>
-			<focul_range>0.1, 0.3</focul_range>
+			<endpoint_coc>1, 1</endpoint_coc>
+			<focul_range>0.282824, 0.320011</focul_range>
 		</DofPass>
+		<EdgePass>
+			<active>0</active>
+			<edge_color>1, 1, 1, 1</edge_color>
+			<bg_color>0, 0, 0, 1</bg_color>
+			<use_read_as_bg>0</use_read_as_bg>
+		</EdgePass>
 	</ofxDeferredShading>
 </group>

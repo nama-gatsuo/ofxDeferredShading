@@ -64,15 +64,10 @@ void main() {
         } else {
             col = interpolateDof(small, mid.rgb, large, coc);
         }
-
-
     } else {
         col = texture(tex, vTexCoord);
         coc = 0.;
     }
 
-    col.a = 1.;
     outputColor = col;
-    //outputColor = vec4(vec3(large), 1.);
-    //outputColor = texture(tex, vTexCoord);
 }

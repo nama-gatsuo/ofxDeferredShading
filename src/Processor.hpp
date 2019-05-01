@@ -60,10 +60,8 @@ namespace ofxDeferred {
 
 	private:
 		void process();
-		unsigned getNumProcessedPasses() const { return numProcessedPasses; }
 
 		unsigned currentReadFbo;
-		unsigned numProcessedPasses;
 		unsigned width, height;
 
 		GBuffer gbuffer;

@@ -27,7 +27,6 @@ void Processor::init(unsigned w, unsigned h) {
 		pingPong[i].allocate(s);
 	}
 
-	numProcessedPasses = 0;
 	currentReadFbo = 0;
 
 	gbuffer.setup(width, height);
@@ -74,7 +73,7 @@ void Processor::debugDraw() {
 
 void Processor::process() {
 
-	numProcessedPasses = 0;
+	int numProcessedPasses = 0;
 	for (auto pass : passes) {
 		if (pass->getEnabled()) {
 			if (numProcessedPasses == 0) pass->render(gbuffer.getFbo(), pingPong[1 - currentReadFbo], gbuffer);
@@ -82,7 +81,13 @@ void Processor::process() {
 			currentReadFbo = 1 - currentReadFbo;
 			numProcessedPasses++;
 		}
+	}
 
+	if (numProcessedPasses == 0) {
+		pingPong[currentReadFbo].begin();
+		ofClear(0.);
+		gbuffer.getTexture(GBuffer::TYPE_ALBEDO);
+		pingPong[currentReadFbo].end();
 	}
 
 }
