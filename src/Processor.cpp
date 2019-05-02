@@ -84,10 +84,11 @@ void Processor::process() {
 	}
 
 	if (numProcessedPasses == 0) {
-		pingPong[currentReadFbo].begin();
+		pingPong[1 - currentReadFbo].begin();
 		ofClear(0.);
-		gbuffer.getTexture(GBuffer::TYPE_ALBEDO);
-		pingPong[currentReadFbo].end();
+		gbuffer.getTexture(GBuffer::TYPE_ALBEDO).draw(0, 0);
+		pingPong[1 - currentReadFbo].end();
+		currentReadFbo = 1 - currentReadFbo;
 	}
 
 }
