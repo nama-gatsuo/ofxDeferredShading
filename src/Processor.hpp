@@ -53,8 +53,8 @@ namespace ofxDeferred {
 		RenderPass::Ptr operator[](unsigned i) const { return passes[i]; }
 		std::vector<RenderPass::Ptr>& getPasses() { return passes; }
 		
-		const ofFbo& getFbo() { return pingPong[currentReadFbo]; }
-		GBuffer& getGBuffer() { return gbuffer; }
+		const ofFbo& getFbo() const { return pingPong[currentReadFbo]; }
+		const GBuffer& getGBuffer() const { return gbuffer; }
 
 		ofParameterGroup& getParameters() { return params; }
 
