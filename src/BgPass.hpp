@@ -1,5 +1,5 @@
 #pragma once
-#include "Processor.hpp"
+#include "DeferredProcessor.hpp"
 
 namespace ofxDeferred {
 	class BgPass : public RenderPass {

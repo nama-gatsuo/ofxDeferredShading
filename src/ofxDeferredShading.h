@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Processor.hpp"
+#include "DeferredProcessor.hpp"
 #include "PointLightPass.hpp"
 #include "SsaoPass.hpp"
 #include "ShadowLightPass.hpp"

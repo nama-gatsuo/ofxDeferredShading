@@ -1,4 +1,4 @@
-#include "Processor.hpp"
+#include "DeferredProcessor.hpp"
 
 using namespace ofxDeferred;
 

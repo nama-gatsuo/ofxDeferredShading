@@ -1,5 +1,5 @@
 #pragma once
-#include "Processor.hpp"
+#include "DeferredProcessor.hpp"
 #include "ofVboMesh.h"
 
 namespace ofxDeferred {
@@ -14,8 +14,8 @@ namespace ofxDeferred {
 		void setParameters() {
 			group.add(diffuseColor.set("diffuse_color", ofFloatColor(.4)));
 			group.add(specularColor.set("specular_color", ofFloatColor(.9)));
-			group.add(position.set("position", glm::vec3(), glm::vec3(-1000.), glm::vec3(1000.)));
-			group.add(radius.set("radius", 100., 0.1, 1500.));
+			group.add(position.set("position", glm::vec3(), glm::vec3(-800.), glm::vec3(800.)));
+			group.add(radius.set("radius", 100., 0.1, 600.));
 			group.add(intensity.set("intensity", 0.5, 0., 1.));
 		}
 	};
