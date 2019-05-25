@@ -36,6 +36,9 @@ namespace ofxDeferred {
 		ofParameter<ofFloatColor> diffuseColor;
 		ofParameter<ofFloatColor> specularColor;
 
+		ofParameter<glm::vec3> pos;
+		ofParameter<glm::vec3> center;
+
 	public:
 		using Ptr = std::shared_ptr<ShadowLightPass>;
 		ShadowLightPass(const glm::vec2& size);
@@ -53,6 +56,14 @@ namespace ofxDeferred {
 		void setFar(float _farClip) { farClip = _farClip; }
 		void setNear(float _nearClip) { nearClip = _nearClip; }
 		void setViewPortSize(float size) { viewPortSize = size; }
+		void setGlobalPosition(const glm::vec3& pos) {
+			this->pos = pos;
+			ofNode::setGlobalPosition(pos);
+		}
+		void lookAt(const glm::vec3& dir) {
+			this->center = dir;
+			ofNode::lookAt(dir);
+		}
 
 		float getLinearScalar() { return linearDepthScalar; }
 		

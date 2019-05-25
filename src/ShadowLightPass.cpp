@@ -30,6 +30,8 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "Shad
 	group.add(ambientColor.set("ambient_color", ofFloatColor(0.6)));
 	group.add(diffuseColor.set("diffuse_color", ofFloatColor(0.9)));
 	
+	group.add(pos.set("source_position", glm::vec3(100., -200., 100.), glm::vec3(-2048.), glm::vec3(2048.)));
+	group.add(center.set("source_look", glm::vec3(0., 0., 0.), glm::vec3(-1024.), glm::vec3(1024.)));
 	// load shader
 	shader.load(passThruPath, shaderPath + "shadow/shadowLight.frag");
 	linearDepthShader.load(shaderPath + "gbuffer.vert", shaderPath + "shadow/LinearDetph.frag");
@@ -84,6 +86,9 @@ void ShadowLightPass::debugDraw() {
 }
 
 void ShadowLightPass::update(const ofCamera &cam) {
+
+	setGlobalPosition(pos);
+	lookAt(center);
 
 	linearDepthScalar = 1.f / (farClip - nearClip);
 	shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());
