@@ -24,15 +24,16 @@ vec3 getSmallBlur(vec2 uv) {
     return sum;
 }
 
-vec4 interpolateDof(vec3 small, vec3 mid, vec3 large, float coc) {
+vec4 interpolateDof(vec3 noBlur, vec3 small, vec3 mid, vec3 large, float coc) {
     vec3 c = vec3(0.);
 
-    float d0 = 0.4;
+    float d0 = 0.2;
     float d1 = 0.4;
-    float d2 = 0.2;
+    float d2 = 0.4;
 
     if (coc < d0) {
-        c = mix(small, mid, coc / d0);
+        c = mix(noBlur, mid, coc / d0);
+        //c = mix(small, mid, coc / d0);
     } else if (coc < d0 + d1) {
         c = mix(mid, large, (coc - d0) / d1);
     } else {
@@ -44,6 +45,7 @@ vec4 interpolateDof(vec3 small, vec3 mid, vec3 large, float coc) {
 
 void main() {
 
+    vec4 noBlur = texture(tex, vTexCoord);
     vec3 small = getSmallBlur(vTexCoord);
     vec4 mid = texture(midBlur, vTexCoord / 4.);
     vec3 large = texture(largeBlur, vTexCoord / 4.).rgb;
@@ -53,21 +55,16 @@ void main() {
     vec4 col = vec4(0.);
 
     float depth = texture(normalAndDepthTex, vTexCoord).a;
-    if (depth < 0.999) {
+    if (depth != 0.) {
         float a = farEndCoc / (1. - foculRangeEnd);
         float farCoc = clamp(a * (depth - foculRangeEnd), 0., farEndCoc);
-
         coc = max(nearCoc, farCoc);
-
-        if (coc == 0.0) {
-            col = texture(tex, vTexCoord);
-        } else {
-            col = interpolateDof(small, mid.rgb, large, coc);
-        }
     } else {
-        col = texture(tex, vTexCoord);
-        coc = 0.;
+        col = noBlur;
+        coc = farEndCoc;
     }
-
+    col = interpolateDof(noBlur.rgb, small, mid.rgb, large, coc);
     outputColor = col;
+    //outputColor = vec4(vec3(coc), 1.);
+    //outputColor = texture(tex, vTexCoord);
 }

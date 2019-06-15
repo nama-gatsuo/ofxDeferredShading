@@ -4,6 +4,8 @@ in float vDepth;
 in vec2 vTexCoord;
 in vec4 vColor;
 
+uniform int isShadow;
+
 layout (location = 0) out vec4 outputColor0;
 layout (location = 1) out vec4 outputColor1;
 layout (location = 2) out vec4 outputColor2;
@@ -18,9 +20,13 @@ vec3 calcFlatNormal(vec3 posInViewSpace){
 }
 
 void main(){
-
-    outputColor0 = vColor;
-    outputColor1 = vPosition;
-    outputColor2 = vec4(calcFlatNormal(vPosition.xyz), vDepth);
+    if (isShadow == 1) {
+        outputColor0.r = vDepth;
+        outputColor0.a = 1.0;
+    } else {
+        outputColor0 = vColor;
+        outputColor1 = vPosition;
+        outputColor2 = vec4(calcFlatNormal(vPosition.xyz), vDepth);
+    }
 
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "DeferredProcessor.hpp"
-#include "Blur.h"
+#include "BlurPass.h"
 #include "ofImage.h"
 #include "ofPixels.h"
 
@@ -16,7 +16,7 @@ namespace ofxDeferred {
 		std::vector<glm::vec3> ssaoKernel;
 		const int kernelSize;
 		
-		Blur blur;
+		BlurPass blur;
 		ofFbo blurred;
 		ofFbo ssao;
 	public:

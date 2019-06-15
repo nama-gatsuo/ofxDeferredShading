@@ -7,17 +7,19 @@
 		</BgPass>
 		<SsaoPass>
 			<active>1</active>
-			<occlusion_radius>20.5852</occlusion_radius>
-			<darkness>0.833403</darkness>
+			<occlusion_radius>12.5156</occlusion_radius>
+			<darkness>1</darkness>
 		</SsaoPass>
 		<ShadowLightPass>
 			<active>1</active>
 			<near_clip>0</near_clip>
-			<far_clip>2400</far_clip>
+			<far_clip>3857.34</far_clip>
 			<view_port_size>1440</view_port_size>
 			<ambient_color>0.596257, 0.6, 0.6, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<darkness>0.448147</darkness>
+			<darkness>0.526239</darkness>
+			<source_position>-431.011, 1331.28, -775.836</source_position>
+			<source_look>0, 0, 0</source_look>
 		</ShadowLightPass>
 		<PointLightPass>
 			<active>1</active>
@@ -38,12 +40,24 @@
 		</PointLightPass>
 		<BloomPass>
 			<active>1</active>
-			<luma_threshold>0.901083</luma_threshold>
+			<luma_threshold>0.911495</luma_threshold>
+			<BlurPass>
+				<active>1</active>
+				<preShrink>2</preShrink>
+				<sampleStep>1.07515</sampleStep>
+				<blurRes>12</blurRes>
+			</BlurPass>
 		</BloomPass>
 		<DofPass>
 			<active>1</active>
-			<endpoint_coc>0.245637, 0.580319</endpoint_coc>
-			<focul_range>0.134077, 0.277512</focul_range>
+			<endpoint_coc>1, 1</endpoint_coc>
+			<focul_range>0.309386, 0.511258</focul_range>
+			<BlurPass>
+				<active>1</active>
+				<preShrink>2</preShrink>
+				<sampleStep>1</sampleStep>
+				<blurRes>12</blurRes>
+			</BlurPass>
 		</DofPass>
 		<EdgePass>
 			<active>0</active>

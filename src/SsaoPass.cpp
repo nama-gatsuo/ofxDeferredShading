@@ -3,7 +3,7 @@
 using namespace ofxDeferred;
 
 SsaoPass::SsaoPass(const glm::vec2& size) :
-	RenderPass(size, "SsaoPass"), kernelSize(32), blur(size)
+	RenderPass(size, "SsaoPass"), kernelSize(32), blur(size, GL_R8)
 {
 	
 	for (int i = 0; i < kernelSize; i++) {
@@ -27,9 +27,10 @@ SsaoPass::SsaoPass(const glm::vec2& size) :
 	noiseTex.setFromPixels(pix);
 	noiseTex.update();
 
-	blur.setup(3, 1.f);
-	ssao.allocate(size.x, size.y, GL_R16F);
-	blurred.allocate(size.x, size.y, GL_R16F);
+	blur.setSampleStep(1.);
+	blur.setBlurRes(3);
+	ssao.allocate(size.x, size.y, GL_R8);
+	blurred.allocate(size.x, size.y, GL_R8);
 
 	calcAo.load(passThruPath, shaderPath + "ao/calcAo.frag");
 	applyAo.load(passThruPath, shaderPath + "ao/applyAo.frag");
@@ -61,7 +62,7 @@ void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 	}
 	ssao.end();
 
-	blur.blur(ssao, blurred);
+	blur.render(ssao, blurred, gbuffer);
 
 	writeFbo.begin();
 	ofClear(0);

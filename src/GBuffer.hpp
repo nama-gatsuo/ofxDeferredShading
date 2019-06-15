@@ -32,6 +32,9 @@ namespace ofxDeferred {
 		ofTexture& getTexture(int index) {
 			return fbo.getTexture(index);
 		}
+		const ofTexture& getTexture(int index) const {
+			return fbo.getTexture(index);
+		}
 		ofFbo& getFbo() {
 			return fbo;
 		}

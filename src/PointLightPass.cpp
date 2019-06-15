@@ -50,37 +50,28 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	writeFbo.end();
 }
 
-void PointLightPass::drawLights(ofPolyRenderMode mode) {
+void ofxDeferred::PointLightPass::drawLights(ofPolyRenderMode mode) {
+	for (auto& light : lights) {
+		ofPushStyle();
+		float s = glm::clamp(5. * light.intensity, 2., 5.);
+		ofSetColor(ofFloatColor(light.diffuseColor->r * s, light.diffuseColor->g * s, light.diffuseColor->b * s));
 
-	for (auto light : lights) {
 		ofPushMatrix();
 		ofTranslate(light.position);
-		ofScale(light.radius);
+		ofScale(light.radius / 1000.);
 		sphere.draw(mode);
 		ofPopMatrix();
+		ofPopStyle();
 	}
-
 }
 
-void PointLightPass::drawLights(ofCamera& cam, bool isShadow, ofPolyRenderMode mode) {
-
-	glm::mat4 normalMatrix = glm::inverse(glm::transpose(cam.getModelViewMatrix()));
-
-	lightShader.begin();
-	lightShader.setUniform1i("isShadow", isShadow ? 1 : 0);
-	lightShader.setUniformMatrix4f("normalMatrix", normalMatrix);
-	lightShader.setUniform1f("lds", 1. - (cam.getFarClip() - cam.getNearClip()));
-	drawLights(mode);
-	lightShader.end();
-
-}
 
 void ofxDeferred::PointLightPass::drawLights(float lds, bool isShadow, ofPolyRenderMode mode) {
 	lightShader.begin();
 	lightShader.setUniform1i("isShadow", isShadow ? 1 : 0);
 	lightShader.setUniform1f("lds", lds);
 
-	for (auto light : lights) {
+	for (auto& light : lights) {
 		lightShader.setUniform4f("emissiveColor", light.diffuseColor);
 		lightShader.setUniform1f("intensity", light.intensity);
 

@@ -1,24 +1,9 @@
 #pragma once
 #include "DeferredProcessor.hpp"
-#include "Blur.h"
+#include "BlurPass.h"
 
 namespace ofxDeferred {
 	class DofPass : public RenderPass {
-	private:
-		ofShader downSample;
-		ofShader calcNearCoc;
-		ofShader smallBlur;
-		ofShader applyDof;
-		Blur blur;
-
-		ofFbo shrunk;
-		ofFbo shrunkBlurred;
-		ofFbo nearCoC;
-		ofFbo colorBlurred;
-
-		ofParameter<glm::vec2> endPointsCoC;
-		ofParameter<glm::vec2> foculRange;
-
 	public:
 		using Ptr = std::shared_ptr<DofPass>;
 
@@ -28,5 +13,26 @@ namespace ofxDeferred {
 
 		void setEndPointsCoC(const glm::vec2& p) { endPointsCoC = p; }
 		void setFoculRange(const glm::vec2& range) { foculRange = range; }
+		void debugDraw();
+
+	private:
+		void applySmallBlur(const ofTexture& read, ofFbo& write);
+
+		ofShader downSample;
+		ofShader calcNearCoc;
+		ofShader smallBlur;
+		ofShader applyDof;
+		ofShader debugShader;
+		BlurPass blur;
+
+		ofFbo shrunk;
+		ofFbo shrunkBlurred;
+		ofFbo nearCoC;
+		ofFbo colorBlurred;
+
+		ofParameter<glm::vec2> endPointsCoC;
+		ofParameter<glm::vec2> foculRange;
+
+	
 	};
 }

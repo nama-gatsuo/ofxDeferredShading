@@ -7,6 +7,7 @@ in vec4 normal; // oF Default
 in vec4 color; // oF Default
 in vec2 texcoord; // oF Default
 
+uniform vec4 globalColor;
 uniform float lds; // lenear depth scalar
 
 out vec4 vPosition;
@@ -22,6 +23,6 @@ void main(){
     vDepth = - viewPos.z * lds;
     vNormal = (normalMatrix * normal).xyz;
     vTexCoord = texcoord;
-    vColor = color;
+    vColor = color * globalColor;
     vPosition = viewPos;
 }

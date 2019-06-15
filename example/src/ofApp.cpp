@@ -68,9 +68,9 @@ void ofApp::setupDeferred() {
 	pointLightPass->addLight();
 	pointLightPass->addLight();
 
-	deferred.createPass<ofxDeferred::BloomPass>();
 	deferred.createPass<ofxDeferred::DofPass>();
-
+	deferred.createPass<ofxDeferred::BloomPass>();
+	
 	panel.setup();
 	panel.setDefaultBackgroundColor(ofFloatColor(0., 0.5));
 	panel.setDefaultHeaderBackgroundColor(ofFloatColor(0.6, 0.6, 0.3, 0.6));

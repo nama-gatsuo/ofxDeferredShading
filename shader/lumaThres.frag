@@ -13,6 +13,6 @@ float luma(in vec3 color) {
 void main(){
 
     vec4 col = texture(tex, vTexCoord);
-    outputColor = col * clamp(luma(col.rgb) - lumaThres, 0., 1.) * (1. / (1. - lumaThres));
-
+    outputColor = col * clamp(luma(col.rgb) - lumaThres, 0., 1.) * (1. / (1. - lumaThres + 0.0001));
+    //outputColor = col - vec4(vec3(1.), 0);
 }

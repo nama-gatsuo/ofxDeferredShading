@@ -1,12 +1,12 @@
 #pragma once
 #include "DeferredProcessor.hpp"
-#include "Blur.h"
+#include "BlurPass.h"
 
 namespace ofxDeferred {
 	class BloomPass : public RenderPass {
 	private:
 		ofFbo blurred;
-		Blur blur;
+		BlurPass blur;
 		
 		ofShader lumaShader;
 		ofFbo lumaFbo;
@@ -21,5 +21,6 @@ namespace ofxDeferred {
 		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
 
 		void setThreshold(float thres) { lumaThres = thres; }
+		void debugDraw();
 	};
 }

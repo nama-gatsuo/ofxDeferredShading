@@ -38,7 +38,7 @@ public:
 
 		for (int i = 0; i < 4; i++) {
 			glm::mat4 m(mat);
-			m = m * glm::rotate(float(HALF_PI * i), glm::vec3(0.f, 1.f, 0.f));
+			m = m * glm::rotate(float(HALF_PI * float(i)), glm::vec3(0.f, 1.f, 0.f));
 			m = m * glm::translate(glm::vec3(0, 0, 0.5));
 
 			createWall(m, 1.0, 1.0);

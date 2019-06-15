@@ -7,7 +7,6 @@
 #include "BloomPass.hpp"
 #include "DofPass.hpp"
 #include "EdgePass.hpp"
-#include "Blur.h"
 #include "BgPass.hpp"
 
 using ofxDeferredProcessing = ofxDeferred::Processor;
