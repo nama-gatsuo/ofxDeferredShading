@@ -48,7 +48,7 @@ void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 		//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		calcNearCoc.begin();
 		calcNearCoc.setUniformTexture("shrunk", shrunk.getTexture(0), 1);
-		calcNearCoc.setUniformTexture("shrunkBlurred", shrunk.getTexture(0), 2);
+		calcNearCoc.setUniformTexture("shrunkBlurred", shrunkBlurred.getTexture(0), 2);
 		nearCoC.draw(0, 0);
 		calcNearCoc.end();
 

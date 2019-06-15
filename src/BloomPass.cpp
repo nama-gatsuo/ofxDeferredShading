@@ -15,10 +15,6 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, "BloomPass"), blu
 
 void BloomPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	
-	if (ofGetFrameNum() % 30 == 0) {
-		lumaShader.load(passThruPath, shaderPath + "lumaThres.frag");
-	}
-
 	ofDisableAlphaBlending();
 	lumaFbo.begin();
 	ofClear(0);

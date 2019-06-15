@@ -23,6 +23,8 @@ private:
 	ofxDeferredProcessing deferred;
 	ofxDeferred::PointLightPass::Ptr pointLightPass;
 	ofxDeferred::ShadowLightPass::Ptr shadowLightPass;
+	ofxDeferred::DofPass::Ptr dof;
+	ofxDeferred::BloomPass::Ptr bloom;
 
 	// gui
 	bool isShowPanel;
