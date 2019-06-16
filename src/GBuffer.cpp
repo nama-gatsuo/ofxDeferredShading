@@ -15,7 +15,7 @@ void GBuffer::setup(int w, int h) {
 	s.depthStencilAsTexture = true;
 	s.useDepth = true;
 	s.useStencil = true;
-	s.numSamples = 8;
+	s.numSamples = 4;
 	fbo.allocate(s);
 
 	shader.load(shaderPath + "gbuffer");

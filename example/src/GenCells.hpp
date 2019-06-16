@@ -88,7 +88,7 @@ public:
 		ofMesh _mesh = ofMesh::box(w, h, d, 1, 1, 1);
 
 		ofFloatColor c;
-		if (light) c.set(1.5f);
+		if (light) c.set(2.f);
 		else c.setHsb(0.5, 0.2, 0.3);
 
 		glm::mat4 normMat = glm::inverse(glm::transpose(mat));

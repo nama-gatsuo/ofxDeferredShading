@@ -21,13 +21,13 @@ namespace ofxDeferred {
 	};
 
 	class PointLightPass : public RenderPass {
-	protected:
+	private:
 		std::vector<PointLight> lights;
 		ofShader shader;
 		glm::mat4 modelViewMatrix;
 		ofVboMesh sphere;
 		ofShader lightShader;
-
+		ofParameter<float> lightBrightness;
 	public:
 		using Ptr = std::shared_ptr<PointLightPass>;
 		PointLightPass(const glm::vec2& size);

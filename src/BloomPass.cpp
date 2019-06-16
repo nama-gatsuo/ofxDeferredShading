@@ -2,13 +2,15 @@
 
 using namespace ofxDeferred;
 
-BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, "BloomPass"), blur(size, GL_RGB32F) {
+BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, "BloomPass"), blur(size, GL_RGB16F) {
 	blurred.allocate(size.x, size.y, GL_RGB);
 	
 	lumaShader.load(passThruPath, shaderPath + "lumaThres.frag");
-	lumaFbo.allocate(size.x, size.y, GL_RGB32F);
-
-	group.add(lumaThres.set("luma_threshold", 0.5, 0., 1.));
+	lumaFbo.allocate(size.x, size.y, GL_RGB16F);
+	composite.load(passThruPath, shaderPath + "bloom.frag");
+	
+	group.add(lumaThres.set("luma_threshold", 0.5, 0., 3.));
+	group.add(strength.set("strength", 1., 0., 10.));
 	group.add(blur.getParameters());
 }
 
@@ -21,6 +23,7 @@ void BloomPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	{
 		lumaShader.begin();
 		lumaShader.setUniform1f("lumaThres", lumaThres);
+		lumaShader.setUniformTexture("read", readFbo.getTexture(), 1);
 		gbuffer.getTexture(GBuffer::TYPE_ALBEDO).draw(0, 0);
 		lumaShader.end();
 	}
@@ -35,8 +38,15 @@ void BloomPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 		ofEnableAlphaBlending();
 		
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
+		composite.begin();
+		composite.setUniformTexture("blurredThres", blurred.getTexture(), 1);
+		composite.setUniform1f("strength", strength);
 		readFbo.draw(0, 0);
-		blurred.draw(0, 0);
+		composite.end();
+		//ofSetColor(255, 128);
+		//lumaFbo.draw(0, 0);
+		//ofSetColor(255);
+		//blurred.draw(0, 0);
 		
 		ofDisableBlendMode();
 		ofDisableAlphaBlending();
@@ -54,6 +64,6 @@ void BloomPass::debugDraw() {
 
 	ofDisableAlphaBlending();
 	lumaFbo.draw(0, hs * 3, ws, hs);
-	blurred.draw(ws * 2, hs * 3, ws, hs);
+	blurred.draw(ws, hs * 3, ws, hs);
 	ofEnableAlphaBlending();
 }

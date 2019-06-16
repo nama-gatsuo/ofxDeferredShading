@@ -9,10 +9,11 @@ namespace ofxDeferred {
 		BlurPass blur;
 		
 		ofShader lumaShader;
+		ofShader composite;
 		ofFbo lumaFbo;
 
 		ofParameter<float> lumaThres;
-
+		ofParameter<float> strength;
 	public:
 		using Ptr = std::shared_ptr<BloomPass>;
 		

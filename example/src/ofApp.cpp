@@ -38,8 +38,8 @@ void ofApp::draw() {
 	if (isShowPanel) {
 		shadowLightPass->debugDraw();
 		//deferred.debugDraw();
-		dof->debugDraw();
-		//bloom->debubDraw();
+		//dof->debugDraw();
+		bloom->debugDraw();
 		panel.draw();
 		ofDrawBitmapString(ofToString(ofGetFrameRate()), 12, 16);
 	}
@@ -69,7 +69,7 @@ void ofApp::setupDeferred() {
 	pointLightPass = deferred.createPass<ofxDeferred::PointLightPass>();
 	pointLightPass->addLight();
 	pointLightPass->addLight();
-
+	
 	dof = deferred.createPass<ofxDeferred::DofPass>();
 	bloom = deferred.createPass<ofxDeferred::BloomPass>();
 	

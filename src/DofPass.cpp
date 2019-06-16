@@ -14,6 +14,7 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, "DofPass"), blur(size
 	smallBlur.load(passThruPath, shaderPath + "dof/smallBlur.frag");
 	applyDof.load(passThruPath, shaderPath + "dof/applyDof.frag");
 	debugShader.load(passThruPath, shaderPath + "alphaFrag.frag");
+	blur.setPreShrink(4);
 
 	group.add(endPointsCoC.set("endpoint_coc", glm::vec2(0.9, 0.6), glm::vec2(0.), glm::vec2(1.)));
 	group.add(foculRange.set("focul_range", glm::vec2(0.1, 0.3), glm::vec2(0.), glm::vec2(1.)));

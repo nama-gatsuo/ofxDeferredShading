@@ -5,7 +5,7 @@ using namespace ofxDeferred;
 PointLightPass::PointLightPass(const glm::vec2& size) : RenderPass(size, "PointLightPass") {
 	shader.load(passThruPath, shaderPath + "pointLight.frag");
 	lightShader.load(shaderPath + "material/emissive");
-
+	group.add(lightBrightness.set("lightBrightness", 1., 0., 50.));
 	sphere = ofMesh::sphere(20);
 	for (int i = 0; i < sphere.getNumVertices(); i++) {
 		sphere.addColor(ofFloatColor(10.));
@@ -53,7 +53,7 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 void ofxDeferred::PointLightPass::drawLights(ofPolyRenderMode mode) {
 	for (auto& light : lights) {
 		ofPushStyle();
-		float s = glm::clamp(5. * light.intensity, 2., 5.);
+		float s = lightBrightness;
 		ofSetColor(ofFloatColor(light.diffuseColor->r * s, light.diffuseColor->g * s, light.diffuseColor->b * s));
 
 		ofPushMatrix();
@@ -70,10 +70,11 @@ void ofxDeferred::PointLightPass::drawLights(float lds, bool isShadow, ofPolyRen
 	lightShader.begin();
 	lightShader.setUniform1i("isShadow", isShadow ? 1 : 0);
 	lightShader.setUniform1f("lds", lds);
+	lightShader.setUniform1f("lightBrightness", lightBrightness);
 
 	for (auto& light : lights) {
 		lightShader.setUniform4f("emissiveColor", light.diffuseColor);
-		lightShader.setUniform1f("intensity", light.intensity);
+		lightShader.setUniform1f("intensity", light.intensity);	
 
 		ofPushMatrix();
 		ofTranslate(light.position);

@@ -10,6 +10,7 @@ in vec2 texcoord; // oF Default
 uniform float lds; // lenear depth scalar
 uniform vec4 emissiveColor;
 uniform float intensity;
+uniform float lightBrightness;
 
 out vec4 vPosition;
 out float vDepth;
@@ -22,6 +23,6 @@ void main(){
     vec4 viewPos = modelViewMatrix * position;
     vDepth = - viewPos.z * lds;
     vTexCoord = texcoord;
-    vColor = emissiveColor * clamp(5. * intensity, 2., 5.);
+    vColor = emissiveColor * lightBrightness;
     vPosition = viewPos;
 }
