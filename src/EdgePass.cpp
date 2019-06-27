@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-EdgePass::EdgePass(const glm::vec2& size) : RenderPass(size, "EdgePass") {
+EdgePass::EdgePass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Edge) {
 	shader.load(passThruPath, shaderPath + "edge.frag");
 	group.add(edgeColor.set("edge_color", ofFloatColor(1.)));
 	group.add(bgColor.set("bg_color", ofFloatColor(0.)));

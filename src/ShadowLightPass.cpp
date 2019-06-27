@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, "ShadowLightPass") {
+ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::ShadowLight) {
 
 	// create shadow map fbo
 	ofFbo::Settings s;
@@ -82,7 +82,13 @@ void ShadowLightPass::endShadowMap() {
 }
 
 void ShadowLightPass::debugDraw() {
-	shadowMap.getTexture().draw(0, 0, 256, 256);
+	float w = ofGetViewportWidth() * 0.25;
+	float h = w;
+	float y = ofGetViewportHeight() - h;
+
+	ofDisableAlphaBlending();
+	shadowMap.getTexture().draw(0, y, w, h);
+	ofEnableAlphaBlending();
 }
 
 void ShadowLightPass::update(const ofCamera &cam) {

@@ -44,7 +44,7 @@ namespace ofxDeferred {
 		PointLight& addLight(const PointLight& light) {
 			lights.push_back(light);
 			PointLight& pl = lights[lights.size() - 1];
-			pl.group.setName("lighst_" + ofToString(lights.size()));
+			pl.group.setName("light_" + ofToString(lights.size()));
 			pl.setParameters();
 			group.add(pl.group);
 			return pl;

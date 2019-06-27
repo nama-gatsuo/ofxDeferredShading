@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-DofPass::DofPass(const glm::vec2& size) : RenderPass(size, "DofPass"), blur(size / 4., GL_RGBA) {
+DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Dof), blur(size / 4., GL_RGBA) {
 
 	shrunk.allocate(size.x / 4., size.y / 4., GL_RGBA);
 	shrunkBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA);

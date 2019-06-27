@@ -4,7 +4,7 @@
 
 using namespace ofxDeferred;
 
-BlurPass::BlurPass(const glm::vec2& size, GLint colorFormat) : RenderPass(size, "BlurPass"), pp(size, colorFormat) {
+BlurPass::BlurPass(const glm::vec2& size, GLint colorFormat) : RenderPass(size, RenderPassRegistry::Blur), pp(size, colorFormat) {
 
 	group.add(preShrink.set("preShrink", 2, 1, 8));
 	group.add(sampleStep.set("sampleStep", 1., 0., 10.));

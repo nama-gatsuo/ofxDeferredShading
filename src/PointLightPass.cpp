@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-PointLightPass::PointLightPass(const glm::vec2& size) : RenderPass(size, "PointLightPass") {
+PointLightPass::PointLightPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::PointLight) {
 	shader.load(passThruPath, shaderPath + "pointLight.frag");
 	lightShader.load(shaderPath + "material/emissive");
 	group.add(lightBrightness.set("lightBrightness", 1., 0., 50.));

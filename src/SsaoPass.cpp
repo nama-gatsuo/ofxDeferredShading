@@ -3,7 +3,7 @@
 using namespace ofxDeferred;
 
 SsaoPass::SsaoPass(const glm::vec2& size) :
-	RenderPass(size, "SsaoPass"), kernelSize(32), blur(size, GL_R8)
+	RenderPass(size, RenderPassRegistry::Ssao), kernelSize(32), blur(size, GL_R8)
 {
 	
 	for (int i = 0; i < kernelSize; i++) {

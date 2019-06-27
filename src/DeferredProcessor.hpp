@@ -3,6 +3,18 @@
 
 namespace ofxDeferred {
 
+	class RenderPassRegistry {
+	public:
+		const static std::string Bg;
+		const static std::string Bloom;
+		const static std::string Blur;
+		const static std::string Dof;
+		const static std::string Edge;
+		const static std::string PointLight;
+		const static std::string ShadowLight;
+		const static std::string Ssao;
+	};
+
 	class RenderPass {
 	public:
 		using Ptr = std::shared_ptr<RenderPass>;
