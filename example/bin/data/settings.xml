@@ -66,4 +66,72 @@
 			<use_read_as_bg>0</use_read_as_bg>
 		</EdgePass>
 	</ofxDeferredShading>
+	<deferred>
+		<BgPass>
+			<active>1</active>
+			<fill_color>0.1, 0.1, 0.1, 1</fill_color>
+		</BgPass>
+		<EdgePass>
+			<active>0</active>
+			<edge_color>0, 0, 0, 1</edge_color>
+			<bg_color>0, 0, 0, 1</bg_color>
+			<use_read_as_bg>1</use_read_as_bg>
+		</EdgePass>
+		<SsaoPass>
+			<active>1</active>
+			<occlusion_radius>32.8197</occlusion_radius>
+			<darkness>1</darkness>
+		</SsaoPass>
+		<ShadowLightPass>
+			<active>1</active>
+			<near_clip>0</near_clip>
+			<far_clip>4273.79</far_clip>
+			<view_port_size>1440</view_port_size>
+			<darkness>0.427322</darkness>
+			<ambient_color>0.6, 0.6, 0.6, 1</ambient_color>
+			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
+			<source_position>104.571, 1331.28, 881.338</source_position>
+			<source_look>0, 0, 0</source_look>
+		</ShadowLightPass>
+		<PointLightPass>
+			<active>1</active>
+			<lightBrightness>1</lightBrightness>
+			<light_1>
+				<diffuse_color>0.815509, 0.816086, 0.849177, 1</diffuse_color>
+				<specular_color>0.672579, 0.42157, 0.450685, 1</specular_color>
+				<position>381.481, 695.456, 733.885</position>
+				<radius>21.5387</radius>
+				<intensity>0.806421</intensity>
+			</light_1>
+			<light_2>
+				<diffuse_color>0.593805, 0.757423, 0.648472, 1</diffuse_color>
+				<specular_color>0.882479, 0.497671, 0.663149, 1</specular_color>
+				<position>751.17, -389.685, -277.865</position>
+				<radius>503.7</radius>
+				<intensity>0.14536</intensity>
+			</light_2>
+		</PointLightPass>
+		<DofPass>
+			<active>1</active>
+			<endpoint_coc>0.9, 0.6</endpoint_coc>
+			<focul_range>0.1, 0.3</focul_range>
+			<BlurPass>
+				<active>1</active>
+				<preShrink>4</preShrink>
+				<sampleStep>1</sampleStep>
+				<blurRes>12</blurRes>
+			</BlurPass>
+		</DofPass>
+		<BloomPass>
+			<active>1</active>
+			<luma_threshold>0.5</luma_threshold>
+			<strength>1</strength>
+			<BlurPass>
+				<active>1</active>
+				<preShrink>2</preShrink>
+				<sampleStep>1</sampleStep>
+				<blurRes>12</blurRes>
+			</BlurPass>
+		</BloomPass>
+	</deferred>
 </group>

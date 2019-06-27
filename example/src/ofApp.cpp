@@ -36,10 +36,10 @@ void ofApp::draw() {
 	deferred.end();
 
 	if (isShowPanel) {
+		deferred.debugDraw();
 		shadowLightPass->debugDraw();
-		//deferred.debugDraw();
 		//dof->debugDraw();
-		bloom->debugDraw();
+		//bloom->debugDraw();
 		panel.draw();
 		ofDrawBitmapString(ofToString(ofGetFrameRate()), 12, 16);
 	}
