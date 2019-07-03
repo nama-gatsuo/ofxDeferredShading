@@ -63,7 +63,7 @@ void ofApp::setupDeferred() {
 	shadowLightPass = deferred.createPass<ofxDeferred::ShadowLightPass>();
 	shadowLightPass->setDarkness(0.9f);
 	shadowLightPass->setViewPortSize(1440.f);
-	shadowLightPass->setFar(2400.);
+	shadowLightPass->setFar(3000.);
 	shadowLightPass->setNear(400.);
 
 	pointLightPass = deferred.createPass<ofxDeferred::PointLightPass>();

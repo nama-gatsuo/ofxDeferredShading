@@ -1,15 +1,20 @@
 #version 400
 
+uniform sampler2DRect tex;
 uniform sampler2DRect colorTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
 
-uniform vec3 lPosition;
-uniform vec4 lDiffuse;
-uniform vec4 lSpecular;
+#define maxlLightNum 32
+
+uniform int lightNum;
+
 uniform float lAttenuation;
-uniform float lIntensity;
-uniform float lRadius;
+uniform float lIntensity[maxlLightNum];
+uniform float lRadius[maxlLightNum];
+uniform vec3 lPosition[maxlLightNum];
+uniform vec4 lDiffuse[maxlLightNum];
+uniform vec4 lSpecular[maxlLightNum];
 
 in vec2 vTexCoord;
 out vec4 outputColor;
@@ -23,40 +28,36 @@ void main(){
     }
 
     vec3 position = texture(positionTex, vTexCoord).rgb;
-    float linearDepth = texture(normalAndDepthTex, vTexCoord).a;
     vec3 N = texture(normalAndDepthTex, vTexCoord).rgb;
+    vec3 V = normalize(position);
 
     vec4 diffuse = vec4(0.0);
     vec4 specular = vec4(0.0);
 
-    vec3 L = normalize(lPosition - position);
-    vec3 R = normalize(reflect(L, N));
-    vec3 V = normalize(position);
+    for (int i = 0; i < maxlLightNum; i++) {
+        if (i == lightNum) break;
 
-    float lambert = max(dot(L, N), 0.0);
+        vec3 L = normalize(lPosition[i] - position);
+        vec3 R = normalize(reflect(L, N));
+        float lambert = max(dot(L, N), 0.0);
+        float dist = distance(lPosition[i], position);
 
-    if (lambert > 0.0) {
-        float dist = distance(lPosition, position);
-        if (dist <= lRadius || lRadius > 0) {
-
-            float distPercent = dist / lRadius;
+        if (dist < lRadius[i]) {
+            float distPercent = dist / lRadius[i];
             float dampingFactor = 1.0 - pow(distPercent, 2.0);
             float attenuation = (1.0 / lAttenuation) * dampingFactor;
+            float specularPower = pow(max(dot(R, V), 0.0), 32.0);
 
-            vec4 diffuseContribution = lDiffuse * lambert;
-            diffuseContribution *= lIntensity;
-            diffuseContribution *= attenuation;
-
-            vec4 specularContribution = lSpecular * pow(max(dot(R, V), 0.0), 32.0);
-            specularContribution *= lIntensity;
-            specularContribution *= attenuation;
-
-            diffuse += diffuseContribution;
-            specular += specularContribution;
-
+            diffuse += lDiffuse[i] * lambert * lIntensity[i] * attenuation;
+            specular += lSpecular[i] * specularPower * lIntensity[i] * attenuation;
         }
     }
 
-    outputColor = diffuse + specular;
-    outputColor.a = 1.;
+    outputColor = texture(tex, vTexCoord);
+    //outputColor = vec4(0);
+    outputColor += diffuse + specular;
+    //outputColor = clamp(outputColor, vec4(0.), vec4(1.));
+    //
+
+    //tputColor.a = 1.;
 }

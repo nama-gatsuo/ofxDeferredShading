@@ -8,6 +8,8 @@ namespace ofxDeferred {
 		ofParameter<ofFloatColor> edgeColor;
 		ofParameter<ofFloatColor> bgColor;
 		ofParameter<bool> useReadColor;
+		ofParameter<float> normalEdgeStrength;
+		ofParameter<float> depthEdgeStrength;
 
 	public:
 		using Ptr = std::shared_ptr<EdgePass>;

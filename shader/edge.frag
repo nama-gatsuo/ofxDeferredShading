@@ -1,3 +1,5 @@
+// based on shader sample by wgld.org https://wgld.org/d/webgl/w085.html
+
 #version 400
 uniform int useReadColor;
 uniform vec4 bgColor;
@@ -7,6 +9,8 @@ uniform sampler2DRect tex;
 uniform sampler2DRect colorTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
+uniform float normalEdgeStrength;
+uniform float depthEdgeStrength;
 
 const vec2 offsetCoord[9] = vec2[](
     vec2(-1., -1.), vec2(-1., 0.), vec2(-1., 1.),
@@ -41,11 +45,11 @@ void main(){
         normalSum += nd.rgb * weight[i];
     }
 
-    normalEdge = dot(abs(normalSum), vec3(1.)) / 3.;
-    depthEdge = step(0.02, abs(depthEdge));
-    vec3 bg = useReadColor == 1 ? col.rgb : bgColor.rgb;
+    normalEdge = dot(abs(normalSum), vec3(1.)) / 3. * normalEdgeStrength;
+    depthEdge = step(0.02, abs(depthEdge)) * depthEdgeStrength;
+    vec3 bg = useReadColor == 1 ? texture(tex, vTexCoord).rgb : bgColor.rgb;
 
-    float edge = (1. - depthEdge) * (1. - normalEdge);
+    float edge = clamp((1. - depthEdge) * (1. - normalEdge), 0., 1.);
     outputColor = vec4(mix(edgeColor.rgb, bg, edge), 1.);
 
 }
