@@ -21,7 +21,7 @@ namespace ofxDeferred {
 
 		RenderPass(const glm::vec2& sz, const std::string& n);
 		virtual void update(const ofCamera& cam) = 0;
-		virtual void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) = 0;
+		virtual void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) = 0;
 
 		void setEnabled(bool enabled) { this->enabled = enabled; }
 		bool getEnabled() const { return enabled; }
@@ -70,6 +70,8 @@ namespace ofxDeferred {
 
 		ofParameterGroup& getParameters() { return params; }
 
+		void enableProcessing() { isProcessing = true; }
+		void disableProcessing() { isProcessing = false; }
 	private:
 		void process();
 
@@ -81,6 +83,7 @@ namespace ofxDeferred {
 		std::vector<RenderPass::Ptr> passes;
 
 		ofParameterGroup params;
+		bool isProcessing;
 	};
 
 }

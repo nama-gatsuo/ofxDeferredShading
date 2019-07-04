@@ -22,7 +22,7 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::D
 
 }
 
-void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
+void DofPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 
 	ofDisableAlphaBlending();
 	// downSample and initialize CoC
@@ -30,7 +30,7 @@ void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	ofClear(0);
 	{
 		downSample.begin();
-		downSample.setUniformTexture("colorTex", readFbo.getTexture(), 1);
+		downSample.setUniformTexture("colorTex", read, 1);
 		downSample.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 2);
 		downSample.setUniform1f("nearEndCoc", endPointsCoC.get().x);
 		downSample.setUniform1f("foculRangeStart", foculRange.get().x);
@@ -40,7 +40,7 @@ void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	shrunk.end();
 
 	// blur downSampled CoC image
-	blur.render(shrunk, shrunkBlurred, gbuffer);
+	blur.render(shrunk.getTexture(), shrunkBlurred, gbuffer);
 
 	// calc near coc
 	nearCoC.begin();
@@ -60,7 +60,7 @@ void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	applySmallBlur(nearCoC.getTexture(), colorBlurred);
 
 	// output
-	writeFbo.begin();
+	write.begin();
 	ofClear(0);
 	{
 		//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
@@ -72,10 +72,10 @@ void DofPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 		applyDof.setUniform1f("farEndCoc", endPointsCoC.get().y);
 		applyDof.setUniform1f("foculRangeStart", foculRange.get().x);
 		applyDof.setUniform1f("foculRangeEnd", foculRange.get().y);
-		readFbo.draw(0, 0);
+		read.draw(0, 0);
 		applyDof.end();
 	}
-	writeFbo.end();
+	write.end();
 
 }
 

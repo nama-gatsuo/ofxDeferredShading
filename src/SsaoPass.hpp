@@ -22,7 +22,7 @@ namespace ofxDeferred {
 	public:
 		using Ptr = std::shared_ptr<SsaoPass>;
 		SsaoPass(const glm::vec2& size);
-		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
+		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 		void update(const ofCamera& cam);
 		void setOcculusionRadius(float radius) { this->radius = radius; }
 		void setDarkness(float darkness) { this->darkness = darkness; }

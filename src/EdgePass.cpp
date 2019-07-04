@@ -11,8 +11,8 @@ EdgePass::EdgePass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry:
 	group.add(depthEdgeStrength.set("depthEdgeStrength", 1., 0., 1.));;
 }
 
-void EdgePass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
-	writeFbo.begin();
+void EdgePass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
+	write.begin();
 	ofClear(0);
 	shader.begin();
 
@@ -24,8 +24,8 @@ void EdgePass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	shader.setUniform4f("edgeColor", edgeColor);
 	shader.setUniform1f("normalEdgeStrength", normalEdgeStrength);
 	shader.setUniform1f("depthEdgeStrength", depthEdgeStrength);
-	readFbo.draw(0, 0);
+	read.draw(0, 0);
 
 	shader.end();
-	writeFbo.end();
+	write.end();
 }

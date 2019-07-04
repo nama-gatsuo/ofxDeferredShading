@@ -102,9 +102,9 @@ void ShadowLightPass::update(const ofCamera &cam) {
 
 }
 
-void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
+void ShadowLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 
-	writeFbo.begin();
+	write.begin();
 
 	ofClear(0);
 
@@ -122,9 +122,9 @@ void ShadowLightPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) 
 
 	shader.setUniform4f("ambient", ambientColor);
 	shader.setUniform4f("diffuse", diffuseColor);
-	readFbo.draw(0, 0);
+	read.draw(0, 0);
 
 	shader.end();
 
-	writeFbo.end();
+	write.end();
 }

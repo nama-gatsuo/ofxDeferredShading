@@ -18,7 +18,7 @@ void PointLightPass::update(const ofCamera &cam) {
 	modelViewMatrix = cam.getModelViewMatrix();
 }
 
-void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
+void PointLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 
 	std::vector<glm::vec3> posArray;
 	std::vector<ofFloatColor> diffColArray;
@@ -44,7 +44,7 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	const int n = posArray.size();
 
 	
-	writeFbo.begin();
+	write.begin();
 	ofClear(0);
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 
@@ -60,14 +60,14 @@ void PointLightPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	shader.setUniform1fv("lIntensity", intensityArray.data(), n);
 	shader.setUniform1fv("lRadius", radiusArray.data(), n);
 
-	readFbo.draw(0, 0);
+	read.draw(0, 0);
 
 	shader.end();
 
 	//readFbo.draw(0, 0);
 
 	ofDisableBlendMode();
-	writeFbo.end();
+	write.end();
 }
 
 void ofxDeferred::PointLightPass::drawLights(ofPolyRenderMode mode) {

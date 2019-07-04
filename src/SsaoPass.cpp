@@ -43,7 +43,7 @@ void SsaoPass::update(const ofCamera& cam) {
 	projection = cam.getProjectionMatrix(ofRectangle(0, 0, size.x, size.y));
 }
 
-void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
+void SsaoPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 
 	ssao.begin();
 	ofClear(0);
@@ -57,22 +57,22 @@ void SsaoPass::render(ofFbo &readFbo, ofFbo &writeFbo, GBuffer &gbuffer) {
 		calcAo.setUniformTexture("normalAndDepthTex", gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL), 3);
 		calcAo.setUniformTexture("noiseTex", noiseTex.getTexture(), 4);
 		calcAo.setUniform3fv("ssaoKernel", &ssaoKernel[0].x, ssaoKernel.size());
-		readFbo.draw(0, 0);
+		read.draw(0, 0);
 		calcAo.end();
 	}
 	ssao.end();
 
-	blur.render(ssao, blurred, gbuffer);
+	blur.render(ssao.getTexture(), blurred, gbuffer);
 
-	writeFbo.begin();
+	write.begin();
 	ofClear(0);
 	{
 		applyAo.begin();
 		applyAo.setUniformTexture("ssao", blurred.getTexture(), 1);
 		applyAo.setUniform1f("darkness", darkness);
-		readFbo.draw(0, 0);
+		read.draw(0, 0);
 		applyAo.end();
 	}
-	writeFbo.end();
+	write.end();
 
 }

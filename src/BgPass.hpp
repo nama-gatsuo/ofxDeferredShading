@@ -22,8 +22,8 @@ namespace ofxDeferred {
 			bg.end();
 		}
 
-		void update(const ofCamera& cam) {}
-		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
+		void update(const ofCamera& cam) override {}
+		void render(const ofTexture& read, ofFbo& writeFbo, const GBuffer& gbuffer) override {
 			writeFbo.begin();
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);

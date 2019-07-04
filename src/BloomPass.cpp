@@ -15,7 +15,7 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistr
 }
 
 
-void BloomPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
+void BloomPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 	
 	ofDisableAlphaBlending();
 	lumaFbo.begin();
@@ -23,15 +23,15 @@ void BloomPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 	{
 		lumaShader.begin();
 		lumaShader.setUniform1f("lumaThres", lumaThres);
-		lumaShader.setUniformTexture("read", readFbo.getTexture(), 1);
+		lumaShader.setUniformTexture("read", read, 1);
 		gbuffer.getTexture(GBuffer::TYPE_ALBEDO).draw(0, 0);
 		lumaShader.end();
 	}
 	lumaFbo.end();
 
-	blur.render(lumaFbo, blurred, gbuffer);	
+	blur.render(lumaFbo.getTexture(), blurred, gbuffer);	
 
-	writeFbo.begin();
+	write.begin();
 	ofClear(0);
 	{
 		ofPushStyle();
@@ -41,7 +41,7 @@ void BloomPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 		composite.begin();
 		composite.setUniformTexture("blurredThres", blurred.getTexture(), 1);
 		composite.setUniform1f("strength", strength);
-		readFbo.draw(0, 0);
+		read.draw(0, 0);
 		composite.end();
 		//ofSetColor(255, 128);
 		//lumaFbo.draw(0, 0);
@@ -52,7 +52,7 @@ void BloomPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer) {
 		ofDisableAlphaBlending();
 		ofPopStyle();
 	}
-	writeFbo.end();
+	write.end();
 
 }
 

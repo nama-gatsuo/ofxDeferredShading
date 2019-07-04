@@ -16,7 +16,7 @@ RenderPass::RenderPass(const glm::vec2& sz, const std::string& n) : size(sz), na
 	group.add(enabled.set("active", true));
 }
 
-Processor::Processor() {
+Processor::Processor() : isProcessing(true) {
 	params.setName("ofxDeferredShading");
 }
 
@@ -59,14 +59,17 @@ void Processor::end(bool autoDraw) {
 
 	gbuffer.end();
 
-	ofPushStyle();
-	glPushAttrib(GL_ENABLE_BIT);
-	glDisable(GL_LIGHTING);
-	ofSetColor(255);
-	process();
-	if (autoDraw) draw();
-	glPopAttrib();
-	ofPopStyle();
+	if (isProcessing) {
+		ofPushStyle();
+		glPushAttrib(GL_ENABLE_BIT);
+		glDisable(GL_LIGHTING);
+		ofSetColor(255);
+		process();
+		if (autoDraw) draw();
+		glPopAttrib();
+		ofPopStyle();
+	}
+	
 }
 
 void Processor::draw(float x, float y) const {
@@ -86,8 +89,8 @@ void Processor::process() {
 	int numProcessedPasses = 0;
 	for (auto pass : passes) {
 		if (pass->getEnabled()) {
-			if (numProcessedPasses == 0) pass->render(gbuffer.getFbo(), pingPong[1 - currentReadFbo], gbuffer);
-			else pass->render(pingPong[currentReadFbo], pingPong[1 - currentReadFbo], gbuffer);
+			if (numProcessedPasses == 0) pass->render(gbuffer.getFbo().getTexture(), pingPong[1 - currentReadFbo], gbuffer);
+			else pass->render(pingPong[currentReadFbo].getTexture(), pingPong[1 - currentReadFbo], gbuffer);
 			currentReadFbo = 1 - currentReadFbo;
 			numProcessedPasses++;
 		}

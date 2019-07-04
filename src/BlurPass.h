@@ -72,7 +72,7 @@ namespace ofxDeferred {
 		using Ptr = ofPtr<BlurPass>;
 
 		BlurPass(const glm::vec2& res, GLint colorFormat = GL_RGB);
-		void render(ofFbo& read, ofFbo& write, GBuffer& gbuffer) override;
+		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 		void update(const ofCamera& cam) override {}
 		//void resize(int w, int h) override;
 

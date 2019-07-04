@@ -30,7 +30,7 @@ BlurPass::BlurPass(const glm::vec2& size, GLint colorFormat) : RenderPass(size, 
 
 }
 
-void BlurPass::render(ofFbo& read, ofFbo& write, GBuffer& gbuffer) {
+void BlurPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 	glm::vec2 shrunkSize(size / (float)preShrink);
 
 	ofDisableAlphaBlending();

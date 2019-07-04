@@ -87,8 +87,8 @@ namespace ofxDeferred {
 		int getLightsSize() const { return lights.size(); }
 		std::vector<ofPtr<PointLight>>& getLights() { return lights; }
 		
-		void update(const ofCamera& cam);
-		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
+		void update(const ofCamera& cam) override;
+		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 		void drawLights(ofPolyRenderMode mode = OF_MESH_FILL);
 		void drawLights(float lds, bool isShadow, ofPolyRenderMode mode = OF_MESH_FILL);
 		

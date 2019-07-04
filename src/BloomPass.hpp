@@ -18,8 +18,8 @@ namespace ofxDeferred {
 		using Ptr = std::shared_ptr<BloomPass>;
 		
 		BloomPass(const glm::vec2& size);
-		void update(const ofCamera& cam) {}
-		void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);
+		void update(const ofCamera& cam) override {}
+		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 
 		void setThreshold(float thres) { lumaThres = thres; }
 		void debugDraw();
