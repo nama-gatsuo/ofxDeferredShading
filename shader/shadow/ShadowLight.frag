@@ -16,6 +16,7 @@ uniform vec4 diffuse;
 uniform float darkness;
 uniform float lds;
 uniform float near;
+uniform int isLighting;
 
 in vec2 vTexCoord;
 out vec4 outputColor;
@@ -77,6 +78,10 @@ void main() {
 
     float shadow = (1. - sm * darkness);
 
-    outputColor = read * (ambient + diffuse * clamp(dot(normal, -lightDir), 0., 1.)) * shadow;
+    if (isLighting == 1) {
+        outputColor = read * (ambient + diffuse * clamp(dot(normal, -lightDir), 0., 1.)) * shadow;
+    } else {
+        outputColor = read * shadow;
+    }
     outputColor.a = 1.0;
 }

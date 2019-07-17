@@ -38,7 +38,7 @@ namespace ofxDeferred {
 
 		ofParameter<glm::vec3> pos;
 		ofParameter<glm::vec3> center;
-
+		bool isLighting;
 	public:
 		using Ptr = std::shared_ptr<ShadowLightPass>;
 		ShadowLightPass(const glm::vec2& size);
@@ -70,6 +70,9 @@ namespace ofxDeferred {
 		void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
 		void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }
 		
+		void disableLighting() { isLighting = false; }
+		void enableLighting() { isLighting = true; }
+
 	};
 
 }

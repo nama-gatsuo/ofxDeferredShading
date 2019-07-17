@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::ShadowLight) {
+ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::ShadowLight), isLighting(true) {
 
 	// create shadow map fbo
 	ofFbo::Settings s;
@@ -120,6 +120,7 @@ void ShadowLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer&
 	shader.setUniform1f("lds", linearDepthScalar);
 	shader.setUniform1f("near", nearClip);
 
+	shader.setUniform1i("isLighting", isLighting ? 1 : 0);
 	shader.setUniform4f("ambient", ambientColor);
 	shader.setUniform4f("diffuse", diffuseColor);
 	read.draw(0, 0);
