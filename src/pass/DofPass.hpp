@@ -1,5 +1,5 @@
 #pragma once
-#include "DeferredProcessor.hpp"
+#include "RenderPass.hpp"
 #include "BlurPass.h"
 
 namespace ofxDeferred {

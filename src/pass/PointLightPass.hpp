@@ -1,7 +1,8 @@
 #pragma once
-#include "DeferredProcessor.hpp"
+#include "RenderPass.hpp"
 #include "ofVboMesh.h"
 #include "ofTypes.h"
+
 namespace ofxDeferred {
 	class PointLight {
 	public:

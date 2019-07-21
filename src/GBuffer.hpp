@@ -9,8 +9,8 @@
 
 namespace ofxDeferred {
 
-	const std::string shaderPath = "../../../../../addons/ofxDeferredShading/shader/";
-	const std::string passThruPath = shaderPath + "passThru.vert";
+	const static std::string shaderPath("../../../../../addons/ofxDeferredShading/shader/");
+	const static std::string passThruPath(shaderPath + "passThru.vert");
 
 	class GBuffer {
 	private:
