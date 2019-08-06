@@ -92,7 +92,7 @@
 			<darkness>0.427322</darkness>
 			<ambient_color>0.6, 0.6, 0.6, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<source_position>-690.277, 1331.28, -557.861</source_position>
+			<source_position>-472.206, 1331.28, 751.476</source_position>
 			<source_look>0, 0, 0</source_look>
 		</ShadowLightPass>
 		<PointLightPass>
@@ -137,8 +137,8 @@
 				<maxBokehCount>100</maxBokehCount>
 				<bokehCocThres>0.378448</bokehCocThres>
 				<bokehLumThres>0.389073</bokehLumThres>
-				<maxBokehRadius>72.3755</maxBokehRadius>
-				<bokehDepthCutoff>0.330636</bokehDepthCutoff>
+				<maxBokehRadius>153.377</maxBokehRadius>
+				<bokehDepthCutoff>0.357198</bokehDepthCutoff>
 			</bokeh>
 		</DofPass>
 		<BloomPass>

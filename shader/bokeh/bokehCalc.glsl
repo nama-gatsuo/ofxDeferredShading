@@ -16,7 +16,7 @@ uniform float foculRangeEnd;
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 void main() {
 
-    vec2 uv = gl_GlobalInvocationID.xy;
+    vec2 uv = gl_GlobalInvocationID.xy * 4;
     vec3 color = texture(tex, uv).rgb;
 
     vec3 avgColor = vec3(0);

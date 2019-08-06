@@ -19,7 +19,7 @@ namespace ofxDeferred {
 
 	private:
 		void applySmallBlur(const ofTexture& read, ofFbo& write);
-		void calcBokeh(const ofTexture& read, const ofTexture& albed);
+		void calcBokeh(const ofTexture& read);
 		void renderBokeh();
 
 		ofShader downSample;

@@ -95,7 +95,7 @@ void DofPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer
 	// blur color sample
 	applySmallBlur(nearCoC.getTexture(), colorBlurred);
 
-	if (isActiveBokeh) calcBokeh(read, gbuffer.getTexture(GBuffer::TYPE_ALBEDO));
+	if (isActiveBokeh) calcBokeh(gbuffer.getTexture(GBuffer::TYPE_ALBEDO));
 
 	// output
 	write.begin();
@@ -157,7 +157,7 @@ void DofPass::applySmallBlur(const ofTexture& read, ofFbo& write) {
 	write.end();
 }
 
-void DofPass::calcBokeh(const ofTexture& read, const ofTexture& albed) {
+void DofPass::calcBokeh(const ofTexture& read) {
 
 	// Bind textures to store
 	bokehColorTex.bindAsImage(0, GL_WRITE_ONLY);
@@ -165,26 +165,25 @@ void DofPass::calcBokeh(const ofTexture& read, const ofTexture& albed) {
 	atomicBuffer.bind();
 		
 	detectBokehShader.begin();
-	//detectBokehShader.setUniformTexture("tex", read, 0);
+	detectBokehShader.setUniformTexture("tex", read, 0);
 	detectBokehShader.setUniformTexture("depth", depth.getTexture(), 1);
-	detectBokehShader.setUniformTexture("tex", albed, 0);
 
 	detectBokehShader.setUniform1f("cocThres", bokehCocThres);
 	detectBokehShader.setUniform1f("lumThres", bokehLumThres);
 	detectBokehShader.setUniform1f("farEndCoc", endPointsCoC->y);
 	detectBokehShader.setUniform1f("foculRangeEnd", foculRange->y);
-	detectBokehShader.dispatchCompute(read.getWidth(), read.getHeight(), 1);
+	detectBokehShader.dispatchCompute(read.getWidth() / 4, read.getHeight() / 4, 1);
 	detectBokehShader.end();
 	
 	bokehColorTex.unbind();
 	bokehPosDepthCocTex.unbind();
 	atomicBuffer.unbind();
 
-	ofLogNotice("atomic counter") << atomicBuffer.getCount();
+	//ofLogNotice("atomic counter") << atomicBuffer.getCount();
 }
 
 void DofPass::renderBokeh() {
-	int count = atomicBuffer.getCount();
+	int count = std::min(atomicBuffer.getCount(), maxBokehCount.get());
 	if (count == 0) return;
 
 	bokehRenderShader.begin();
