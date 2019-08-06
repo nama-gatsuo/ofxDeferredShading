@@ -4,7 +4,7 @@ in vec2 vTexCoord;
 out vec4 outputColor;
 
 uniform sampler2DRect colorTex;
-uniform sampler2DRect normalAndDepthTex;
+uniform sampler2DRect depthTex;
 uniform float nearEndCoc;
 uniform float foculRangeStart;
 
@@ -21,15 +21,15 @@ void main() {
     vec4 cocUnit = vec4(0.);
     float a = - nearEndCoc / (foculRangeStart + 0.0001);
 
-    float depth = texture(normalAndDepthTex, vTexCoord * 4.).a;
+    float depth = texture(depthTex, vTexCoord * 4.).r;
 
     for (int i = 0; i < 4; i++) {
         vec4 d = vec4(0.);
         vec4 start = vec4(nearEndCoc);
-        d.x = texture(normalAndDepthTex, vTexCoord * 4. + vec2(0., float(i))).a;
-        d.y = texture(normalAndDepthTex, vTexCoord * 4. + vec2(1., float(i))).a;
-        d.z = texture(normalAndDepthTex, vTexCoord * 4. + vec2(2., float(i))).a;
-        d.w = texture(normalAndDepthTex, vTexCoord * 4. + vec2(3., float(i))).a;
+        d.x = texture(depthTex, vTexCoord * 4. + vec2(0., float(i))).r;
+        d.y = texture(depthTex, vTexCoord * 4. + vec2(1., float(i))).r;
+        d.z = texture(depthTex, vTexCoord * 4. + vec2(2., float(i))).r;
+        d.w = texture(depthTex, vTexCoord * 4. + vec2(3., float(i))).r;
         //d = vec4(1.) - d;
         //d = mix(vec4(0.), d, step(vec4(0.00001), d));
         start = mix(vec4(0.), vec4(nearEndCoc), step(vec4(0.0001), d));

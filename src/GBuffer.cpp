@@ -12,10 +12,13 @@ void GBuffer::setup(int w, int h) {
 	s.colorFormats.push_back(GL_RGBA32F); // vertex coord
 	s.colorFormats.push_back(GL_RGBA32F); // depth + normal
 
-	s.depthStencilAsTexture = true;
 	s.useDepth = true;
 	s.useStencil = true;
+	// Multisampling is not supported with depthStencilAsTexture
+	// If we use MSAA, we should set below as false
+	s.depthStencilAsTexture = false;
 	s.numSamples = 4;
+
 	fbo.allocate(s);
 
 	shader.load(shaderPath + "gbuffer");

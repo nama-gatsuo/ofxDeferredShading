@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderPass.hpp"
+#include "ofxDeferredShading/src/PingPongBuffer.h"
 
 namespace ofxDeferred {
 
@@ -32,7 +33,7 @@ namespace ofxDeferred {
 		RenderPass::Ptr operator[](unsigned i) const { return passes[i]; }
 		std::vector<RenderPass::Ptr>& getPasses() { return passes; }
 		
-		const ofFbo& getFbo() const { return pingPong[currentReadFbo]; }
+		const ofFbo& getFbo() const { return *(pingPong.src); }
 		const GBuffer& getGBuffer() const { return gbuffer; }
 
 		ofParameterGroup& getParameters() { return params; }
@@ -42,11 +43,10 @@ namespace ofxDeferred {
 	private:
 		void process();
 
-		unsigned currentReadFbo;
 		unsigned width, height;
 
 		GBuffer gbuffer;
-		ofFbo pingPong[2];
+		PingPongBuffer pingPong;
 		std::vector<RenderPass::Ptr> passes;
 
 		ofParameterGroup params;

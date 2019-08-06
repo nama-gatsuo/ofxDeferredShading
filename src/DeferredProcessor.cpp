@@ -15,15 +15,14 @@ void Processor::init(unsigned w, unsigned h) {
 	s.height = height;
 	s.internalformat = GL_RGBA;
 	s.numSamples = 4;
+	s.wrapModeHorizontal = GL_CLAMP_TO_EDGE;
+	s.wrapModeVertical = GL_CLAMP_TO_EDGE;
+
 	s.useDepth = true;
 	s.useStencil = true;
-	s.depthStencilAsTexture = true;
+	s.depthStencilAsTexture = false;
 
-	for (int i = 0; i < 2; i++) {
-		pingPong[i].allocate(s);
-	}
-
-	currentReadFbo = 0;
+	pingPong.resize(s);
 
 	gbuffer.setup(width, height);
 
@@ -64,7 +63,7 @@ void Processor::draw(float x, float y) const {
 }
 
 void Processor::draw(float x, float y, float w, float h) const {
-	pingPong[currentReadFbo].draw(0, 0, w, h);
+	pingPong.src->draw(0, 0, w, h);
 }
 
 void Processor::debugDraw() {
@@ -76,19 +75,20 @@ void Processor::process() {
 	int numProcessedPasses = 0;
 	for (auto pass : passes) {
 		if (pass->getEnabled()) {
-			if (numProcessedPasses == 0) pass->render(gbuffer.getFbo().getTexture(), pingPong[1 - currentReadFbo], gbuffer);
-			else pass->render(pingPong[currentReadFbo].getTexture(), pingPong[1 - currentReadFbo], gbuffer);
-			currentReadFbo = 1 - currentReadFbo;
+			if (numProcessedPasses == 0) pass->render(gbuffer.getFbo().getTexture(), *(pingPong.dst), gbuffer);
+			else pass->render(pingPong.src->getTexture(), *(pingPong.dst), gbuffer);
+			
+			pingPong.swap();
 			numProcessedPasses++;
 		}
 	}
 
 	if (numProcessedPasses == 0) {
-		pingPong[1 - currentReadFbo].begin();
+		pingPong.dst->begin();
 		ofClear(0.);
 		gbuffer.getTexture(GBuffer::TYPE_ALBEDO).draw(0, 0);
-		pingPong[1 - currentReadFbo].end();
-		currentReadFbo = 1 - currentReadFbo;
+		pingPong.dst->end();
+		pingPong.swap();
 	}
 
 }

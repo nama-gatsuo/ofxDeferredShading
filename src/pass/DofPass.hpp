@@ -1,6 +1,8 @@
 #pragma once
 #include "RenderPass.hpp"
 #include "BlurPass.h"
+#include "AtomicCounterBuffer.h"
+#include "ofVboMesh.h"
 
 namespace ofxDeferred {
 	class DofPass : public RenderPass {
@@ -17,6 +19,8 @@ namespace ofxDeferred {
 
 	private:
 		void applySmallBlur(const ofTexture& read, ofFbo& write);
+		void calcBokeh(const ofTexture& read, const ofTexture& albed);
+		void renderBokeh();
 
 		ofShader downSample;
 		ofShader calcNearCoc;
@@ -24,15 +28,32 @@ namespace ofxDeferred {
 		ofShader applyDof;
 		ofShader debugShader;
 		BlurPass blur;
-
+		
 		ofFbo shrunk;
 		ofFbo shrunkBlurred;
 		ofFbo nearCoC;
 		ofFbo colorBlurred;
+		ofFbo depth;
 
 		ofParameter<glm::vec2> endPointsCoC;
 		ofParameter<glm::vec2> foculRange;
 
-	
+		// Variables for bokeh calculation
+		ofParameterGroup bokehGroup;
+		ofParameter<bool> isActiveBokeh;
+		ofParameter<int> maxBokehCount;
+		ofParameter<float> bokehCocThres;
+		ofParameter<float> bokehLumThres;
+		ofParameter<float> maxBokehRadius;
+		ofParameter<float> bokehDepthCutoff;
+		AtomicCounterBuffer atomicBuffer;
+		ofShader detectBokehShader;
+		ofShader bokehRenderShader;
+		ofShader bokehShapingShader;
+		ofTexture bokehColorTex;
+		ofTexture bokehPosDepthCocTex;
+		ofFbo bokehShapeTex;
+		
+		ofVboMesh vbo;
 	};
 }

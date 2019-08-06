@@ -76,6 +76,8 @@
 			<edge_color>0, 0, 0, 1</edge_color>
 			<bg_color>0, 0, 0, 1</bg_color>
 			<use_read_as_bg>1</use_read_as_bg>
+			<normalEdgeStrength>1</normalEdgeStrength>
+			<depthEdgeStrength>1</depthEdgeStrength>
 		</EdgePass>
 		<SsaoPass>
 			<active>1</active>
@@ -90,7 +92,7 @@
 			<darkness>0.427322</darkness>
 			<ambient_color>0.6, 0.6, 0.6, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<source_position>104.571, 1331.28, 881.338</source_position>
+			<source_position>-690.277, 1331.28, -557.861</source_position>
 			<source_look>0, 0, 0</source_look>
 		</ShadowLightPass>
 		<PointLightPass>
@@ -102,6 +104,7 @@
 				<position>381.481, 695.456, 733.885</position>
 				<radius>21.5387</radius>
 				<intensity>0.806421</intensity>
+				<isActive>1</isActive>
 			</light_1>
 			<light_2>
 				<diffuse_color>0.593805, 0.757423, 0.648472, 1</diffuse_color>
@@ -110,10 +113,18 @@
 				<radius>503.7</radius>
 				<intensity>0.14536</intensity>
 			</light_2>
+			<light_0>
+				<isActive>1</isActive>
+				<diffuse_color>0.670797, 0.510788, 0.326682, 1</diffuse_color>
+				<specular_color>0.642457, 0.577654, 0.923826, 1</specular_color>
+				<position>75.1244, -757.762, -645.65</position>
+				<radius>335.906</radius>
+				<intensity>0.781915</intensity>
+			</light_0>
 		</PointLightPass>
 		<DofPass>
 			<active>1</active>
-			<endpoint_coc>0.9, 0.6</endpoint_coc>
+			<endpoint_coc>0.766254, 0.40501</endpoint_coc>
 			<focul_range>0.1, 0.3</focul_range>
 			<BlurPass>
 				<active>1</active>
@@ -121,6 +132,14 @@
 				<sampleStep>1</sampleStep>
 				<blurRes>12</blurRes>
 			</BlurPass>
+			<bokeh>
+				<isActiveBokeh>1</isActiveBokeh>
+				<maxBokehCount>100</maxBokehCount>
+				<bokehCocThres>0.378448</bokehCocThres>
+				<bokehLumThres>0.389073</bokehLumThres>
+				<maxBokehRadius>72.3755</maxBokehRadius>
+				<bokehDepthCutoff>0.330636</bokehDepthCutoff>
+			</bokeh>
 		</DofPass>
 		<BloomPass>
 			<active>1</active>

@@ -6,7 +6,7 @@ out vec4 outputColor;
 uniform sampler2DRect tex;
 uniform sampler2DRect midBlur;
 uniform sampler2DRect largeBlur;
-uniform sampler2DRect normalAndDepthTex;
+uniform sampler2DRect depthTex;
 
 uniform float foculRangeStart;
 uniform float foculRangeEnd;
@@ -46,7 +46,7 @@ vec4 interpolateDof(vec3 noBlur, vec3 small, vec3 mid, vec3 large, float coc) {
 void main() {
 
     vec4 noBlur = texture(tex, vTexCoord);
-    vec3 small = getSmallBlur(vTexCoord);
+    // vec3 small = getSmallBlur(vTexCoord);
     vec4 mid = texture(midBlur, vTexCoord / 4.);
     vec3 large = texture(largeBlur, vTexCoord / 4.).rgb;
 
@@ -54,7 +54,7 @@ void main() {
     float coc = 0.;
     vec4 col = vec4(0.);
 
-    float depth = texture(normalAndDepthTex, vTexCoord).a;
+    float depth = texture(depthTex, vTexCoord).r;
     if (depth != 0.) {
         float a = farEndCoc / (1. - foculRangeEnd);
         float farCoc = clamp(a * (depth - foculRangeEnd), 0., farEndCoc);
@@ -63,7 +63,9 @@ void main() {
         col = noBlur;
         coc = farEndCoc;
     }
-    col = interpolateDof(noBlur.rgb, small, mid.rgb, large, coc);
+    //col = interpolateDof(noBlur.rgb, small, mid.rgb, large, coc);
+    col = interpolateDof(noBlur.rgb, noBlur.rgb, mid.rgb, large, coc);
+
     outputColor = col;
     //outputColor = vec4(vec3(coc), 1.);
     //outputColor = texture(tex, vTexCoord);
