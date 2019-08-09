@@ -8,6 +8,7 @@ in vec2 vTexCoord;
 out vec4 outputColor;
 
 void main(){
-    outputColor = texture(bokehTex, vTexCoord * textureSize(bokehTex)).r * vColor;
-    //outputColor = vec4(1.);
+    float c = texture(bokehTex, vTexCoord * textureSize(bokehTex)).r;
+    if (c == 0.) discard;
+    outputColor = c * vColor;
 }

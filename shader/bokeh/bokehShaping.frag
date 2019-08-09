@@ -7,6 +7,6 @@ void main(){
     vec2 uv = vTexCoord / res * 2. - 1.;
     float dist = length(uv);
 
-    outputColor.r = 1. - step(1., dist);
+    outputColor.r = 1. - smoothstep(0.9, 1., dist);
     outputColor.a = 1.;
 }
