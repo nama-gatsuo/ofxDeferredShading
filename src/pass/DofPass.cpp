@@ -9,6 +9,7 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::D
 	nearCoC.allocate(size.x / 4., size.y / 4., GL_RGBA);
 	colorBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA);
 	depth.allocate(size.x, size.y, GL_R32F);
+	bokehShapeTex.allocate(256, 256, GL_R8);
 
 	downSample.load(passThruPath, shaderPath + "dof/downSample.frag");
 	calcNearCoc.load(passThruPath, shaderPath + "dof/calcNearCoc.frag");
@@ -16,6 +17,11 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::D
 	applyDof.load(passThruPath, shaderPath + "dof/applyDof.frag");
 	debugShader.load(passThruPath, shaderPath + "alphaFrag.frag");
 	blur.setPreShrink(4);
+
+	detectBokehShader.setupShaderFromFile(GL_COMPUTE_SHADER, shaderPath + "bokeh/bokehCalc.glsl");
+	detectBokehShader.linkProgram();
+	bokehRenderShader.load(shaderPath + "bokeh/bokehRender");
+	bokehShapingShader.load(passThruPath, shaderPath + "bokeh/bokehShaping.frag");
 
 	group.add(endPointsCoC.set("endpoint_coc", glm::vec2(0.9, 0.6), glm::vec2(0.), glm::vec2(1.)));
 	group.add(foculRange.set("focul_range", glm::vec2(0.1, 0.3), glm::vec2(0.), glm::vec2(1.)));
@@ -28,27 +34,18 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::D
 	bokehGroup.add(bokehLumThres.set("bokehLumThres", 0.03, 0., 1.));
 	bokehGroup.add(maxBokehRadius.set("maxBokehRadius", 100., 0., 300.));
 	bokehGroup.add(bokehDepthCutoff.set("bokehDepthCutoff", 0.03, 0.0, 1.0));
+	bokehGroup.add(bokehShapeId.set("bokehShapeId", 0, 0, 2));
 	group.add(bokehGroup);
 
+	// Add listners
+	bokehShapeId.addListener(this, &DofPass::onTexParamChanged);
+	maxBokehCount.addListener(this, &DofPass::onMaxBokehCountChanged);
+	int i = 0;
+	onTexParamChanged(i);
+	onMaxBokehCountChanged(i);
+
 	vbo = ofMesh::plane(1., 1.);
-
-	bokehColorTex.allocate(maxBokehCount, 1, GL_RGBA32F);
-	bokehPosDepthCocTex.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
-	bokehPosDepthCocTex.allocate(maxBokehCount, 1, GL_RGBA32F);
 	
-	bokehShapeTex.allocate(256, 256, GL_R8);
-
-	detectBokehShader.setupShaderFromFile(GL_COMPUTE_SHADER, shaderPath + "bokeh/bokehCalc.glsl");
-	detectBokehShader.linkProgram();
-	bokehRenderShader.load(shaderPath + "bokeh/bokehRender");
-	bokehShapingShader.load(passThruPath, shaderPath + "bokeh/bokehShaping.frag");
-
-	bokehShapeTex.begin();
-	ofClear(0);
-	bokehShapingShader.begin();
-	bokehShapeTex.draw(0, 0);
-	bokehShapingShader.end();
-	bokehShapeTex.end();
 }
 
 void DofPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
@@ -146,6 +143,27 @@ void DofPass::debugDraw() {
 	}
 
 	ofEnableAlphaBlending();
+}
+
+void DofPass::onTexParamChanged(int&) {
+
+	bokehShapeTex.begin();
+	ofClear(0);
+	bokehShapingShader.begin();
+	bokehShapingShader.setUniform1i("shapeId", bokehShapeId);
+	bokehShapeTex.draw(0, 0);
+	bokehShapingShader.end();
+	bokehShapeTex.end();
+	
+}
+
+void DofPass::onMaxBokehCountChanged(int&) {
+	bokehColorTex.clear();
+	bokehPosDepthCocTex.clear();
+
+	bokehColorTex.allocate(maxBokehCount, 1, GL_RGBA32F);
+	bokehPosDepthCocTex.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
+	bokehPosDepthCocTex.allocate(maxBokehCount, 1, GL_RGBA32F);
 }
 
 void DofPass::applySmallBlur(const ofTexture& read, ofFbo& write) {

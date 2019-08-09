@@ -17,6 +17,9 @@ namespace ofxDeferred {
 		void setFoculRange(const glm::vec2& range) { foculRange = range; }
 		void debugDraw();
 
+		void onTexParamChanged(int&);
+		void onMaxBokehCountChanged(int&);
+
 	private:
 		void applySmallBlur(const ofTexture& read, ofFbo& write);
 		void calcBokeh(const ofTexture& read);
@@ -46,6 +49,7 @@ namespace ofxDeferred {
 		ofParameter<float> bokehLumThres;
 		ofParameter<float> maxBokehRadius;
 		ofParameter<float> bokehDepthCutoff;
+		ofParameter<int> bokehShapeId;
 		AtomicCounterBuffer atomicBuffer;
 		ofShader detectBokehShader;
 		ofShader bokehRenderShader;
