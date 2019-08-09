@@ -8,7 +8,7 @@ uniform sampler2DRect depthTex;
 uniform sampler2DRect albed;
 
 uniform float cocThres;
-uniform float lumThes;
+uniform float lumThres;
 
 uniform float farEndCoc;
 uniform float foculRangeEnd;
@@ -16,7 +16,7 @@ uniform float foculRangeEnd;
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 void main() {
 
-    vec2 uv = gl_GlobalInvocationID.xy * 4;
+    vec2 uv = gl_GlobalInvocationID.xy * 8;
     vec3 color = texture(tex, uv).rgb;
 
     vec3 avgColor = vec3(0);
@@ -38,7 +38,7 @@ void main() {
     float a = farEndCoc / (1. - foculRangeEnd);
     float farCoc = clamp(a * (depth - foculRangeEnd), 0., farEndCoc);
 
-    if (difLum > lumThes && farCoc > cocThres) {
+    if (difLum > lumThres && farCoc > cocThres) {
         int current = int(atomicCounterIncrement(bokehCounter));
         imageStore(bokehPosDepthCoc, ivec2(current, 0), vec4(uv, depth, farCoc));
 		imageStore(bokehColor, ivec2(current, 0), vec4(color, 1.));

@@ -2,7 +2,9 @@
 
 using namespace ofxDeferred;
 
-DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Dof), blur(size / 4., GL_RGBA) {
+DofPass::DofPass(const glm::vec2& size) : 
+	RenderPass(size, RenderPassRegistry::Dof),
+	blur(size / 4., GL_RGBA), atomicBuffer(false) {
 
 	shrunk.allocate(size.x / 4., size.y / 4., GL_RGBA);
 	shrunkBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA);
@@ -25,7 +27,7 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::D
 	bokehGroup.add(isActiveBokeh.set("isActiveBokeh", false));
 	bokehGroup.add(maxBokehCount.set("maxBokehCount", 1000, 1, 1000));
 	bokehGroup.add(bokehCocThres.set("bokehCocThres", 0.03, 0., 1.));
-	bokehGroup.add(bokehLumThres.set("bokehLumThres", 0.03, 0., 1.));
+	bokehGroup.add(bokehLumThres.set("bokehLumThres", 0.03, 0., 10.));
 	bokehGroup.add(maxBokehRadius.set("maxBokehRadius", 100., 0., 300.));
 	bokehGroup.add(bokehDepthCutoff.set("bokehDepthCutoff", 0.03, 0.0, 1.0));
 	group.add(bokehGroup);
@@ -38,8 +40,7 @@ DofPass::DofPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::D
 	
 	bokehShapeTex.allocate(256, 256, GL_R8);
 
-	detectBokehShader.setupShaderFromFile(GL_COMPUTE_SHADER, shaderPath + "bokeh/bokehCalc.glsl");
-	detectBokehShader.linkProgram();
+	detectBokehShader.loadCompute(shaderPath + "bokeh/bokehCalc.glsl");
 	bokehRenderShader.load(shaderPath + "bokeh/bokehRender");
 	bokehShapingShader.load(passThruPath, shaderPath + "bokeh/bokehShaping.frag");
 
@@ -82,7 +83,6 @@ void DofPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer
 	nearCoC.begin();
 	ofClear(0);
 	{
-		//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		calcNearCoc.begin();
 		calcNearCoc.setUniformTexture("shrunk", shrunk.getTexture(0), 1);
 		calcNearCoc.setUniformTexture("shrunkBlurred", shrunkBlurred.getTexture(0), 2);
@@ -139,11 +139,11 @@ void DofPass::debugDraw() {
 	colorBlurred.draw(ws * 3, hs * 3, ws, hs);
 	debugShader.end();
 	
-	if (isActiveBokeh) {
+	/*if (isActiveBokeh) {
 		bokehColorTex.draw(0, hs * 3., ws, 20.);
 		bokehPosDepthCocTex.draw(0, hs * 3. + 20., ws, 20.);
 		bokehShapeTex.draw(0, hs * 3. + 40., 256, 256);
-	}
+	}*/
 
 	ofEnableAlphaBlending();
 }
@@ -172,19 +172,15 @@ void DofPass::calcBokeh(const ofTexture& read) {
 	detectBokehShader.setUniform1f("lumThres", bokehLumThres);
 	detectBokehShader.setUniform1f("farEndCoc", endPointsCoC->y);
 	detectBokehShader.setUniform1f("foculRangeEnd", foculRange->y);
-	detectBokehShader.dispatchCompute(read.getWidth() / 4, read.getHeight() / 4, 1);
+	detectBokehShader.dispatchCompute(read.getWidth() / 8, read.getHeight() / 8, 1);
 	detectBokehShader.end();
 	
 	bokehColorTex.unbind();
 	bokehPosDepthCocTex.unbind();
 	atomicBuffer.unbind();
-
-	//ofLogNotice("atomic counter") << atomicBuffer.getCount();
 }
 
 void DofPass::renderBokeh() {
-	int count = std::min(atomicBuffer.getCount(), maxBokehCount.get());
-	if (count == 0) return;
 
 	bokehRenderShader.begin();
 	bokehRenderShader.setUniformTexture("bokehColor", bokehColorTex, 1);
@@ -192,7 +188,7 @@ void DofPass::renderBokeh() {
 	bokehRenderShader.setUniformTexture("bokehTex", bokehShapeTex.getTexture(), 3);
 	bokehRenderShader.setUniform1f("maxBokehRadius", maxBokehRadius);
 	bokehRenderShader.setUniform1f("bokehDepthCutoff", bokehDepthCutoff);
-	vbo.drawInstanced(OF_MESH_FILL, count);
+	atomicBuffer.drawIndirect(vbo);
 	bokehRenderShader.end();
 
 }
