@@ -20,8 +20,7 @@ DofPass::DofPass(const glm::vec2& size) :
 	debugShader.load(passThruPath, shaderPath + "alphaFrag.frag");
 	blur.setPreShrink(4);
 
-	detectBokehShader.setupShaderFromFile(GL_COMPUTE_SHADER, shaderPath + "bokeh/bokehCalc.glsl");
-	detectBokehShader.linkProgram();
+	detectBokehShader.loadCompute(shaderPath + "bokeh/bokehCalc.glsl");
 	bokehRenderShader.load(shaderPath + "bokeh/bokehRender");
 	bokehShapingShader.load(passThruPath, shaderPath + "bokeh/bokehShaping.frag");
 
@@ -31,7 +30,8 @@ DofPass::DofPass(const glm::vec2& size) :
 
 	bokehGroup.setName("bokeh");
 	bokehGroup.add(isActiveBokeh.set("isActiveBokeh", false));
-	bokehGroup.add(maxBokehCount.set("maxBokehCount", 1000, 1, 1000));
+	//bokehGroup.add(maxBokehCount.set("maxBokehCount", 1000, 1, 1000));
+	maxBokehCount.set("maxBokehCount", 500, 1, 1000);
 	bokehGroup.add(bokehCocThres.set("bokehCocThres", 0.03, 0., 1.));
 	bokehGroup.add(bokehLumThres.set("bokehLumThres", 0.03, 0., 10.));
 	bokehGroup.add(maxBokehRadius.set("maxBokehRadius", 100., 0., 300.));
@@ -47,7 +47,6 @@ DofPass::DofPass(const glm::vec2& size) :
 	onMaxBokehCountChanged(i);
 
 	vbo = ofMesh::plane(1., 1.);
-
 }
 
 void DofPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
@@ -133,14 +132,13 @@ void DofPass::debugDraw() {
 	debugShader.end();
 
 	colorBlurred.draw(ws * 2, hs * 3, ws, hs);
-	debugShader.begin();
-	colorBlurred.draw(ws * 3, hs * 3, ws, hs);
-	debugShader.end();
+	depth.draw(ws * 3, hs * 3, ws, hs);
 
 	/*if (isActiveBokeh) {
 		bokehColorTex.draw(0, hs * 3., ws, 20.);
 		bokehPosDepthCocTex.draw(0, hs * 3. + 20., ws, 20.);
-		bokehShapeTex.draw(0, hs * 3. + 40., 256, 256);
+		atomicBuffer.getTex().draw(0, hs * 3. + 40., 20, 20);
+		bokehShapeTex.draw(0, hs * 3. + 60., 128, 128);
 	}*/
 
 	ofEnableAlphaBlending();
@@ -185,13 +183,13 @@ void DofPass::calcBokeh(const ofTexture& read) {
 
 	detectBokehShader.begin();
 	detectBokehShader.setUniformTexture("tex", read, 0);
-	detectBokehShader.setUniformTexture("depth", depth.getTexture(), 1);
+	detectBokehShader.setUniformTexture("depthTex", depth.getTexture(), 1);
 
-	detectBokehShader.setUniform1f("cocThres", bokehCocThres);
-	detectBokehShader.setUniform1f("lumThres", bokehLumThres);
+	detectBokehShader.setUniform1f("cocThres", bokehCocThres.get());
+	detectBokehShader.setUniform1f("lumThres", bokehLumThres.get());
 	detectBokehShader.setUniform1f("farEndCoc", endPointsCoC->y);
 	detectBokehShader.setUniform1f("foculRangeEnd", foculRange->y);
-	detectBokehShader.dispatchCompute(read.getWidth() / 8, read.getHeight() / 8, 1);
+	detectBokehShader.dispatchCompute(read.getWidth() / 4, read.getHeight() / 4, 1);
 	detectBokehShader.end();
 
 	bokehColorTex.unbind();

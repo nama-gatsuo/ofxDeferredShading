@@ -23,7 +23,7 @@ void main() {
     float coc = s.a;
     vec4 color = texelFetch(bokehColor, sampleUv);
 
-    float size = maxBokehRadius * max(coc, 0.1);
+    float size = maxBokehRadius * max(coc * depth, 0.1);
     vec3 p = position.xyz * size + vec3(centerPos, 0.);
 
     float alpha = clamp(coc - bokehDepthCutoff, 0., 1.);

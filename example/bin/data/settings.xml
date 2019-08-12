@@ -72,12 +72,12 @@
 			<fill_color>0.1, 0.1, 0.1, 1</fill_color>
 		</BgPass>
 		<EdgePass>
-			<active>0</active>
-			<edge_color>0, 0, 0, 1</edge_color>
+			<active>1</active>
+			<edge_color>0.00714284, 0.00714284, 0.00714284, 1</edge_color>
 			<bg_color>0, 0, 0, 1</bg_color>
 			<use_read_as_bg>1</use_read_as_bg>
-			<normalEdgeStrength>1</normalEdgeStrength>
-			<depthEdgeStrength>1</depthEdgeStrength>
+			<normalEdgeStrength>0.396085</normalEdgeStrength>
+			<depthEdgeStrength>0.364848</depthEdgeStrength>
 		</EdgePass>
 		<SsaoPass>
 			<active>1</active>
@@ -92,12 +92,12 @@
 			<darkness>0.427322</darkness>
 			<ambient_color>0.6, 0.6, 0.6, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<source_position>-472.206, 1331.28, 751.476</source_position>
+			<source_position>-880.037, 1331.28, 115.008</source_position>
 			<source_look>0, 0, 0</source_look>
 		</ShadowLightPass>
 		<PointLightPass>
 			<active>1</active>
-			<lightBrightness>1</lightBrightness>
+			<lightBrightness>11.2141</lightBrightness>
 			<light_1>
 				<diffuse_color>0.815509, 0.816086, 0.849177, 1</diffuse_color>
 				<specular_color>0.672579, 0.42157, 0.450685, 1</specular_color>
@@ -117,15 +117,15 @@
 				<isActive>1</isActive>
 				<diffuse_color>0.670797, 0.510788, 0.326682, 1</diffuse_color>
 				<specular_color>0.642457, 0.577654, 0.923826, 1</specular_color>
-				<position>75.1244, -757.762, -645.65</position>
-				<radius>335.906</radius>
+				<position>75.1244, 236.234, -639.772</position>
+				<radius>600</radius>
 				<intensity>0.781915</intensity>
 			</light_0>
 		</PointLightPass>
 		<DofPass>
 			<active>1</active>
-			<endpoint_coc>0.766254, 0.40501</endpoint_coc>
-			<focul_range>0.1, 0.3</focul_range>
+			<endpoint_coc>0.766254, 0.830003</endpoint_coc>
+			<focul_range>0.171264, 0.378448</focul_range>
 			<BlurPass>
 				<active>1</active>
 				<preShrink>4</preShrink>
@@ -135,10 +135,11 @@
 			<bokeh>
 				<isActiveBokeh>1</isActiveBokeh>
 				<maxBokehCount>100</maxBokehCount>
-				<bokehCocThres>0.378448</bokehCocThres>
-				<bokehLumThres>0.389073</bokehLumThres>
+				<bokehCocThres>0.112827</bokehCocThres>
+				<bokehLumThres>0.543906</bokehLumThres>
 				<maxBokehRadius>153.377</maxBokehRadius>
-				<bokehDepthCutoff>0.357198</bokehDepthCutoff>
+				<bokehDepthCutoff>0.2722</bokehDepthCutoff>
+				<bokehShapeId>2</bokehShapeId>
 			</bokeh>
 		</DofPass>
 		<BloomPass>

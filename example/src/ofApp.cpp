@@ -38,7 +38,7 @@ void ofApp::draw() {
 	if (isShowPanel) {
 		//deferred.debugDraw();
 		//shadowLightPass->debugDraw();
-		dof->debugDraw();
+		//dof->debugDraw();
 		//bloom->debugDraw();
 		panel.draw();
 		ofDrawBitmapString(ofToString(ofGetFrameRate()), 12, 16);

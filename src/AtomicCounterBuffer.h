@@ -2,6 +2,7 @@
 
 #include "ofVboMesh.h"
 #include "ofBufferObject.h"
+#include "ofGLProgrammableRenderer.h"
 
 namespace ofxDeferred {
 	class AtomicCounterBuffer {
@@ -18,18 +19,24 @@ namespace ofxDeferred {
 			if (isUseIndirectBuffer) {
 
 				// Create buffer storage for indirect buffer
-				
+				// Setup the indirect buffer
 				glGenBuffers(1, &indirectBufferId);
 				glBindBuffer(GL_DRAW_INDIRECT_BUFFER, indirectBufferId);
-				DrawElementsIndirectCommand cmd{ 1, 4, 0, 0, 0 };
-				glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(DrawElementsIndirectCommand), &cmd, GL_DYNAMIC_DRAW);
+				DrawElementsIndirectCommand cmd{ 4, 200, 0, 0, 0 };
+				
+				glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(DrawElementsIndirectCommand), &cmd, GL_STATIC_DRAW);
+				glBindBuffer(GL_DRAW_INDIRECT_BUFFER, 0);
 
-				glGenTextures(1, &texId);
-				glBindBuffer(GL_TEXTURE_BUFFER, texId);
+				// Create the texture proxy for the indirect buffer
+				glGenTextures(1, &indirectBufferTex);
+				glBindBuffer(GL_TEXTURE_BUFFER, indirectBufferTex);
 				glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, indirectBufferId);
 				glBindTexture(GL_TEXTURE_BUFFER, 0);
 
 				synchIndirect.loadCompute(shaderPath + "bokeh/bokehSync.glsl");
+
+				testTex.allocate(1, 1, GL_R32F);
+				testTex.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
 			}
 
 		}
@@ -37,73 +44,99 @@ namespace ofxDeferred {
 		~AtomicCounterBuffer() {
 			glDeleteBuffers(1, &counterId);
 			if (isUseIndirectBuffer) {
-				glDeleteBuffers(1, &texId);
+				glDeleteBuffers(1, &indirectBufferId);
+				glDeleteBuffers(1, &indirectBufferTex);
 			}
 		}
 
 		void bind() {
 			glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, counterId);
+			
+			// Clear atomic counter buffer
+			glm::uint32* bokehCounterValue = (glm::uint32*)glMapBufferRange(
+				GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(glm::uint32),
+				GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT
+			);
+			*bokehCounterValue = 0;
+			glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+			
 		}
 
 		void unbind() {
-
 			if (isUseIndirectBuffer) {
 				// Synch the atomic counter with the indirect texture for indirect instanced-rendering
-				synchIndirect.begin();
+				/*synchIndirect.begin();
 				synchIndirect.setUniform1i("maxCount", 500);
 				glActiveTexture(GL_TEXTURE0 + 1);
-				glBindImageTexture(1, texId, 0, false, 0, GL_WRITE_ONLY, GL_R32UI);
+				glBindImageTexture(1, indirectBufferTex, 0, false, 0, GL_WRITE_ONLY, GL_R32UI);	
+				testTex.bindAsImage(2, GL_WRITE_ONLY);
 				synchIndirect.dispatchCompute(1, 1, 1);
 				glActiveTexture(GL_TEXTURE0);
 				synchIndirect.end();
-
-				// Clear atomic counter buffer
-				glm::uint32* bokehCounterValue = (glm::uint32*)glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(glm::uint32), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
-				*bokehCounterValue = 0;
-				glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+				testTex.unbind();*/
+				
 
 				// unbind atomic counter buffer
 				glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, 0);
-				glMemoryBarrier(GL_ALL_BARRIER_BITS);
+				
+				//readFromAtomicCounterBuffer();
+
 			} else {
 				// unbind buffer base
 				glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, 0);
 
-				glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, counterId);
-				{
-					// Read from buffer
-					glGetBufferSubData(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), &count);
-
-					// reset
-					GLuint reset = 0;
-					glBufferSubData(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), &reset);
-				}
-				glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+				readFromAtomicCounterBuffer();
 			}
 
 		}
 
 		int getCount() { return count; }
 
-		void drawIndirect(ofVboMesh& vbo) {
-			
+		void drawIndirect(ofVboMesh& mesh) {
+			auto& vbo = mesh.getVbo();
+
 			if (isUseIndirectBuffer) {
-				glBindVertexArray(vbo.getVbo().getVaoId());
-				glBindBuffer(GL_DRAW_INDIRECT_BUFFER, texId);
+				
+				glMemoryBarrier(GL_ALL_BARRIER_BITS);
+								
+				vbo.bind();
 
+				glBindBuffer(GL_DRAW_INDIRECT_BUFFER, indirectBufferId);
 				glDrawElementsIndirect(GL_TRIANGLE_STRIP, GL_UNSIGNED_INT, NULL);
-				//glDrawArraysIndirect(GL_TRIANGLE_STRIP, NULL);
-
+				
 				glBindBuffer(GL_DRAW_INDIRECT_BUFFER, 0);
-
-				glBindVertexArray(0);
+				vbo.unbind();
+				
 			} else {
-				vbo.drawInstanced(OF_MESH_FILL, count);
+				
+				vbo.bind();
+				glDrawElementsInstanced(GL_TRIANGLE_STRIP, vbo.getNumIndices(), GL_UNSIGNED_INT, nullptr, count);
+				vbo.unbind();
+			
 			}
 			
 		}
 
+		const ofTexture& getTex() const {
+			return testTex;
+		}
+
 	private:
+		void readFromAtomicCounterBuffer() {
+			glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, counterId);
+			{
+				// Read from buffer
+				glGetBufferSubData(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), &count);
+				//ofLogNotice("Count") << count;
+
+				// reset
+				GLuint reset = 0;
+				glBufferSubData(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), &reset);
+			}
+			glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+		}
+
+
 		struct DrawArraysIndirectBufferCommand {
 			GLuint count;
 			GLuint primCount;
@@ -125,8 +158,12 @@ namespace ofxDeferred {
 
 		// Texture buffer ID for indirect rendering
 		GLuint indirectBufferId;
-		GLuint texId;
+		//DrawElementsIndirectCommandDrawElementsIndirectCommand cmd;
+		GLuint indirectBufferTex;
 		const bool isUseIndirectBuffer;
 		ofShader synchIndirect;
+
+
+		ofTexture testTex;
 	};
 }
