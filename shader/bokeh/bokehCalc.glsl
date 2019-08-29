@@ -19,16 +19,16 @@ void main() {
     vec3 color = texture(tex, uv).rgb;
 
     vec3 avgColor = vec3(0);
-	avgColor += texture(tex, uv + vec2(-1.5f, -1.5f)).rgb;
-	avgColor += texture(tex, uv + vec2( 0.5f, -1.5f)).rgb;
-	avgColor += texture(tex, uv + vec2( 1.5f, -1.5f)).rgb;
-	avgColor += texture(tex, uv + vec2(-1.5f,  0.5f)).rgb;
-	avgColor += texture(tex, uv + vec2( 0.5f,  0.5f)).rgb;
-	avgColor += texture(tex, uv + vec2( 1.5f,  0.5f)).rgb;
-	avgColor += texture(tex, uv + vec2(-1.5f,  1.5f)).rgb;
-	avgColor += texture(tex, uv + vec2( 0.5f,  1.5f)).rgb;
-	avgColor += texture(tex, uv + vec2( 1.5f,  1.5f)).rgb;
-	avgColor /= 9.;
+    avgColor += texture(tex, uv + vec2(-1.5f, -1.5f)).rgb;
+    avgColor += texture(tex, uv + vec2( 0.5f, -1.5f)).rgb;
+    avgColor += texture(tex, uv + vec2( 1.5f, -1.5f)).rgb;
+    avgColor += texture(tex, uv + vec2(-1.5f,  0.5f)).rgb;
+    avgColor += texture(tex, uv + vec2( 0.5f,  0.5f)).rgb;
+    avgColor += texture(tex, uv + vec2( 1.5f,  0.5f)).rgb;
+    avgColor += texture(tex, uv + vec2(-1.5f,  1.5f)).rgb;
+    avgColor += texture(tex, uv + vec2( 0.5f,  1.5f)).rgb;
+    avgColor += texture(tex, uv + vec2( 1.5f,  1.5f)).rgb;
+    avgColor /= 9.;
 
     float difLum = dot(vec3(1.), color) - dot(vec3(1.), avgColor);
     difLum /= 3.;
@@ -40,7 +40,7 @@ void main() {
     if (difLum > lumThres && depth > cocThres) {
         int current = int(atomicCounterIncrement(bokehCounter));
         imageStore(bokehPosDepthCoc, ivec2(current, 0), vec4(uv, depth, farCoc));
-		imageStore(bokehColor, ivec2(current, 0), vec4(color, 1.));
+        imageStore(bokehColor, ivec2(current, 0), vec4(color, 1.));
     }
 
 }

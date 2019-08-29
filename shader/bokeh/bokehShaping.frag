@@ -32,8 +32,4 @@ void main(){
 
     outputColor.r = 1. - smoothstep(.5, .9, d);
     outputColor.a = 1.;
-
-
-
-
 }
