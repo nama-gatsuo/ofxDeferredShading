@@ -3,7 +3,8 @@
 using namespace ofxDeferred;
 
 DofPass::DofPass(const glm::vec2& size) :
-	RenderPass(size, RenderPassRegistry::Dof), blur(size / 4., GL_RGBA)
+	RenderPass(size, RenderPassRegistry::Dof), blur(size / 4., GL_RGBA),
+	atomicBuffer(4)
 {
 
 	shrunk.allocate(size.x / 4., size.y / 4., GL_RGBA);
@@ -152,6 +153,7 @@ void DofPass::onMaxBokehCountChanged(int&) {
 	bokehColorTex.clear();
 	bokehPosDepthCocTex.clear();
 
+	bokehColorTex.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
 	bokehColorTex.allocate(maxBokehCount, 1, GL_RGBA32F);
 	bokehPosDepthCocTex.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
 	bokehPosDepthCocTex.allocate(maxBokehCount, 1, GL_RGBA32F);
@@ -199,7 +201,7 @@ void DofPass::renderBokeh() {
 	bokehRenderShader.setUniformTexture("bokehTex", bokehShapeTex.getTexture(), 3);
 	bokehRenderShader.setUniform1f("maxBokehRadius", maxBokehRadius);
 	bokehRenderShader.setUniform1f("bokehDepthCutoff", bokehDepthCutoff);
-	atomicBuffer.drawIndirect(vbo.getVbo());
+	atomicBuffer.drawIndirect(vbo.getVbo(), GL_TRIANGLE_STRIP);
 	bokehRenderShader.end();
 
 }

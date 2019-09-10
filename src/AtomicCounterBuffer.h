@@ -7,7 +7,7 @@
 namespace ofxDeferred {
 	class AtomicCounterBuffer {
 	public:
-		AtomicCounterBuffer() : maxCount(500) {
+		AtomicCounterBuffer(int indirectVertCount) : maxCount(500) {
 			// Create atomic counter buffer
 			// and define its initial storage capacity
 			glGenBuffers(1, &counterId);
@@ -16,7 +16,7 @@ namespace ofxDeferred {
 			glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
 
 			// Indirect command
-			DrawElementsIndirectCommand cmd{ 4, 0, 0, 0, 0 };
+			DrawElementsIndirectCommand cmd{ indirectVertCount, 0, 0, 0, 0 };
 
 			// Create buffer storage for indirect buffer
 			// Setup the indirect buffer
@@ -74,14 +74,14 @@ namespace ofxDeferred {
 			
 		}
 
-		void drawIndirect(ofVbo& vbo) {
+		void drawIndirect(ofVbo& vbo, GLenum drawMode) {
 			
 			glMemoryBarrier(GL_ALL_BARRIER_BITS);
 			
 			vbo.bind();
 
 			glBindBuffer(GL_DRAW_INDIRECT_BUFFER, indirectBufferId);
-			glDrawElementsIndirect(GL_TRIANGLE_STRIP, GL_UNSIGNED_INT, NULL);
+			glDrawElementsIndirect(drawMode, GL_UNSIGNED_INT, NULL);
 			glBindBuffer(GL_DRAW_INDIRECT_BUFFER, 0);
 				
 			vbo.unbind();

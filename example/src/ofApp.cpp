@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 
-	ofSetVerticalSync(true);
+	//ofSetVerticalSync(true);
 
 	archi.setup();
 	cells.setup();
@@ -30,13 +30,18 @@ void ofApp::draw() {
 	shadowLightPass->endShadowMap();
 
 	deferred.begin(cam);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	archi.draw();
 	cells.draw();
 	pointLightPass->drawLights();
+	glDisable(GL_CULL_FACE);
+	
 	deferred.end();
 
 	if (isShowPanel) {
-		//deferred.debugDraw();
+		deferred.debugDraw();
 		//shadowLightPass->debugDraw();
 		//dof->debugDraw();
 		//bloom->debugDraw();
