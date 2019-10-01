@@ -30,7 +30,9 @@ SsaoPass::SsaoPass(const glm::vec2& size) :
 	blur.setSampleStep(1.);
 	blur.setBlurRes(3);
 	ssao.allocate(size.x, size.y, GL_R8);
+	ssao.getTexture().setRGToRGBASwizzles(true);
 	blurred.allocate(size.x, size.y, GL_R8);
+	blurred.getTexture().setRGToRGBASwizzles(true);
 
 	calcAo.load(passThruPath, shaderPath + "ao/calcAo.frag");
 	applyAo.load(passThruPath, shaderPath + "ao/applyAo.frag");
@@ -41,6 +43,11 @@ SsaoPass::SsaoPass(const glm::vec2& size) :
 
 void SsaoPass::update(const ofCamera& cam) {
 	projection = cam.getProjectionMatrix(ofRectangle(0, 0, size.x, size.y));
+}
+
+void ofxDeferred::SsaoPass::debugDraw(const glm::vec2& p, const glm::vec2& size) {
+	ssao.draw(p, size.x, size.y);
+	blurred.draw(p + glm::vec2(size.x, 0), size.x, size.y);
 }
 
 void SsaoPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {

@@ -18,6 +18,7 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 	s.depthStencilAsTexture = true;
 
 	shadowMap.allocate(s);
+	shadowMap.getTexture().setRGToRGBASwizzles(true);
 
 	group.add(nearClip.set("near_clip", 0., 0., 10000.f));
 	group.add(farClip.set("far_clip", 5000., 1., 10000.f));
@@ -81,13 +82,10 @@ void ShadowLightPass::endShadowMap() {
 
 }
 
-void ShadowLightPass::debugDraw() {
-	float w = ofGetViewportWidth() * 0.25;
-	float h = w;
-	float y = ofGetViewportHeight() - h;
+void ShadowLightPass::debugDraw(const glm::vec2& p, const glm::vec2& size) {
 
 	ofDisableAlphaBlending();
-	shadowMap.getTexture().draw(0, y, w, h);
+	shadowMap.getTexture().draw(p, size.x, size.x);
 	ofEnableAlphaBlending();
 }
 

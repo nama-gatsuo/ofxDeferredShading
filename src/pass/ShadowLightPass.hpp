@@ -46,7 +46,7 @@ namespace ofxDeferred {
 		void beginShadowMap(bool bUseOwnShader = false);
 		void endShadowMap();
 
-		void debugDraw();
+		void debugDraw(const glm::vec2& p, const glm::vec2& size) override;
 		ofFbo& getShadowMap() { return shadowMap; };
 
 		void update(const ofCamera& cam) override;

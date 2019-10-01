@@ -10,6 +10,7 @@ namespace ofxDeferred {
 
 		BlurPass(const glm::vec2& res, GLint colorFormat = GL_RGB);
 		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
+		void render(const ofTexture& read, ofFbo& write);
 		void update(const ofCamera& cam) override {}
 		//void resize(int w, int h) override;
 
@@ -20,10 +21,16 @@ namespace ofxDeferred {
 		void setSampleStep(float v) { sampleStep.set(v); }
 		void setBlurRes(int v) { blurRes.set(v); }
 		void setPreShrink(int v) { preShrink.set(v); }
+		const ofTexture& getBlurred() const {
+			return pp.src->getTexture();
+		}
 
+		static float Gaussian(float x, float mean, float variance) {
+			x -= mean;
+			return (1. / sqrt(TWO_PI * variance)) * exp(-(x * x) / (2. * variance));
+		}
 	private:
 		inline std::vector<float> createGaussianWeights(int radius, float variance);
-		inline float Gaussian(float x, float mean, float variance);
 
 		std::vector<float> coefficients;
 

@@ -28,7 +28,7 @@ namespace ofxDeferred {
 		void setup(int w = ofGetWidth(), int h = ofGetHeight());
 		void begin(ofCamera& cam, bool bUseOthreShader = false);
 		void end() const;
-		void debugDraw() const;
+		void debugDraw(const glm::vec2& p, const glm::vec2& size) const;
 		ofTexture& getTexture(int index) {
 			return fbo.getTexture(index);
 		}

@@ -7,11 +7,31 @@ DofPass::DofPass(const glm::vec2& size) :
 	atomicBuffer(4)
 {
 
-	shrunk.allocate(size.x / 4., size.y / 4., GL_RGBA);
-	shrunkBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA);
-	nearCoC.allocate(size.x / 4., size.y / 4., GL_RGBA);
-	colorBlurred.allocate(size.x / 4., size.y / 4., GL_RGBA);
-	depth.allocate(size.x, size.y, GL_R32F);
+	ofFboSettings s;
+	s.width = size.x / 4.;
+	s.height = size.y / 4.;
+	s.internalformat = GL_RGBA;
+	s.numColorbuffers = 1;
+	s.numSamples = 1;
+	//s.minFilter = GL_NEAREST;
+	//s.maxFilter = GL_NEAREST;
+	s.useDepth = false;
+	s.useStencil = false;
+
+	shrunk.allocate(s);
+	shrunkBlurred.allocate(s);
+	nearCoC.allocate(s);
+	colorBlurred.allocate(s);
+
+	s.width = size.x;
+	s.height = size.y;
+	s.internalformat = GL_R32F;
+	depth.allocate(s);
+	depth.getTexture().setRGToRGBASwizzles(true);
+	
+	s.width = 256;
+	s.height = 256;
+	s.internalformat = GL_R8;
 	bokehShapeTex.allocate(256, 256, GL_R8);
 
 	downSample.load(passThruPath, shaderPath + "dof/downSample.frag");
@@ -19,7 +39,7 @@ DofPass::DofPass(const glm::vec2& size) :
 	smallBlur.load(passThruPath, shaderPath + "dof/smallBlur.frag");
 	applyDof.load(passThruPath, shaderPath + "dof/applyDof.frag");
 	debugShader.load(passThruPath, shaderPath + "alphaFrag.frag");
-	blur.setPreShrink(4);
+	blur.setPreShrink(1);
 
 	detectBokehShader.loadCompute(shaderPath + "bokeh/bokehCalc.glsl");
 	bokehRenderShader.load(shaderPath + "bokeh/bokehRender");
@@ -52,7 +72,7 @@ DofPass::DofPass(const glm::vec2& size) :
 void DofPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 
 	depth.begin();
-	ofClear(0);
+	ofClear(255);
 	debugShader.begin();
 	gbuffer.getTexture(GBuffer::TYPE_DEPTH_NORMAL).draw(0, 0);
 	debugShader.end();
@@ -119,20 +139,18 @@ void DofPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer
 
 }
 
-void DofPass::debugDraw() {
-	float w2 = ofGetViewportWidth();
-	float h2 = ofGetViewportHeight();
-	float ws = w2 * 0.25;
-	float hs = h2 * 0.25;
+void DofPass::debugDraw(const glm::vec2& p, const glm::vec2& size) {
+	
+	glm::vec2 pos = p;
 
 	ofDisableAlphaBlending();
-	shrunkBlurred.draw(0, hs * 3, ws, hs);
+	shrunkBlurred.draw(pos, size.x, size.y); pos += glm::vec2(size.x, 0);
 	debugShader.begin();
-	shrunkBlurred.draw(ws * 1, hs * 3, ws, hs);
+	shrunkBlurred.draw(pos, size.x, size.y); pos += glm::vec2(size.x, 0);
 	debugShader.end();
 
-	colorBlurred.draw(ws * 2, hs * 3, ws, hs);
-	depth.draw(ws * 3, hs * 3, ws, hs);
+	colorBlurred.draw(pos, size.x, size.y); pos += glm::vec2(size.x, 0);
+	depth.draw(pos, size.x, size.y);
 
 	ofEnableAlphaBlending();
 }
@@ -185,7 +203,7 @@ void DofPass::calcBokeh(const ofTexture& read) {
 	detectBokehShader.setUniform1f("lumThres", bokehLumThres.get());
 	detectBokehShader.setUniform1f("farEndCoc", endPointsCoC->y);
 	detectBokehShader.setUniform1f("foculRangeEnd", foculRange->y);
-	detectBokehShader.dispatchCompute(read.getWidth() / 4, read.getHeight() / 4, 1);
+	detectBokehShader.dispatchCompute(read.getWidth(), read.getHeight(), 1);
 	detectBokehShader.end();
 
 	bokehColorTex.unbind();

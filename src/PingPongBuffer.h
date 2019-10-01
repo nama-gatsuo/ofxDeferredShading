@@ -14,6 +14,12 @@ namespace ofxDeferred {
 			ofFboSettings s;
 			s.width = res.x;
 			s.height = res.y;
+			s.numColorbuffers = 1;
+			s.numSamples = 1;
+			s.maxFilter = GL_NEAREST;
+			s.minFilter = GL_NEAREST;
+			s.useDepth = false;
+			s.useStencil = false;
 			s.internalformat = intrenalFormat;
 
 			for (auto& b : buffers) {

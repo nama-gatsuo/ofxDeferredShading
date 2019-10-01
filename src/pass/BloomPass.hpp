@@ -6,14 +6,16 @@ namespace ofxDeferred {
 	class BloomPass : public RenderPass {
 	private:
 		ofFbo blurred;
-		BlurPass blur;
-		
+		std::vector<ofPtr<BlurPass>> blurs;
+		std::vector<float> weights;
+
 		ofShader lumaShader;
 		ofShader composite;
 		ofFbo lumaFbo;
 
 		ofParameter<float> lumaThres;
 		ofParameter<float> strength;
+		const int numPass;
 	public:
 		using Ptr = std::shared_ptr<BloomPass>;
 		
@@ -22,6 +24,6 @@ namespace ofxDeferred {
 		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 
 		void setThreshold(float thres) { lumaThres = thres; }
-		void debugDraw();
+		void debugDraw(const glm::vec2& p, const glm::vec2& size) override;
 	};
 }

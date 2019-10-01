@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 
-	//ofSetVerticalSync(true);
+	ofSetVerticalSync(true);
 
 	archi.setup();
 	cells.setup();

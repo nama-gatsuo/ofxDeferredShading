@@ -31,9 +31,14 @@ BlurPass::BlurPass(const glm::vec2& size, GLint colorFormat) : RenderPass(size, 
 }
 
 void BlurPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
+	render(read, write);
+}
+
+void ofxDeferred::BlurPass::render(const ofTexture& read, ofFbo& write) {
 	glm::vec2 shrunkSize(size / (float)preShrink);
 
 	ofDisableAlphaBlending();
+	
 	pp.dst->begin();
 	ofClear(0);
 	read.draw(0, 0, shrunkSize.x, shrunkSize.y);
@@ -46,6 +51,7 @@ void BlurPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffe
 		ofClear(0);
 		shader.begin();
 		shader.setUniform1i("isHorizontal", i);
+		shader.setUniform1f("sampleStep", sampleStep);
 		pp.src->draw(0, 0);
 		shader.end();
 
@@ -104,9 +110,4 @@ inline std::vector<float> BlurPass::createGaussianWeights(int radius, float vari
 	}
 
 	return row;
-}
-
-inline float BlurPass::Gaussian(float x, float mean, float variance) {
-	x -= mean;
-	return (1. / sqrt(TWO_PI * variance)) * exp(-(x * x) / (2. * variance));
 }

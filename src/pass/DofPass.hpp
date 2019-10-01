@@ -15,7 +15,7 @@ namespace ofxDeferred {
 
 		void setEndPointsCoC(const glm::vec2& p) { endPointsCoC = p; }
 		void setFoculRange(const glm::vec2& range) { foculRange = range; }
-		void debugDraw();
+		void debugDraw(const glm::vec2& p, const glm::vec2& size) override;
 
 		void onTexParamChanged(int&);
 		void onMaxBokehCountChanged(int&);

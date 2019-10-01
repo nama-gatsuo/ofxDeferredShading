@@ -21,11 +21,11 @@ out vec4 outputColor;
 
 void main(){
 
-    float stencil = texture(colorTex, vTexCoord).a;
-    if (stencil < 0.001) {
-        outputColor = vec4(0.);
-        return;
-    }
+    // float stencil = texture(colorTex, vTexCoord).a;
+    // if (stencil < 0.001) {
+    //     outputColor = vec4(0.);
+    //     return;
+    // }
 
     vec3 position = texture(positionTex, vTexCoord).rgb;
     vec3 N = texture(normalAndDepthTex, vTexCoord).rgb;

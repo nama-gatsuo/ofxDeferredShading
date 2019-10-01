@@ -67,7 +67,10 @@ void Processor::draw(float x, float y, float w, float h) const {
 }
 
 void Processor::debugDraw() {
-	gbuffer.debugDraw();
+	glm::vec2 s(ofGetViewportWidth() * 0.25, ofGetViewportHeight() * 0.25);
+	glm::vec2 p(0, ofGetHeight() - s.y);
+
+	gbuffer.debugDraw(p, s);
 }
 
 void Processor::process() {

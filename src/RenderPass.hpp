@@ -22,6 +22,7 @@ namespace ofxDeferred {
 		RenderPass(const glm::vec2& sz, const std::string& n);
 		virtual void update(const ofCamera& cam) = 0;
 		virtual void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) = 0;
+		virtual void debugDraw(const glm::vec2& p, const glm::vec2& size) {}
 
 		void setEnabled(bool enabled) { this->enabled = enabled; }
 		bool getEnabled() const { return enabled; }
