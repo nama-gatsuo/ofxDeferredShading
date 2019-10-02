@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Bloom), numPass(8) {
+BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Bloom), numPass(6), blurred(size) {
 	
 	composite.load(passThruPath, shaderPath + "bloom.frag");
 	lumaShader.load(passThruPath, shaderPath + "lumaThres.frag");
@@ -11,20 +11,19 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistr
 	s.width = size.x;
 	s.height = size.y;
 	s.internalformat = GL_RGB16F;
-	s.minFilter = GL_NEAREST;
-	s.maxFilter = GL_NEAREST;
+	s.minFilter = GL_LINEAR;
+	s.maxFilter = GL_LINEAR;
 	s.numSamples = 1;
 	s.numColorbuffers = 1;
 	s.useDepth = false;
 	s.useStencil = false;
 
 	lumaFbo.allocate(s);
-	blurred.allocate(s);
+	blurred.resize(s);
 
 	for (int i = 0; i < numPass; i++) {
 		
 		glm::ivec2 res(size / pow(2., (i + 1)));
-		ofLogNotice() << res;
 		ofPtr<BlurPass> blur = std::make_shared<BlurPass>(res, GL_RGB16F);
 		blur->setBlurRes(3);
 		blur->setSampleStep(1.);
@@ -32,20 +31,17 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistr
 		blurs.push_back(blur);
 
 		float g = 1. / pow(1.5, (i + 1));
-		ofLogNotice() << g;
 		weights.push_back(g);
 	}
 
 	group.add(lumaThres.set("luma_threshold", 0.5, 0., 3.));
 	group.add(strength.set("strength", 1., 0., 10.));
 	
-	
 }
 
 
 void BloomPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
 	
-	ofDisableAlphaBlending();
 	lumaFbo.begin();
 	ofClear(0);
 	{
@@ -57,26 +53,23 @@ void BloomPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuff
 	}
 	lumaFbo.end();
 
-	for (int i = 0; i < numPass; i++) {		
-		blurs[i]->render(lumaFbo.getTexture(), blurred, gbuffer);
+	blurs[0]->render(lumaFbo.getTexture(), *(blurred.src), gbuffer);
+	for (int i = 1; i < numPass; i++) {	
+		blurs[i]->render(blurred.src->getTexture(), *(blurred.dst), gbuffer);
+		blurred.swap();
 	}
 
 	write.begin();
 	ofClear(0);
 	{
-		
 		composite.begin();
-		//composite.setUniformTexture("blurredThres", blurred.getTexture(), 1);
-		composite.setUniform1i("numPass", numPass);
-		composite.setUniform1fv("weights", weights.data(), 8);
+		composite.setUniform1fv("weights", weights.data(), numPass);
 		for (int i = 0; i < numPass; i++) {
 			composite.setUniformTexture("pass" + ofToString(i), blurs[i]->getBlurred(), i + 1);
 		}
 		composite.setUniform1f("strength", strength);
 		read.draw(0, 0);
 		composite.end();
-		
-		
 		
 	}
 	write.end();

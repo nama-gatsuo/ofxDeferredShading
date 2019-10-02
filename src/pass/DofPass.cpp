@@ -13,8 +13,8 @@ DofPass::DofPass(const glm::vec2& size) :
 	s.internalformat = GL_RGBA;
 	s.numColorbuffers = 1;
 	s.numSamples = 1;
-	//s.minFilter = GL_NEAREST;
-	//s.maxFilter = GL_NEAREST;
+	s.minFilter = GL_LINEAR;
+	s.maxFilter = GL_LINEAR;
 	s.useDepth = false;
 	s.useStencil = false;
 

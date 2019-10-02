@@ -62,7 +62,7 @@ void ofxDeferred::BlurPass::render(const ofTexture& read, ofFbo& write) {
 
 	write.begin();
 	ofClear(0);
-	pp.src->draw(0, 0, size.x, size.y);
+	pp.src->draw(0, 0, write.getWidth(), write.getHeight());
 	write.end();
 }
 

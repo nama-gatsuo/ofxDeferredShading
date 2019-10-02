@@ -7,10 +7,10 @@ uniform sampler2DRect pass2;
 uniform sampler2DRect pass3;
 uniform sampler2DRect pass4;
 uniform sampler2DRect pass5;
-uniform sampler2DRect pass6;
-uniform sampler2DRect pass7;
+//uniform sampler2DRect pass6;
+//uniform sampler2DRect pass7;
 uniform float strength;
-uniform float weights[8];
+uniform float weights[6];
 in vec2 vTexCoord;
 out vec4 outputColor;
 
@@ -22,7 +22,7 @@ void main(){
     col += texture(pass3, vTexCoord / 16.).rgb * weights[3] * strength;
     col += texture(pass4, vTexCoord / 32.).rgb * weights[4] * strength;
     col += texture(pass5, vTexCoord / 64.).rgb * weights[5] * strength;
-    col += texture(pass6, vTexCoord / 128.).rgb * weights[6] * strength;
-    col += texture(pass7, vTexCoord / 256.).rgb * weights[7] * strength;
+    //col += texture(pass6, vTexCoord / 128.).rgb * weights[6] * strength;
+    //col += texture(pass7, vTexCoord / 256.).rgb * weights[7] * strength;
     outputColor = vec4(col, 1.);
 }

@@ -5,7 +5,7 @@
 namespace ofxDeferred {
 	class BloomPass : public RenderPass {
 	private:
-		ofFbo blurred;
+		PingPongBuffer blurred;
 		std::vector<ofPtr<BlurPass>> blurs;
 		std::vector<float> weights;
 
