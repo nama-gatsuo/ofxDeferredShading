@@ -69,7 +69,7 @@
 	<deferred>
 		<BgPass>
 			<active>1</active>
-			<fill_color>0.1, 0.1, 0.1, 1</fill_color>
+			<fill_color>0.385714, 0.190044, 0.295534, 1</fill_color>
 		</BgPass>
 		<EdgePass>
 			<active>1</active>
@@ -89,11 +89,12 @@
 			<near_clip>0</near_clip>
 			<far_clip>4273.79</far_clip>
 			<view_port_size>1440</view_port_size>
-			<darkness>0.427322</darkness>
-			<ambient_color>0.6, 0.6, 0.6, 1</ambient_color>
+			<darkness>0.656393</darkness>
+			<ambient_color>0.6, 0.453666, 0.445476, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<source_position>780.135, 1331.28, -423.18</source_position>
+			<source_position>60.2837, 1229.15, -1022.52</source_position>
 			<source_look>0, 0, 0</source_look>
+			<biasScalar>0.00153061</biasScalar>
 		</ShadowLightPass>
 		<PointLightPass>
 			<active>1</active>
@@ -101,9 +102,9 @@
 			<light_1>
 				<diffuse_color>0.815509, 0.816086, 0.849177, 1</diffuse_color>
 				<specular_color>0.672579, 0.42157, 0.450685, 1</specular_color>
-				<position>381.481, 695.456, 733.885</position>
-				<radius>21.5387</radius>
-				<intensity>0.806421</intensity>
+				<position>-214.779, 800, 600.513</position>
+				<radius>600</radius>
+				<intensity>0.622819</intensity>
 				<isActive>1</isActive>
 			</light_1>
 			<light_2>

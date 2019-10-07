@@ -20,11 +20,11 @@ void main(){
     // center
     vec4 result = texture(tex, uv) * coefficients[0];
 
-    for (int i = 0; i < 32; i++) {
+    for (int i = 1; i < 32; i++) {
         if (i == blurRes) break;
 
-        result += texture(tex, uv + vec2(texOffset * sampleStep * float(i + 1))) * coefficients[i + 1];
-        result += texture(tex, uv - vec2(texOffset * sampleStep * float(i + 1))) * coefficients[i + 1];
+        result += texture(tex, uv + vec2(texOffset * sampleStep * float(i))) * coefficients[i];
+        result += texture(tex, uv - vec2(texOffset * sampleStep * float(i))) * coefficients[i];
     }
 
     outputColor = result;

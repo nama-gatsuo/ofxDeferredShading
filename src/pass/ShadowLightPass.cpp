@@ -27,6 +27,7 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 
 	group.add(viewPortSize.set("view_port_size", 1024.f, 2., 2048.));
 	group.add(darkness.set("darkness", 0.8, 0., 1.));
+	group.add(biasScalar.set("biasScalar", 0.005, 0.001, 0.05));
 
 	group.add(ambientColor.set("ambient_color", ofFloatColor(0.6)));
 	group.add(diffuseColor.set("diffuse_color", ofFloatColor(0.9)));
@@ -94,10 +95,12 @@ void ShadowLightPass::update(const ofCamera &cam) {
 	setGlobalPosition(pos);
 	lookAt(center);
 
+	invCamMat = glm::inverse(cam.getProjectionMatrix());
 	linearDepthScalar = 1.f / (farClip - nearClip);
-	shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());
+	shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());;
 	directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(getLookAtDir(), 0.f));
-
+	camFar = cam.getFarClip();
+	
 }
 
 void ShadowLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) {
@@ -117,7 +120,11 @@ void ShadowLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer&
 	shader.setUniform1f("darkness", darkness);
 	shader.setUniform1f("lds", linearDepthScalar);
 	shader.setUniform1f("near", nearClip);
+	
+	shader.setUniformMatrix4f("invCamMat", invCamMat);
+	shader.setUniform1f("camFar", camFar);
 
+	shader.setUniform1f("biasScalar", biasScalar);
 	shader.setUniform1i("isLighting", isLighting ? 1 : 0);
 	shader.setUniform4f("ambient", ambientColor);
 	shader.setUniform4f("diffuse", diffuseColor);

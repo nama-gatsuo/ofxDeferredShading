@@ -10,9 +10,9 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistr
 	ofFboSettings s;
 	s.width = size.x;
 	s.height = size.y;
-	s.internalformat = GL_RGB16F;
-	s.minFilter = GL_LINEAR;
-	s.maxFilter = GL_LINEAR;
+	s.internalformat = GL_RGBA16F;
+	s.minFilter = GL_NEAREST;
+	s.maxFilter = GL_NEAREST;
 	s.numSamples = 1;
 	s.numColorbuffers = 1;
 	s.useDepth = false;
@@ -24,7 +24,7 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistr
 	for (int i = 0; i < numPass; i++) {
 		
 		glm::ivec2 res(size / pow(2., (i + 1)));
-		ofPtr<BlurPass> blur = std::make_shared<BlurPass>(res, GL_RGB16F);
+		ofPtr<BlurPass> blur = std::make_shared<BlurPass>(res, GL_RGBA16F);
 		blur->setBlurRes(3);
 		blur->setSampleStep(1.);
 		blur->setPreShrink(1);
@@ -81,7 +81,9 @@ void BloomPass::debugDraw(const glm::vec2& p, const glm::vec2& size) {
 	ofDisableAlphaBlending();
 	lumaFbo.draw(pos, size.x, size.y); pos += glm::vec2(size.x, 0);
 	blurs[0]->getBlurred().draw(pos, size.x, size.y); pos += glm::vec2(size.x, 0);
-	blurs[1]->getBlurred().draw(pos, size.x, size.y); pos += glm::vec2(size.x, 0);
-	blurs[2]->getBlurred().draw(pos, size.x, size.y);
+	blurs[1]->getBlurred().draw(pos, size.x/2, size.y/2); pos += glm::vec2(size.x/2, 0);
+	blurs[2]->getBlurred().draw(pos, size.x/4, size.y/4); pos += glm::vec2(size.x / 4, 0);
+	blurs[3]->getBlurred().draw(pos, size.x / 8, size.y / 8); pos += glm::vec2(size.x / 8, 0);
+	blurs[4]->getBlurred().draw(pos, size.x / 16, size.y / 16); pos += glm::vec2(size.x / 8, 0);
 	ofEnableAlphaBlending();
 }

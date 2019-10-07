@@ -25,6 +25,9 @@ namespace ofxDeferred {
 		glm::vec3 directionInView;
 		float linearDepthScalar;
 
+		glm::mat4 invCamMat;
+		float camFar;
+
 		ofParameter<float> nearClip;
 		ofParameter<float> farClip;
 
@@ -38,6 +41,8 @@ namespace ofxDeferred {
 
 		ofParameter<glm::vec3> pos;
 		ofParameter<glm::vec3> center;
+		ofParameter<float> biasScalar;
+
 		bool isLighting;
 	public:
 		using Ptr = std::shared_ptr<ShadowLightPass>;

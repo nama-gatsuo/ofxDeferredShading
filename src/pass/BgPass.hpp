@@ -25,15 +25,13 @@ namespace ofxDeferred {
 		void update(const ofCamera& cam) override {}
 		void render(const ofTexture& read, ofFbo& writeFbo, const GBuffer& gbuffer) override {
 			writeFbo.begin();
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-			glBlendEquation(GL_FUNC_ADD);
+			ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 			ofClear(fillColor.get());
 
 			bg.draw(0, 0);
 			gbuffer.getTexture(GBuffer::TYPE_ALBEDO).draw(0, 0);
 			
-			glDisable(GL_BLEND);
+			ofDisableBlendMode();
 			writeFbo.end();
 		}
 		void onParamChanged(ofFloatColor& c) {

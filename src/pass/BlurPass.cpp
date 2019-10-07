@@ -39,12 +39,10 @@ void ofxDeferred::BlurPass::render(const ofTexture& read, ofFbo& write) {
 
 	ofDisableAlphaBlending();
 	
-	pp.dst->begin();
+	pp.src->begin();
 	ofClear(0);
 	read.draw(0, 0, shrunkSize.x, shrunkSize.y);
-	pp.dst->end();
-
-	pp.swap();
+	pp.src->end();
 
 	for (int i = 0; i < 2; i++) {
 		pp.dst->begin();
