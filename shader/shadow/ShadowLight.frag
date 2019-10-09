@@ -2,7 +2,6 @@
 precision highp float;
 
 uniform sampler2DRect tex;
-uniform sampler2DRect colorTex;
 uniform sampler2DRect lightDepthTex;
 uniform sampler2DRect positionTex;
 uniform sampler2DRect normalAndDepthTex;
@@ -18,9 +17,6 @@ uniform float lds;
 uniform float near;
 uniform int isLighting;
 uniform float biasScalar;
-
-uniform mat4 invCamMat;
-uniform float camFar;
 
 in vec2 vTexCoord;
 out vec4 outputColor;
@@ -58,33 +54,6 @@ float sampleShadowPCF(in vec2 uv, float compare) {
     return result / sampleSqrd;
 }
 
-float sampleVolume(in vec4 pos) {
-
-    vec2 res = textureSize(lightDepthTex);
-    float s = 0.;
-    vec3 side = vec3(0.);
-
-    if (all(equal(vec3(0), pos.xyz))) {
-        vec4 ray = invCamMat * vec4(vTexCoord/vec2(1920,1080)-vec2(0.5), 0, .4);
-        ray.y = - ray.y;
-        side = normalize(ray.xyz) * camFar * 0.4;
-    } else {
-        side = pos.xyz;
-    }
-
-    for (float d = 0.; d < 1.; d += 0.05) {
-
-        vec4 p = vec4(mix(vec3(0), side, d), 1.);
-
-        vec4 shadowCoord = shadowTransMat * p;
-        float dist = shadowCoord.z;
-        s += step(texture(lightDepthTex, shadowCoord.xy * res).r - near * lds, dist) * pow(1. - dist, 2.);
-
-    }
-    return s * 0.05;
-
-}
-
 void main() {
 
     vec4 read = texture(tex, vTexCoord);
@@ -106,7 +75,6 @@ void main() {
 
     if (isLighting == 1) {
         outputColor = read * (ambient + diffuse * clamp(dot(normal, -lightDir), 0., 1.)) * shadow;
-        //outputColor.rgb += vec3(sampleVolume(position) * ambient);
     } else {
         outputColor = read * shadow;
     }

@@ -1,9 +1,12 @@
 #version 400
-in vec4 vPosition;
-in float vDepth;
-in vec3 vNormal;
-in vec2 vTexCoord;
-in vec4 vColor;
+
+in block {
+    vec4 viewPos;
+    float depth;
+    vec3 normal;
+    vec2 texcoord;
+    vec4 color;
+} In;
 
 layout (location = 0) out vec4 outputColor0;
 layout (location = 1) out vec4 outputColor1;
@@ -19,8 +22,8 @@ layout (location = 3) out vec4 outputColor3;
 
 void main(){
 
-    outputColor0 = vColor;
-    outputColor1 = vPosition;
-    outputColor2 = vec4(vNormal, vDepth);
+    outputColor0 = In.color;
+    outputColor1 = In.viewPos;
+    outputColor2 = vec4(In.normal, In.depth);
 
 }

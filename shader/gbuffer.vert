@@ -10,19 +10,20 @@ in vec2 texcoord; // oF Default
 uniform vec4 globalColor;
 uniform float lds; // lenear depth scalar
 
-out vec4 vPosition;
-out float vDepth;
-out vec3 vNormal;
-out vec2 vTexCoord;
-out vec4 vColor;
+out block {
+    vec4 viewPos;
+    float depth;
+    vec3 normal;
+    vec2 texcoord;
+    vec4 color;
+} Out;
 
 void main(){
     gl_Position = modelViewProjectionMatrix * position;
 
-    vec4 viewPos = modelViewMatrix * position;
-    vDepth = - viewPos.z * lds;
-    vNormal = (normalMatrix * normal).xyz;
-    vTexCoord = texcoord;
-    vColor = color * globalColor;
-    vPosition = viewPos;
+    Out.viewPos = modelViewMatrix * position;
+    Out.depth = - Out.viewPos.z * lds;
+    Out.normal = (normalMatrix * normal).xyz;
+    Out.texcoord = texcoord;
+    Out.color = color * globalColor;
 }

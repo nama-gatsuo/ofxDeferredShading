@@ -29,4 +29,5 @@ private:
 	// gui
 	bool isShowPanel;
 	ofxPanel panel;
+	ofParameter<float> farClip;
 };

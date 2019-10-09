@@ -9,21 +9,21 @@ void ofApp::setup() {
 	cells.setup();
 
 	setupDeferred();
-	
-	cam.setFarClip(3000.);
+	panel.add(farClip.set("farClip", 3000., 10., 10000.));
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	shadowLightPass->setGlobalPosition(glm::normalize(glm::vec3(cos(ofGetElapsedTimef() * 0.5), 1.2f, sin(ofGetElapsedTimef() * 0.5))) * 1600.f);
+	cam.setFarClip(farClip);
+	shadowLightPass->setGlobalPosition(glm::normalize(glm::vec3(cos(ofGetElapsedTimef() * 0.5), 1.5f, sin(ofGetElapsedTimef() * 0.5))) * 1600.f);
 	shadowLightPass->lookAt(glm::vec3(0));	
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
 
-	shadowLightPass->beginShadowMap();
+	shadowLightPass->beginShadowMap(cam);
 	archi.draw();
 	cells.draw();
 	pointLightPass->drawLights();
@@ -42,7 +42,7 @@ void ofApp::draw() {
 
 	if (isShowPanel) {
 		deferred.debugDraw();
-		//shadowLightPass->debugDraw();
+		shadowLightPass->debugDraw(glm::vec2(ofGetWidth()-512, 0), glm::vec2(512));
 		//dof->debugDraw();
 		//bloom->debugDraw();
 		panel.draw();
@@ -53,24 +53,11 @@ void ofApp::draw() {
 
 void ofApp::setupDeferred() {
 	deferred.init(ofGetWidth(), ofGetHeight());
-
+	
 	auto bg = deferred.createPass<ofxDeferred::BgPass>();
-	bg->begin();
-	ofClear(1, 3, 6, 255);
-	bg->end();
-
 	auto e = deferred.createPass<ofxDeferred::EdgePass>();
-	e->setEdgeColor(1.);
-	e->setUseReadColor(true);
-
 	deferred.createPass<ofxDeferred::SsaoPass>();
-
 	shadowLightPass = deferred.createPass<ofxDeferred::ShadowLightPass>();
-	shadowLightPass->setDarkness(0.9f);
-	shadowLightPass->setViewPortSize(1440.f);
-	shadowLightPass->setFar(3000.);
-	shadowLightPass->setNear(400.);
-
 	pointLightPass = deferred.createPass<ofxDeferred::PointLightPass>();
 	pointLightPass->addLight();
 	pointLightPass->addLight();
