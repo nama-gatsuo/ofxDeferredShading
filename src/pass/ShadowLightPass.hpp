@@ -4,6 +4,27 @@
 
 namespace ofxDeferred {
 
+	class BoundingBox {
+	public:
+		BoundingBox(const glm::vec3& p0, const glm::vec3& p1) :
+			min(p0), max(p1),
+			width(abs(max.x - min.x)),
+			height(abs(max.y - min.y)),
+			depth(abs(max.z - min.z))
+		{}
+		const glm::vec3 min, max;
+		const float width, height, depth;
+		glm::mat4 getFitMatrix() {
+			glm::mat4 fitMat(
+				2.f / width, 0, 0, 0,
+				0, 2.f / height, 0, 0,
+				0, 0, 2.f / depth, 0,
+				-(max.x + min.x) / width, -(max.y + min.y) / height, -(max.z + min.z) / depth, 1.f
+			);
+			return glm::scale(glm::vec3(1, 1, -1)) * fitMat;
+		}
+	};
+
 	class ShadowLightPass : public RenderPass, public ofNode {
 	private:
 
@@ -15,15 +36,13 @@ namespace ofxDeferred {
 		static const glm::mat4 biasMat;
 
 		glm::mat4 projection, modelView;
-		glm::mat4 depthMVP;
 		glm::mat4 shadowTransMat;
 		glm::vec3 directionInView;
 		float linearDepthScalar;
 
 		std::vector<glm::vec3> frustPos;
-		ofRectangle viewRect;
-		ofParameter<float> nearClip, farClip;
-
+		//ofParameter<float> nearClip, farClip;
+		float nearClip;
 		ofParameter<float> darkness;
 		ofParameter<ofFloatColor> ambientColor, diffuseColor, specularColor;
 
@@ -33,7 +52,7 @@ namespace ofxDeferred {
 
 		bool isLighting;
 		
-		std::vector<glm::vec3> calculateFrustnumVertices(const ofCamera& cam);
+		std::vector<glm::vec3> calculateFrustumVertices(const ofCamera& cam);
 		void preUpdate(const ofCamera& cam);
 
 	public:

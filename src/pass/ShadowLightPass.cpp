@@ -3,13 +3,13 @@
 
 using namespace ofxDeferred;
 
-ofRectangle getBound(const std::vector<glm::vec3>& points) {
-	glm::vec2 currentMin(points[0]), currentMax(points[0]);
+BoundingBox getBound(const std::vector<glm::vec3>& points) {
+	glm::vec3 currentMin(points[0]), currentMax(points[0]);
 	for (auto& p : points) {
-		currentMin = glm::min(currentMin, glm::vec2(p.x, p.y));
-		currentMax = glm::max(currentMax, glm::vec2(p.x, p.y));
+		currentMin = glm::min(currentMin, p);
+		currentMax = glm::max(currentMax, p);
 	}
-	return ofRectangle(currentMin, currentMax);
+	return { currentMin, currentMax };
 }
 
 const glm::mat4 ShadowLightPass::biasMat(
@@ -18,6 +18,12 @@ const glm::mat4 ShadowLightPass::biasMat(
 	0.0, 0.0, 0.5, 0.0,
 	0.5, 0.5, 0.5, 1.0
 );
+
+void transformVerts(std::vector<glm::vec3>& points, const glm::mat4& m) {
+	for (auto& p : points) {
+		p = m * glm::vec4(p, 1.);
+	}
+}
 
 ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::ShadowLight), isLighting(true) {
 
@@ -37,10 +43,10 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 	shadowMap.allocate(s);
 	shadowMap.getTexture().setRGToRGBASwizzles(true);
 
-	group.add(nearClip.set("near_clip", 0., 0., 10000.f));
-	group.add(farClip.set("far_clip", 5000., 1., 10000.f));
+	//group.add(nearClip.set("near_clip", 0., 0., 10000.f));
+	//group.add(farClip.set("far_clip", 5000., 1., 10000.f));
 
-	linearDepthScalar = 1.f / (farClip - nearClip);
+	//linearDepthScalar = 1.f / (farClip - nearClip);
 
 	group.add(darkness.set("darkness", 0.8, 0., 1.));
 	group.add(biasScalar.set("biasScalar", 0.005, 0.001, 0.05));
@@ -56,7 +62,7 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 
 }
 
-std::vector<glm::vec3> ShadowLightPass::calculateFrustnumVertices(const ofCamera& cam) {
+std::vector<glm::vec3> ShadowLightPass::calculateFrustumVertices(const ofCamera& cam) {
 	
 	const float farHeight = cam.getFarClip() * tan(ofDegToRad(cam.getFov()) * 0.5f);
 	const float farWidth = farHeight * (size.x / size.y);
@@ -75,39 +81,90 @@ std::vector<glm::vec3> ShadowLightPass::calculateFrustnumVertices(const ofCamera
 		glm::vec3(-farWidth,   farHeight,  -cam.getFarClip())
 	};
 
-	// Transform frastnum coodinates into light space
-	for (auto& p : pos) {
-		p = cam.getGlobalTransformMatrix() * glm::vec4(p, 1.);
-	}
-
+	transformVerts(pos, cam.getGlobalTransformMatrix());
+	
 	return pos;
 
 }
 
+
 void ShadowLightPass::preUpdate(const ofCamera& cam) {
 	setGlobalPosition(pos);
 	lookAt(center);
+	frustPos = calculateFrustumVertices(cam);
+	
+	if (false) {
+		// compute shadow map
+		modelView = glm::inverse(getGlobalTransformMatrix());
+		// Transform view-frustum vertices form world into light space
+		std::vector<glm::vec3> newFrustPos(frustPos);
+		transformVerts(newFrustPos, modelView);
+		
+		// AABB(Axis aligned bounding box) of view frustum in LightSpace
+		auto b = getBound(newFrustPos);
+		projection = b.getFitMatrix();
+		shadowTransMat = biasMat * projection * modelView * glm::inverse(cam.getModelViewMatrix());
+		linearDepthScalar = 1.f / b.depth;
+		nearClip = -b.max.z;
+	
+	} else if (true) {
+		// Uniform Shadow Map
+		modelView = glm::lookAt(cam.getPosition(), cam.getPosition() + getLookAtDir(), cam.getLookAtDir());
+		std::vector<glm::vec3> newFrustPos(frustPos);
+		
+		transformVerts(newFrustPos, modelView);
+		
+		// AABB(Axis aligned bounding box) of view frustum in LightSpace
+		auto b = getBound(newFrustPos);
+		projection = b.getFitMatrix();
+		shadowTransMat = biasMat * projection * modelView * glm::inverse(cam.getModelViewMatrix());
+		linearDepthScalar = 1.f / b.depth;
+		nearClip = -b.max.z;
 
-	frustPos = calculateFrustnumVertices(cam);
-	std::vector<glm::vec3> newFrustPos(frustPos);
+	} else {
+		// LiSPSM: Light Space Perspective Shadow Mapping
 
-	glm::mat4 lightMV = glm::inverse(getGlobalTransformMatrix());
-	for (auto& p : newFrustPos) {
-		p = lightMV * glm::vec4(p, 1.);
+		const glm::vec3 left = glm::cross(getLookAtDir(), cam.getLookAtDir());
+		const glm::vec3 up = glm::normalize(glm::cross(left, getLookAtDir()));
+		const glm::mat4 lightView = glm::lookAt(cam.getPosition(), cam.getPosition() + getLookAtDir(), up);
+		// Transform view-frustum vertices form world into light space
+		std::vector<glm::vec3> newFrustPos(frustPos);
+		transformVerts(newFrustPos, lightView);
+		auto b = getBound(newFrustPos);
+		
+		const float cosAngle = glm::dot(cam.getLookAtDir(), getLookAtDir());
+		const float sinAngle = sqrt(1.f - cosAngle * cosAngle);
+		const float factor = 1.f / sinAngle;
+		const float zn = factor * cam.getNearClip();
+		const float d = b.height;
+		const float zf = zn + d * sinAngle;
+		const float n = (zn + sqrt(zf * zn)) * factor;
+		const float f = n + d;
+
+		const glm::vec3 warpEyePos = cam.getPosition() - up * (n - cam.getNearClip());
+		modelView = glm::lookAt(warpEyePos, warpEyePos + getLookAtDir(), up);
+
+		glm::mat4 lispMat(
+			1.f, 0, 0, 0,
+			0, (f + n) / (f - n), 0, 1.f,
+			0, 0, 1.f, 0,
+			0, - 2.f * f * n / (f - n), 0, 0
+		);
+
+		newFrustPos.clear();
+		newFrustPos = frustPos;
+		transformVerts(newFrustPos, lispMat * modelView);
+
+		// AABB of frustum vertices in warped space
+		auto wb = getBound(newFrustPos);
+		const glm::mat4 fitMat = wb.getFitMatrix();
+		ofLogNotice("fit") << "\n" << fitMat;
+		projection = fitMat * lispMat;
+		shadowTransMat = biasMat * projection * modelView * glm::inverse(cam.getModelViewMatrix());
+		linearDepthScalar = 1.f / d;
+		nearClip = n;
 	}
-	viewRect = getBound(newFrustPos);
-
-	modelView = glm::translate(-viewRect.getCenter()) * lightMV;
-	projection = glm::ortho<float>(
-		-viewRect.width * 0.5f, viewRect.width * 0.5f,
-		viewRect.height * 0.5f, -viewRect.height * 0.5f,
-		nearClip, farClip
-	);
-
-	depthMVP = projection * modelView;
-
-	linearDepthScalar = 1.f / (farClip - nearClip);
-	shadowTransMat = biasMat * depthMVP * glm::inverse(cam.getModelViewMatrix());
+	
 	directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(getLookAtDir(), 0.f));
 }
 
@@ -166,7 +223,7 @@ void ShadowLightPass::debugDraw(const glm::vec2& p, const glm::vec2& s) {
 		
 		ofTranslate(p);
 		ofScale(s.x, s.y, 0);
-		ofMultMatrix(biasMat * depthMVP);
+		ofMultMatrix(biasMat * projection * modelView);
 
 		ofSetColor(255, 0, 0);
 		for (int i = 0; i < frustPos.size(); i++) {
