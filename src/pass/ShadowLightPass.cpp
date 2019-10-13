@@ -43,11 +43,6 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 	shadowMap.allocate(s);
 	shadowMap.getTexture().setRGToRGBASwizzles(true);
 
-	//group.add(nearClip.set("near_clip", 0., 0., 10000.f));
-	//group.add(farClip.set("far_clip", 5000., 1., 10000.f));
-
-	//linearDepthScalar = 1.f / (farClip - nearClip);
-
 	group.add(darkness.set("darkness", 0.8, 0., 1.));
 	group.add(biasScalar.set("biasScalar", 0.005, 0.001, 0.05));
 
@@ -84,30 +79,14 @@ std::vector<glm::vec3> ShadowLightPass::calculateFrustumVertices(const ofCamera&
 	transformVerts(pos, cam.getGlobalTransformMatrix());
 	
 	return pos;
-
 }
-
 
 void ShadowLightPass::preUpdate(const ofCamera& cam) {
 	setGlobalPosition(pos);
 	lookAt(center);
 	frustPos = calculateFrustumVertices(cam);
 	
-	if (false) {
-		// compute shadow map
-		modelView = glm::inverse(getGlobalTransformMatrix());
-		// Transform view-frustum vertices form world into light space
-		std::vector<glm::vec3> newFrustPos(frustPos);
-		transformVerts(newFrustPos, modelView);
-		
-		// AABB(Axis aligned bounding box) of view frustum in LightSpace
-		auto b = getBound(newFrustPos);
-		projection = b.getFitMatrix();
-		shadowTransMat = biasMat * projection * modelView * glm::inverse(cam.getModelViewMatrix());
-		linearDepthScalar = 1.f / b.depth;
-		nearClip = -b.max.z;
-	
-	} else if (true) {
+	if (true) {
 		// Uniform Shadow Map
 		modelView = glm::lookAt(cam.getPosition(), cam.getPosition() + getLookAtDir(), cam.getLookAtDir());
 		std::vector<glm::vec3> newFrustPos(frustPos);
