@@ -29,7 +29,7 @@ out vec4 outputColor;
 
 void main(){
     vec4 col = texture(colorTex, vTexCoord);
-    if (col.a < 0.001) {
+    if (col.a == 0.0) {
         outputColor = texture(tex, vTexCoord);
         return;
     }

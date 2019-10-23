@@ -76,6 +76,7 @@ void SsaoPass::render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffe
 	{
 		applyAo.begin();
 		applyAo.setUniformTexture("ssao", blurred.getTexture(), 1);
+		calcAo.setUniformTexture("colorTex", gbuffer.getTexture(GBuffer::TYPE_ALBEDO), 2);
 		applyAo.setUniform1f("darkness", darkness);
 		read.draw(0, 0);
 		applyAo.end();

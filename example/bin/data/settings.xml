@@ -69,7 +69,7 @@
 	<deferred>
 		<BgPass>
 			<active>1</active>
-			<fill_color>0.385714, 0.190044, 0.295534, 1</fill_color>
+			<fill_color>0.242857, 0.208398, 0.203863, 1</fill_color>
 		</BgPass>
 		<EdgePass>
 			<active>1</active>
@@ -89,18 +89,21 @@
 			<near_clip>0</near_clip>
 			<far_clip>4273.79</far_clip>
 			<view_port_size>1440</view_port_size>
-			<darkness>0.656393</darkness>
+			<darkness>0.614744</darkness>
 			<ambient_color>0.6, 0.453666, 0.445476, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<source_position>60.2837, 1229.15, -1022.52</source_position>
+			<source_position>-1432.36, 645.911, 301.898</source_position>
 			<source_look>0, 0, 0</source_look>
-			<biasScalar>0.00153061</biasScalar>
+			<biasScalar>0.00204082</biasScalar>
+			<isShading>1</isShading>
+			<isVolume>1</isVolume>
+			<isDrawSun>1</isDrawSun>
 		</ShadowLightPass>
 		<PointLightPass>
 			<active>1</active>
-			<lightBrightness>11.2141</lightBrightness>
+			<lightBrightness>0.80175</lightBrightness>
 			<light_1>
-				<diffuse_color>0.815509, 0.816086, 0.849177, 1</diffuse_color>
+				<diffuse_color>0.712696, 0.723538, 0.849177, 1</diffuse_color>
 				<specular_color>0.672579, 0.42157, 0.450685, 1</specular_color>
 				<position>-214.779, 800, 600.513</position>
 				<radius>600</radius>
@@ -125,7 +128,7 @@
 		</PointLightPass>
 		<DofPass>
 			<active>1</active>
-			<endpoint_coc>0.766254, 0.830003</endpoint_coc>
+			<endpoint_coc>0.766254, 0.357198</endpoint_coc>
 			<focul_range>0.171264, 0.378448</focul_range>
 			<BlurPass>
 				<active>1</active>
@@ -134,10 +137,10 @@
 				<blurRes>12</blurRes>
 			</BlurPass>
 			<bokeh>
-				<isActiveBokeh>1</isActiveBokeh>
+				<isActiveBokeh>0</isActiveBokeh>
 				<maxBokehCount>1000</maxBokehCount>
 				<bokehCocThres>0.835315</bokehCocThres>
-				<bokehLumThres>0.968899</bokehLumThres>
+				<bokehLumThres>1.28764</bokehLumThres>
 				<maxBokehRadius>115.128</maxBokehRadius>
 				<bokehDepthCutoff>0.490008</bokehDepthCutoff>
 				<bokehShapeId>2</bokehShapeId>
@@ -145,8 +148,8 @@
 		</DofPass>
 		<BloomPass>
 			<active>1</active>
-			<luma_threshold>0.5</luma_threshold>
-			<strength>1</strength>
+			<luma_threshold>1.46939</luma_threshold>
+			<strength>1.51395</strength>
 			<BlurPass>
 				<active>1</active>
 				<preShrink>2</preShrink>
@@ -155,4 +158,5 @@
 			</BlurPass>
 		</BloomPass>
 	</deferred>
+	<farClip>3000</farClip>
 </group>

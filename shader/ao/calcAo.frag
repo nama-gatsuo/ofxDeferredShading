@@ -15,7 +15,7 @@ out vec4 outputColor;
 
 void main() {
 
-    if (texture(colorTex, vTexCoord).a < 0.001) {
+    if (texture(colorTex, vTexCoord).a == 0.0) {
         outputColor = vec4(1.);
         return;
     }

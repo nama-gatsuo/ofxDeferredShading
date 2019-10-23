@@ -14,7 +14,7 @@ void Processor::init(unsigned w, unsigned h) {
 	s.width = width;
 	s.height = height;
 	s.internalformat = GL_RGBA;
-	s.numSamples = 4;
+	s.numSamples = 0;
 	s.wrapModeHorizontal = GL_CLAMP_TO_EDGE;
 	s.wrapModeVertical = GL_CLAMP_TO_EDGE;
 

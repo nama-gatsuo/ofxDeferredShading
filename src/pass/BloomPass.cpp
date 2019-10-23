@@ -13,7 +13,7 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistr
 	s.internalformat = GL_RGBA16F;
 	s.minFilter = GL_NEAREST;
 	s.maxFilter = GL_NEAREST;
-	s.numSamples = 1;
+	s.numSamples = 0;
 	s.numColorbuffers = 1;
 	s.useDepth = false;
 	s.useStencil = false;
@@ -22,15 +22,16 @@ BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistr
 	blurred.resize(s);
 
 	for (int i = 0; i < numPass; i++) {
-		
-		glm::ivec2 res(size / pow(2., (i + 1)));
+		float r = pow(2., (i + 1));
+		glm::ivec2 res(size / r);
 		ofPtr<BlurPass> blur = std::make_shared<BlurPass>(res, GL_RGBA16F);
 		blur->setBlurRes(3);
 		blur->setSampleStep(1.);
 		blur->setPreShrink(1);
 		blurs.push_back(blur);
 
-		float g = 1. / pow(1.5, (i + 1));
+		//float g = 1. - 1. / r;
+		float g = exp(-pow(3.f * r / size.x, 2.));
 		weights.push_back(g);
 	}
 

@@ -6,18 +6,16 @@ void GBuffer::setup(int w, int h) {
 	ofFbo::Settings s;
 	s.width = w;
 	s.height = h;
-	s.minFilter = GL_LINEAR;
-	s.maxFilter = GL_LINEAR;
+	s.minFilter = GL_NEAREST;
+	s.maxFilter = GL_NEAREST;
 	s.colorFormats.push_back(GL_RGBA32F); // color + stencil
 	s.colorFormats.push_back(GL_RGBA32F); // vertex coord
 	s.colorFormats.push_back(GL_RGBA32F); // depth + normal
 
 	s.useDepth = true;
 	s.useStencil = false;
-	// Multisampling is not supported with depthStencilAsTexture
-	// If we use MSAA, we should set below as false
 	s.depthStencilAsTexture = false;
-	s.numSamples = 4;
+	s.numSamples = 0;
 
 	fbo.allocate(s);
 

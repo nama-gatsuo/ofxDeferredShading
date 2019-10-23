@@ -12,7 +12,7 @@ DofPass::DofPass(const glm::vec2& size) :
 	s.height = size.y / 4.;
 	s.internalformat = GL_RGBA;
 	s.numColorbuffers = 1;
-	s.numSamples = 1;
+	s.numSamples = 0;
 	s.minFilter = GL_LINEAR;
 	s.maxFilter = GL_LINEAR;
 	s.useDepth = false;
