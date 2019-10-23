@@ -38,6 +38,7 @@ namespace ofxDeferred {
 		glm::mat4 projection, modelView;
 		glm::mat4 shadowTransMat;
 		glm::vec3 directionInView;
+		glm::vec2 sunPosInScreen;
 		float linearDepthScalar;
 
 		std::vector<glm::vec3> frustPos;
@@ -49,9 +50,12 @@ namespace ofxDeferred {
 		ofParameter<glm::vec3> pos;
 		ofParameter<glm::vec3> center;
 		ofParameter<float> biasScalar;
-
-		bool isLighting;
 		
+		float camFovy, camFarClip;
+		ofParameter<bool> isShading;
+		ofParameter<bool> isVolume;
+		ofParameter<bool> isDrawSun;
+
 		std::vector<glm::vec3> calculateFrustumVertices(const ofCamera& cam);
 		void preUpdate(const ofCamera& cam);
 
@@ -86,8 +90,8 @@ namespace ofxDeferred {
 		void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
 		void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }
 		
-		void disableLighting() { isLighting = false; }
-		void enableLighting() { isLighting = true; }
+		/*void disableLighting() { isLighting = false; }
+		void enableLighting() { isLighting = true; }*/
 
 	};
 

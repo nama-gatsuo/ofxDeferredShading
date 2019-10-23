@@ -25,7 +25,7 @@ void transformVerts(std::vector<glm::vec3>& points, const glm::mat4& m) {
 	}
 }
 
-ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::ShadowLight), isLighting(true) {
+ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::ShadowLight) {
 
 	// create shadow map fbo
 	ofFbo::Settings s;
@@ -51,6 +51,11 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 
 	group.add(pos.set("source_position", glm::vec3(100., -200., 100.), glm::vec3(-2048.), glm::vec3(2048.)));
 	group.add(center.set("source_look", glm::vec3(0., 0., 0.), glm::vec3(-1024.), glm::vec3(1024.)));
+
+	group.add(isShading.set("isShading", true));
+	group.add(isVolume.set("isVolume", true));
+	group.add(isDrawSun.set("isDrawSun", true));
+
 	// load shader
 	shader.load(passThruPath, shaderPath + "shadow/shadowLight.frag");
 	linearDepthShader.load(shaderPath + "gbuffer.vert", shaderPath + "shadow/LinearDetph.frag");
@@ -144,7 +149,17 @@ void ShadowLightPass::preUpdate(const ofCamera& cam) {
 		nearClip = n;
 	}
 	
+	camFarClip = cam.getFarClip();
+	camFovy = ofDegToRad(cam.getFov());
 	directionInView = (glm::inverse(glm::transpose(cam.getModelViewMatrix())) * glm::vec4(getLookAtDir(), 0.f));
+	
+	glm::vec4 sun = cam.getProjectionMatrix() * glm::vec4(- directionInView * 100000.f, 1.f);
+	if (sun.z > 0.f) {
+		sunPosInScreen = glm::vec2(sun.x, - sun.y) / sun.w * 0.5f + glm::vec2(0.5f);
+		sunPosInScreen *= size;
+	} else {
+		sunPosInScreen = glm::vec2(-10000.f);
+	}
 }
 
 
@@ -239,14 +254,22 @@ void ShadowLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer&
 	shader.setUniformMatrix4f("shadowTransMat", shadowTransMat);
 	
 	shader.setUniform3f("lightDir", directionInView);
+	shader.setUniform2f("sun", sunPosInScreen);
 	shader.setUniform1f("darkness", darkness);
 	shader.setUniform1f("lds", linearDepthScalar);
 	shader.setUniform1f("near", nearClip);
 	
+	shader.setUniform1f("farClip", camFarClip);
+	shader.setUniform1f("fovy", camFovy);
+
 	shader.setUniform1f("biasScalar", biasScalar);
-	shader.setUniform1i("isLighting", isLighting ? 1 : 0);
 	shader.setUniform4f("ambient", ambientColor);
 	shader.setUniform4f("diffuse", diffuseColor);
+
+	shader.setUniform1i("isShading", isShading ? 1 : 0);
+	shader.setUniform1i("isVolume", isVolume ? 1 : 0);	
+	shader.setUniform1i("isDrawSun", isDrawSun ? 1 : 0);
+
 	read.draw(0, 0);
 
 	shader.end();
