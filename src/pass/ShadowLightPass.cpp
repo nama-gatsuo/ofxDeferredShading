@@ -55,7 +55,8 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 	group.add(isShading.set("isShading", true));
 	group.add(isVolume.set("isVolume", true));
 	group.add(isDrawSun.set("isDrawSun", true));
-
+	group.add(isFrontCulling.set("isFrontCulling", false));
+	group.add(scattering.set("scattering", 0.2f, 0.f, 1.f));
 	// load shader
 	shader.load(passThruPath, shaderPath + "shadow/shadowLight.frag");
 	linearDepthShader.load(shaderPath + "gbuffer.vert", shaderPath + "shadow/LinearDetph.frag");
@@ -182,8 +183,10 @@ void ShadowLightPass::beginShadowMap(const ofCamera& cam, bool bUseOwnShader) {
 	ofSetMatrixMode(OF_MATRIX_MODELVIEW);
 	ofLoadMatrix(modelView);
 	
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
+	if (isFrontCulling) {
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+	}
 
 	if (!useShader) {
 		linearDepthShader.begin();
@@ -195,8 +198,7 @@ void ShadowLightPass::beginShadowMap(const ofCamera& cam, bool bUseOwnShader) {
 void ShadowLightPass::endShadowMap() {
 
 	if (!useShader) linearDepthShader.end();
-
-	glDisable(GL_CULL_FACE);
+	if (isFrontCulling) glDisable(GL_CULL_FACE);
 	
 	ofDisableDepthTest();
 	ofPopView();
@@ -267,8 +269,9 @@ void ShadowLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer&
 	shader.setUniform4f("diffuse", diffuseColor);
 
 	shader.setUniform1i("isShading", isShading ? 1 : 0);
-	shader.setUniform1i("isVolume", isVolume ? 1 : 0);	
+	shader.setUniform1i("isVolume", isVolume ? 1 : 0);
 	shader.setUniform1i("isDrawSun", isDrawSun ? 1 : 0);
+	shader.setUniform1f("scattering", scattering);
 
 	read.draw(0, 0);
 

@@ -24,6 +24,7 @@ uniform float farClip;
 uniform int isDrawSun;
 uniform int isShading;
 uniform int isVolume;
+uniform float scattering;
 
 in vec2 vTexCoord;
 out vec4 outputColor;
@@ -70,7 +71,6 @@ const mat4 bayerMat = mat4(
 );
 
 float computeScattering(float lightDotView) {
-    float scattering = 0.2;
     float result = 1.0f - scattering * scattering;
     result /= (PI * pow(1.0f + scattering * scattering - (2.0f * scattering) * lightDotView, 1.5f));
     return result;
@@ -88,7 +88,7 @@ vec3 accumurateFog(in vec3 rayGoal) {
         vec4 shadowCoord = shadowTransMat * vec4(p, 1);
         float dist = shadowCoord.z;
         if (texture(lightDepthTex, shadowCoord.xy * res).r - near * lds > dist) {
-            accumFog += computeScattering(dot(vec3(0, 0, -1), lightDir)) * ambient.rgb;
+            accumFog += computeScattering(dot(vec3(0, 0, 1), lightDir)) * ambient.rgb;
         }
     }
     return accumFog * 1.2f / float(sampleNum);

@@ -55,6 +55,8 @@ namespace ofxDeferred {
 		ofParameter<bool> isShading;
 		ofParameter<bool> isVolume;
 		ofParameter<bool> isDrawSun;
+		ofParameter<bool> isFrontCulling;
+		ofParameter<float> scattering;
 
 		std::vector<glm::vec3> calculateFrustumVertices(const ofCamera& cam);
 		void preUpdate(const ofCamera& cam);
