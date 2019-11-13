@@ -16,6 +16,7 @@ namespace ofxDeferred {
 
 		EdgePass(const glm::vec2& size);
 		void setEdgeColor(const ofFloatColor& col) { edgeColor = col; }
+		const ofFloatColor& getEdgeColor() { return edgeColor.get(); }
 		void setBackground(const ofFloatColor& col) { bgColor = col; }
 		void setUseReadColor(bool active) { useReadColor = active; }
 		void update(const ofCamera& cam) override {}
