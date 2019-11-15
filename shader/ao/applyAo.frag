@@ -10,7 +10,7 @@ out vec4 outputColor;
 
 void main() {
     vec4 read = texture(tex, vTexCoord);
-    if (texture(colorTex, vTexCoord) == 0.) {
+    if (texture(colorTex, vTexCoord).a == 0.) {
         outputColor = read;
         return;
     }
