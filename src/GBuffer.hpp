@@ -12,6 +12,13 @@ namespace ofxDeferred {
 	const static std::string shaderPath("../../../../../addons/ofxDeferredShading/shader/");
 	const static std::string passThruPath(shaderPath + "passThru.vert");
 
+	struct RenderInfo {
+		float lds;
+		bool isShadow;
+		glm::vec4 clipPlane;
+		glm::mat4 invCamMatrix;
+	};
+
 	class GBuffer {
 	private:
 		ofFbo fbo;

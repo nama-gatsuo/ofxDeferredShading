@@ -11,6 +11,8 @@ uniform float lds; // lenear depth scalar
 uniform vec4 emissiveColor;
 uniform float intensity;
 uniform float lightBrightness;
+uniform vec4 clipPlane;
+uniform mat4 invCamMat;
 
 out vec4 vPosition;
 out float vDepth;
@@ -25,4 +27,5 @@ void main(){
     vTexCoord = texcoord;
     vColor = emissiveColor * lightBrightness;
     vPosition = viewPos;
+    gl_ClipDistance[0] = dot(clipPlane, invCamMat * viewPos);
 }

@@ -1,5 +1,6 @@
 #include "PointLightPass.hpp"
 
+
 using namespace ofxDeferred;
 
 int PointLight::lightNum = 0;
@@ -86,10 +87,12 @@ void ofxDeferred::PointLightPass::drawLights(ofPolyRenderMode mode) {
 	}
 }
 
-void ofxDeferred::PointLightPass::drawLights(float lds, bool isShadow, ofPolyRenderMode mode) {
+void ofxDeferred::PointLightPass::drawLights(const RenderInfo& info) {
 	lightShader.begin();
-	lightShader.setUniform1i("isShadow", isShadow ? 1 : 0);
-	lightShader.setUniform1f("lds", lds);
+	lightShader.setUniform1i("isShadow", info.isShadow ? 1 : 0);
+	lightShader.setUniform1f("lds", info.lds);
+	lightShader.setUniform4f("clipPlane", info.clipPlane);
+	lightShader.setUniformMatrix4f("invCamMat", info.invCamMatrix);
 
 	for (auto& light : lights) {
 		if (light->isActive) lightShader.setUniform1f("lightBrightness", lightBrightness);
@@ -101,7 +104,7 @@ void ofxDeferred::PointLightPass::drawLights(float lds, bool isShadow, ofPolyRen
 		ofPushMatrix();
 		ofTranslate(light->position);
 		ofScale(light->radius / 1000.);
-		sphere.draw(mode);
+		sphere.draw();
 		ofPopMatrix();
 	}
 	lightShader.end();

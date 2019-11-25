@@ -25,6 +25,7 @@ uniform int isDrawSun;
 uniform int isShading;
 uniform int isVolume;
 uniform float scattering;
+uniform float volumeStrength;
 
 in vec2 vTexCoord;
 out vec4 outputColor;
@@ -126,7 +127,7 @@ void main() {
         }
 
         outputColor = read + sunLight;
-        outputColor.rgb += fog;
+        outputColor.rgb += fog * volumeStrength;
         outputColor.a = 1.;
         return;
     }
@@ -146,6 +147,6 @@ void main() {
 
     outputColor.rgb = read.rgb * shadow;
     if (isShading == 1) outputColor.rgb *= (ambient.rgb + diffuse.rgb * clamp(dot(normal, -lightDir), 0., 1.));
-    if (isVolume == 1)outputColor.rgb += accumurateFog(position.xyz);
+    if (isVolume == 1) outputColor.rgb += accumurateFog(position.xyz) * volumeStrength;
     outputColor.a = 1.0;
 }

@@ -57,6 +57,7 @@ namespace ofxDeferred {
 		ofParameter<bool> isDrawSun;
 		ofParameter<bool> isFrontCulling;
 		ofParameter<float> scattering;
+		ofParameter<float> volumeStrength;
 
 		std::vector<glm::vec3> calculateFrustumVertices(const ofCamera& cam);
 		void preUpdate(const ofCamera& cam);
@@ -86,12 +87,14 @@ namespace ofxDeferred {
 			ofNode::lookAt(dir);
 		}
 
-		float getLinearScalar() { return linearDepthScalar; }
+		float getLinearScalar() const { return linearDepthScalar; }
 		
 		void setDarkness(float _darkness) { darkness = _darkness; }
 		void setAmbientColor(const ofFloatColor& color) { ambientColor = color; }
 		void setDiffuseColor(const ofFloatColor& color) { diffuseColor = color; }
-		
+		void setVolume(bool useVolume) { isVolume.set(useVolume); }
+		void setVolumeStrength(float strength) { volumeStrength.set(strength); }
+
 		/*void disableLighting() { isLighting = false; }
 		void enableLighting() { isLighting = true; }*/
 

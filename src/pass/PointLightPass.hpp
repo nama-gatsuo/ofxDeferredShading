@@ -91,8 +91,10 @@ namespace ofxDeferred {
 		void update(const ofCamera& cam) override;
 		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 		void drawLights(ofPolyRenderMode mode = OF_MESH_FILL);
-		void drawLights(float lds, bool isShadow, ofPolyRenderMode mode = OF_MESH_FILL);
+		void drawLights(const RenderInfo& info);
 		
-		
+		void setColorBrightness(float birghtness) {
+			lightBrightness = birghtness;
+		}
 	};
 }

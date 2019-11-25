@@ -2,7 +2,7 @@
 
 using namespace ofxDeferred;
 
-BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Bloom), numPass(6), blurred(size) {
+BloomPass::BloomPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Bloom), numPass(5), blurred(size) {
 	
 	composite.load(passThruPath, shaderPath + "bloom.frag");
 	lumaShader.load(passThruPath, shaderPath + "lumaThres.frag");

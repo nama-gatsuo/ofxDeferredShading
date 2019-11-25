@@ -57,6 +57,7 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 	group.add(isDrawSun.set("isDrawSun", true));
 	group.add(isFrontCulling.set("isFrontCulling", false));
 	group.add(scattering.set("scattering", 0.2f, 0.f, 1.f));
+	group.add(volumeStrength.set("volumeStrength", 1.f, 0.f, 1.f));
 	// load shader
 	shader.load(passThruPath, shaderPath + "shadow/shadowLight.frag");
 	linearDepthShader.load(shaderPath + "gbuffer.vert", shaderPath + "shadow/LinearDetph.frag");
@@ -272,7 +273,7 @@ void ShadowLightPass::render(const ofTexture& read, ofFbo& write, const GBuffer&
 	shader.setUniform1i("isVolume", isVolume ? 1 : 0);
 	shader.setUniform1i("isDrawSun", isDrawSun ? 1 : 0);
 	shader.setUniform1f("scattering", scattering);
-
+	shader.setUniform1f("volumeStrength", volumeStrength);
 	read.draw(0, 0);
 
 	shader.end();

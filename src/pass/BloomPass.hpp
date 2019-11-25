@@ -24,6 +24,8 @@ namespace ofxDeferred {
 		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 
 		void setThreshold(float thres) { lumaThres = thres; }
+		void setStrength(float str) { strength = str; }
+
 		void debugDraw(const glm::vec2& p, const glm::vec2& size) override;
 	};
 }
