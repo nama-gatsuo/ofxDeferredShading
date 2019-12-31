@@ -69,7 +69,7 @@
 	<deferred>
 		<BgPass>
 			<active>1</active>
-			<fill_color>0.242857, 0.208398, 0.203863, 1</fill_color>
+			<fill_color>0.304074, 0.32717, 0.485714, 1</fill_color>
 		</BgPass>
 		<EdgePass>
 			<active>1</active>
@@ -90,14 +90,17 @@
 			<far_clip>4273.79</far_clip>
 			<view_port_size>1440</view_port_size>
 			<darkness>0.614744</darkness>
-			<ambient_color>0.6, 0.453666, 0.445476, 1</ambient_color>
+			<ambient_color>0.458134, 0.453666, 0.505946, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<source_position>-1432.36, 645.911, 301.898</source_position>
+			<source_position>439.001, 812.613, 1306.5</source_position>
 			<source_look>0, 0, 0</source_look>
 			<biasScalar>0.00204082</biasScalar>
 			<isShading>1</isShading>
 			<isVolume>1</isVolume>
 			<isDrawSun>1</isDrawSun>
+			<isFrontCulling>0</isFrontCulling>
+			<scattering>0.2</scattering>
+			<volumeStrength>1</volumeStrength>
 		</ShadowLightPass>
 		<PointLightPass>
 			<active>1</active>
@@ -149,7 +152,7 @@
 		<BloomPass>
 			<active>1</active>
 			<luma_threshold>1.46939</luma_threshold>
-			<strength>1.51395</strength>
+			<strength>0.524781</strength>
 			<BlurPass>
 				<active>1</active>
 				<preShrink>2</preShrink>
@@ -157,6 +160,21 @@
 				<blurRes>12</blurRes>
 			</BlurPass>
 		</BloomPass>
+		<FogPass>
+			<active>1</active>
+			<noiseFogStrength>1</noiseFogStrength>
+			<depthFogStrength>0.427322</depthFogStrength>
+			<fogColor>0.85, 0.85, 0.82, 1</fogColor>
+			<fogAmp>0.2</fogAmp>
+			<fogFreq>0.0192239, 0.0192239, 0.0192239</fogFreq>
+			<fogOffset>0.4, -0.30608, 0.4</fogOffset>
+			<fogCenter>0.5</fogCenter>
+			<fogRayStart>400</fogRayStart>
+		</FogPass>
 	</deferred>
 	<farClip>3000</farClip>
+	<show_gbuffer>0</show_gbuffer>
+	<show_shadowMap>0</show_shadowMap>
+	<show_dofBuffers>0</show_dofBuffers>
+	<show_bloomBuffers>0</show_bloomBuffers>
 </group>

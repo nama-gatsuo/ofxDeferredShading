@@ -10,6 +10,7 @@ namespace ofxDeferred {
 		const static std::string Blur;
 		const static std::string Dof;
 		const static std::string Edge;
+		const static std::string Fog;
 		const static std::string PointLight;
 		const static std::string ShadowLight;
 		const static std::string Ssao;

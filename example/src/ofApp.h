@@ -30,4 +30,8 @@ private:
 	bool isShowPanel;
 	ofxPanel panel;
 	ofParameter<float> farClip;
+	ofParameter<bool> isShowGbuffer;
+	ofParameter<bool> isShowShadowMap;
+	ofParameter<bool> isShowDofBuffer;
+	ofParameter<bool> isShowBloomBuffer;
 };

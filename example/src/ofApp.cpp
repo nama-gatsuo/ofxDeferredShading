@@ -2,15 +2,15 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-
-	ofSetVerticalSync(true);
-
 	archi.setup();
 	cells.setup();
 
 	setupDeferred();
 	panel.add(farClip.set("farClip", 3000., 10., 10000.));
-
+	panel.add(isShowGbuffer.set("show_gbuffer", true));
+	panel.add(isShowShadowMap.set("show_shadowMap", true));
+	panel.add(isShowDofBuffer.set("show_dofBuffers", false));
+	panel.add(isShowBloomBuffer.set("show_bloomBuffers", false));
 }
 
 //--------------------------------------------------------------
@@ -41,10 +41,10 @@ void ofApp::draw() {
 	deferred.end();
 
 	if (isShowPanel) {
-		deferred.debugDraw();
-		shadowLightPass->debugDraw(glm::vec2(ofGetWidth()-512, 0), glm::vec2(512));
-		//dof->debugDraw();
-		//bloom->debugDraw();
+		if (isShowGbuffer) deferred.debugDraw();
+		if (isShowShadowMap) shadowLightPass->debugDraw(glm::vec2(ofGetWidth()-512, 0), glm::vec2(512));
+		if (isShowDofBuffer) dof->debugDraw(glm::vec2(0), glm::vec2(ofGetWidth(), ofGetHeight()) * 0.25f);
+		if (isShowBloomBuffer) bloom->debugDraw(glm::vec2(0, ofGetHeight() * 0.25), glm::vec2(ofGetWidth(), ofGetHeight()) * 0.25f);
 		panel.draw();
 		ofDrawBitmapString(ofToString(ofGetFrameRate()), 12, 16);
 	}
@@ -62,6 +62,7 @@ void ofApp::setupDeferred() {
 	pointLightPass->addLight();
 	pointLightPass->addLight();
 	
+	deferred.createPass<ofxDeferred::FogPass>();
 	dof = deferred.createPass<ofxDeferred::DofPass>();
 	bloom = deferred.createPass<ofxDeferred::BloomPass>();
 	

@@ -8,5 +8,6 @@
 #include "DofPass.hpp"
 #include "EdgePass.hpp"
 #include "BgPass.hpp"
+#include "FogPass.h"
 
 using ofxDeferredProcessing = ofxDeferred::Processor;
