@@ -92,7 +92,7 @@
 			<darkness>0.614744</darkness>
 			<ambient_color>0.458134, 0.453666, 0.505946, 1</ambient_color>
 			<diffuse_color>0.9, 0.9, 0.9, 1</diffuse_color>
-			<source_position>439.001, 812.613, 1306.5</source_position>
+			<source_position>-1055.25, 752.455, 938.226</source_position>
 			<source_look>0, 0, 0</source_look>
 			<biasScalar>0.00204082</biasScalar>
 			<isShading>1</isShading>
@@ -140,12 +140,12 @@
 				<blurRes>12</blurRes>
 			</BlurPass>
 			<bokeh>
-				<isActiveBokeh>0</isActiveBokeh>
+				<isActiveBokeh>1</isActiveBokeh>
 				<maxBokehCount>1000</maxBokehCount>
-				<bokehCocThres>0.835315</bokehCocThres>
-				<bokehLumThres>1.28764</bokehLumThres>
+				<bokehCocThres>0.197826</bokehCocThres>
+				<bokehLumThres>1.23452</bokehLumThres>
 				<maxBokehRadius>115.128</maxBokehRadius>
-				<bokehDepthCutoff>0.490008</bokehDepthCutoff>
+				<bokehDepthCutoff>0.224388</bokehDepthCutoff>
 				<bokehShapeId>2</bokehShapeId>
 			</bokeh>
 		</DofPass>
@@ -165,16 +165,17 @@
 			<noiseFogStrength>1</noiseFogStrength>
 			<depthFogStrength>0.427322</depthFogStrength>
 			<fogColor>0.85, 0.85, 0.82, 1</fogColor>
-			<fogAmp>0.2</fogAmp>
-			<fogFreq>0.0192239, 0.0192239, 0.0192239</fogFreq>
-			<fogOffset>0.4, -0.30608, 0.4</fogOffset>
-			<fogCenter>0.5</fogCenter>
-			<fogRayStart>400</fogRayStart>
+			<fogAmp>1</fogAmp>
+			<fogFreq>1.26958, 10, 0.848839</fogFreq>
+			<fogOffset>0.4, -0.199832, 0.4</fogOffset>
+			<fogCenter>0</fogCenter>
+			<fogRayStart>3000</fogRayStart>
+			<fogPower>2</fogPower>
 		</FogPass>
 	</deferred>
 	<farClip>3000</farClip>
-	<show_gbuffer>0</show_gbuffer>
-	<show_shadowMap>0</show_shadowMap>
+	<show_gbuffer>1</show_gbuffer>
+	<show_shadowMap>1</show_shadowMap>
 	<show_dofBuffers>0</show_dofBuffers>
 	<show_bloomBuffers>0</show_bloomBuffers>
 </group>
