@@ -31,7 +31,7 @@ in vec2 vTexCoord;
 out vec4 outputColor;
 
 float sampleShadow(in vec2 uv, float compare) {
-    return smoothstep(texture(lightDepthTex, uv).r - near * lds, compare, compare + 0.02);
+    return 1. - smoothstep(compare - 0.01, compare + 0.01, texture(lightDepthTex, uv).r - near * lds);
 }
 
 float sampleShadowLinear(in vec2 uv, float compare) {
