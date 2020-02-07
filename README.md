@@ -6,18 +6,22 @@ Here is [demo](https://www.youtube.com/watch?v=xhm2CdpSpcI).
 ## Concept
 ### Modern OpenGL compatible
 I was satisfied with [ofxPostPrpcessing](https://github.com/neilmendoza/ofxPostProcessing) long time, which is fabulous and has so many beautiful vfx in it. I really appreciate the author and contributors.
-But there is little problem when I use my own shader with it. It is not written in "modern" shader version so cannot coexist with the "**programmble renderer**".
-At this moment, however we have to decide to abandon legacy but helpful functions including ```ofLight```, ```glBegin()```-```glEnd()```...
+But there is little problem when I use my own shaders with it. It is not written in "modern" shader version so cannot coexist with the "**programmble renderer**".
+At this moment, however we have to decide to abandon legacy but helpful functions including `ofLight`, `glBegin()`-`glEnd()`...
 ### Photo-realistic in Real-time
 And the addon mentioned above has only few effects for photo-real purpose such like "casting shadow". So I decided to reproduce and regather PostProcesses focusing "photo-real" rendering and compatible in modern version.
 
-now it contains
-* Multiple point lights with attenuation
+Now it contains
+* Edge detection
+* Multiple point-lights with attenuation
 * Casting shadow with directional light
-* Ambient occlusion (SSAO)
-* HDR bloom
-    * blooming when vertex color is bright
-* Defocus blur
+    * plus Volumetric light using shadow map
+* SSAO: Screen Space Ambient Occlusion
+* Depth of Field
+    * plus Foreground blurring
+    * plus Bokeh point rendering
+* Bloom (Kawase's)
+* Volumetric fog
 
 ## Support
 * openFrameworks 0.10.0~ (using glm library)
@@ -59,8 +63,8 @@ ssao->setOcculusionRadius(5.0);
 ssao->setDarkness(1.0);
 ```
 * draw objects between `begin()` and `end()`.
-* If you want to HDR color, just specify vertex color more than 1.0 in `ofFloatColor`'s parameters.
-* if you want to use cast shadow (`ShadowLightPass`), you need another draw-objects call.
+* If you want to HDR color, just specify vertex color bright enough (can be more than 1.0) through `ofFloatColor`'s parameters.
+* if you want to use cast shadow (`ShadowLightPass`), you need another draw call for shadow map.
 
     ```C++
     // for shadow map
@@ -75,7 +79,7 @@ ssao->setDarkness(1.0);
         lightPass->drawLights();
     deferred.end();
     ```
-* Also, you can use own shader for mesh rendering. In this case, you need to write pixel data into color buffer properly.
+* Also, you can use own shader for mesh rendering. In this case, you need to write pixel data into color buffer properly like below.
 
 ```GLSL
 #version 400
@@ -112,11 +116,13 @@ void main(){
 * GBuffer design from [hanasaan/ofxDeferredProcessing](https://github.com/hanasaan/ofxDeferredProcessing/)
 
 ### Effects
-* Ambient Occlusion from [Learn OpenGL](https://learnopengl.com/#!Advanced-Lighting/SSAO)
-* Point light with attenuation from
- [jacres/of-DeferredRendering](https://github.com/jacres/of-DeferredRendering)
+* Defocus blur including foreground blurring from [GPU Gems 3](https://developer.nvidia.com/gpugems/gpugems3/part-iv-image-effects/chapter-28-practical-post-process-depth-field)
+* Bokeh rendering from [OpenGL Insights](https://github.com/OpenGLInsights/OpenGLInsightsCode/tree/master/Chapter%2015%20Depth%20of%20Field%20with%20Bokeh%20Rendering)
+* Point light with attenuation from [jacres/of-DeferredRendering](https://github.com/jacres/of-DeferredRendering)
 * Shadow Mapping from [Learn OpenGL](https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping)
-* High Dynamic Range + Bloom from [Learn OpenGL](https://learnopengl.com/#!Advanced-Lighting/Bloom)
+* Screen Space Ambient occlusion from [Learn OpenGL](https://learnopengl.com/#!Advanced-Lighting/SSAO)
+* Kawase's bloom from [Intel's article](https://software.intel.com/en-us/blogs/2014/07/15/an-investigation-of-fast-real-time-gpu-based-image-blur-algorithms)
+* Volumetric lighting from [Alexandre Pestana](https://www.alexandre-pestana.com/volumetric-lights/)
 
 ## Author
 [Ayumu Nagamatsu](http://ayumu-nagamatsu.com/)
