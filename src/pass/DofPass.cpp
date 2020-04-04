@@ -189,7 +189,7 @@ void DofPass::applySmallBlur(const ofTexture& read, ofFbo& write) {
 }
 
 void DofPass::calcBokeh(const ofTexture& read) {
-
+#if defined(glBindImageTexture)
 	// Bind textures to store
 	bokehColorTex.bindAsImage(0, GL_WRITE_ONLY);
 	bokehPosDepthCocTex.bindAsImage(1, GL_WRITE_ONLY);
@@ -209,10 +209,11 @@ void DofPass::calcBokeh(const ofTexture& read) {
 	bokehColorTex.unbind();
 	bokehPosDepthCocTex.unbind();
 	atomicBuffer.unbind();
+#endif
 }
 
 void DofPass::renderBokeh() {
-
+#if defined(glDrawElementsIndirect)
 	bokehRenderShader.begin();
 	bokehRenderShader.setUniformTexture("bokehColor", bokehColorTex, 1);
 	bokehRenderShader.setUniformTexture("bokehPosDepthCoc", bokehPosDepthCocTex, 2);
@@ -221,5 +222,5 @@ void DofPass::renderBokeh() {
 	bokehRenderShader.setUniform1f("bokehDepthCutoff", bokehDepthCutoff);
 	atomicBuffer.drawIndirect(vbo.getVbo(), GL_TRIANGLE_STRIP);
 	bokehRenderShader.end();
-
+#endif
 }

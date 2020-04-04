@@ -55,17 +55,19 @@ void ofApp::setupDeferred() {
 	deferred.init(ofGetWidth(), ofGetHeight());
 	
 	auto bg = deferred.createPass<ofxDeferred::BgPass>();
+
 	auto e = deferred.createPass<ofxDeferred::EdgePass>();
 	deferred.createPass<ofxDeferred::SsaoPass>();
 	shadowLightPass = deferred.createPass<ofxDeferred::ShadowLightPass>();
 	pointLightPass = deferred.createPass<ofxDeferred::PointLightPass>();
 	pointLightPass->addLight();
 	pointLightPass->addLight();
+	deferred.createPass<ofxDeferred::FxaaPass>();
 	
 	deferred.createPass<ofxDeferred::FogPass>();
 	dof = deferred.createPass<ofxDeferred::DofPass>();
 	bloom = deferred.createPass<ofxDeferred::BloomPass>();
-	
+
 	panel.setup();
 	panel.setDefaultBackgroundColor(ofFloatColor(0., 0.5));
 	panel.setDefaultHeaderBackgroundColor(ofFloatColor(0.6, 0.6, 0.3, 0.6));

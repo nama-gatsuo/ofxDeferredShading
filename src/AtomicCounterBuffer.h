@@ -43,7 +43,7 @@ namespace ofxDeferred {
 
 		void bind() {
 			glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, counterId);
-			
+
 			// Clear atomic counter buffer
 			glm::uint32* bokehCounterValue = (glm::uint32*)glMapBufferRange(
 				GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(glm::uint32),
@@ -51,7 +51,7 @@ namespace ofxDeferred {
 			);
 			*bokehCounterValue = 0;
 			glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
-			
+
 		}
 
 		void setMaxCount(int maxCount) {
@@ -59,7 +59,7 @@ namespace ofxDeferred {
 		}
 
 		void unbind() {
-			
+
 			// Synch the atomic counter with the indirect texture for indirect instanced-rendering
 			synchIndirect.begin();
 			synchIndirect.setUniform1i("maxCount", maxCount);
@@ -71,29 +71,29 @@ namespace ofxDeferred {
 
 			// unbind atomic counter buffer
 			glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, 0);
-			
+
 		}
 
 		void drawIndirect(ofVbo& vbo, GLenum drawMode) {
-			
+
 			glMemoryBarrier(GL_ALL_BARRIER_BITS);
-			
+
 			vbo.bind();
 
 			glBindBuffer(GL_DRAW_INDIRECT_BUFFER, indirectBufferId);
 			glDrawElementsIndirect(drawMode, GL_UNSIGNED_INT, NULL);
 			glBindBuffer(GL_DRAW_INDIRECT_BUFFER, 0);
-				
+
 			vbo.unbind();
 		}
 
 	private:
 		struct DrawElementsIndirectCommand {
-			GLuint  count;
-			GLuint  primCount;
-			GLuint  firstIndex;
-			GLuint  baseVertex;
-			GLuint  baseInstance;
+			GLuint count;
+			GLuint primCount;
+			GLuint firstIndex;
+			GLuint baseVertex;
+			GLuint baseInstance;
 		};
 
 		// Atomic Counter Buffer ID

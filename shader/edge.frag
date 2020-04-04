@@ -46,7 +46,7 @@ void main(){
     }
 
     normalEdge = dot(abs(normalSum), vec3(1.)) / 3. * normalEdgeStrength;
-    depthEdge = step(0.02, abs(depthEdge)) * depthEdgeStrength;
+    depthEdge = step(0.05, abs(depthEdge)) * depthEdgeStrength;
     vec3 bg = useReadColor == 1 ? texture(tex, vTexCoord).rgb : bgColor.rgb;
 
     float edge = clamp((1. - depthEdge) * (1. - normalEdge), 0., 1.);

@@ -9,5 +9,6 @@
 #include "EdgePass.hpp"
 #include "BgPass.hpp"
 #include "FogPass.h"
+#include "FxaaPass.h"
 
 using ofxDeferredProcessing = ofxDeferred::Processor;
