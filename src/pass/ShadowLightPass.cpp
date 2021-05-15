@@ -59,7 +59,7 @@ ShadowLightPass::ShadowLightPass(const glm::vec2& size) : RenderPass(size, Rende
 	group.add(scattering.set("scattering", 0.2f, 0.f, 1.f));
 	group.add(volumeStrength.set("volumeStrength", 1.f, 0.f, 1.f));
 	// load shader
-	shader.load(passThruPath, shaderPath + "shadow/shadowLight.frag");
+	shader.load(passThruPath, shaderPath + "shadow/ShadowLight.frag");
 	linearDepthShader.load(shaderPath + "gbuffer.vert", shaderPath + "shadow/LinearDetph.frag");
 
 }
