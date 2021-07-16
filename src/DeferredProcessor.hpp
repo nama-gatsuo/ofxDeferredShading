@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderPass.hpp"
-#include "ofxDeferredShading/src/PingPongBuffer.h"
+#include "PingPongBuffer.h"
 
 namespace ofxDeferred {
 
