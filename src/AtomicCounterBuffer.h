@@ -16,7 +16,7 @@ namespace ofxDeferred {
 			glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
 
 			// Indirect command
-			DrawElementsIndirectCommand cmd{ indirectVertCount, 0, 0, 0, 0 };
+			DrawElementsIndirectCommand cmd{ (GLuint)indirectVertCount, 0, 0, 0, 0 };
 
 			// Create buffer storage for indirect buffer
 			// Setup the indirect buffer

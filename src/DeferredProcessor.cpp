@@ -2,7 +2,8 @@
 
 using namespace ofxDeferred;
 
-Processor::Processor() : isProcessing(true) {
+Processor::Processor() : 
+	isProcessing(true),width(0),height(0) {
 	params.setName("ofxDeferredShading");
 }
 

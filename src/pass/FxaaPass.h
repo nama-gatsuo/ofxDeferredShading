@@ -25,6 +25,14 @@ namespace ofxDeferred {
 			shader.end();
 			writeFbo.end();
 		}
+		void refer(FxaaPass& pass) {
+			lumaThreshold.makeReferenceTo(pass.lumaThreshold);
+			mulReduce.makeReferenceTo(pass.mulReduce);
+			minReduce.makeReferenceTo(pass.minReduce);
+			maxSpan.makeReferenceTo(pass.maxSpan);
+			texelStep.makeReferenceTo(pass.texelStep);
+		}
+
 	private:
 		ofShader shader;
 		ofParameter<float> lumaThreshold;

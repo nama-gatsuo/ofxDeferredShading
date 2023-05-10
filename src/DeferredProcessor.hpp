@@ -14,10 +14,10 @@ namespace ofxDeferred {
 		void begin(ofCamera& cam, bool bUseOwnShader = false);
 		void end(bool autoDraw = true);
 
-		void draw(float x = 0., float y = 0.) const;
-		void draw(float x, float y, float w, float h) const;
-		float getWidth() const { return width; }
-		float getHeight() const { return height; }
+		void draw(float x = 0.f, float y = 0.f) const override;
+		void draw(float x, float y, float w, float h) const override;
+		float getWidth() const override { return width; }
+		float getHeight() const override { return height; }
 
 		void debugDraw();
 
@@ -29,7 +29,7 @@ namespace ofxDeferred {
 			return pass;
 		}
 
-		unsigned size() const { return passes.size(); }
+		size_t size() const { return passes.size(); }
 		RenderPass::Ptr operator[](unsigned i) const { return passes[i]; }
 		std::vector<RenderPass::Ptr>& getPasses() { return passes; }
 		

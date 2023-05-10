@@ -24,6 +24,7 @@ namespace ofxDeferred {
 		SsaoPass(const glm::vec2& size);
 		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 		void update(const ofCamera& cam);
+		void refer(SsaoPass& pass);
 		void setOcculusionRadius(float radius) { this->radius = radius; }
 		void setDarkness(float darkness) { this->darkness = darkness; }
 		void debugDraw(const glm::vec2& p, const glm::vec2& size) override;

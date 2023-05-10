@@ -22,6 +22,11 @@ namespace ofxDeferred {
 		void update(const ofCamera& cam) override {}
 		void render(const ofTexture& read, ofFbo& write, const GBuffer& gbuffer) override;
 
+		void refer(EdgePass& pass) {
+			enabled.makeReferenceTo(pass.enabled);
+			edgeColor.makeReferenceTo(pass.edgeColor);
+			bgColor.makeReferenceTo(pass.bgColor);
+		}
 	};
 }
 

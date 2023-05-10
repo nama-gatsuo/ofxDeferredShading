@@ -29,6 +29,13 @@ namespace ofxDeferred {
 			x -= mean;
 			return (1. / sqrt(TWO_PI * variance)) * exp(-(x * x) / (2. * variance));
 		}
+		void refer(BlurPass& pass) {
+			enabled.makeReferenceTo(pass.enabled);
+			preShrink.makeReferenceTo(pass.preShrink);
+			blurRes.makeReferenceTo(pass.blurRes);
+			sampleStep.makeReferenceTo(pass.sampleStep);
+		}
+
 	private:
 		inline std::vector<float> createGaussianWeights(int radius, float variance);
 

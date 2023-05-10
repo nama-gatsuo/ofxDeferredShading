@@ -38,6 +38,11 @@ namespace ofxDeferred {
 			begin();
 			end();
 		}
+
+		void refer(BgPass& pass) {
+			enabled.makeReferenceTo(pass.enabled);
+			fillColor.makeReferenceTo(pass.fillColor);
+		}
 	};
 }
 

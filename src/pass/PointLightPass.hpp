@@ -85,7 +85,7 @@ namespace ofxDeferred {
 			return lights[index];
 		}
 		void clear() { lights.clear(); }
-		int getLightsSize() const { return lights.size(); }
+		size_t getLightsSize() const { return lights.size(); }
 		std::vector<ofPtr<PointLight>>& getLights() { return lights; }
 		
 		void update(const ofCamera& cam) override;
@@ -95,6 +95,14 @@ namespace ofxDeferred {
 		
 		void setColorBrightness(float birghtness) {
 			lightBrightness = birghtness;
+		}
+
+		void refer(PointLightPass& pass) {
+			//enabled.makeReferenceTo(pass.enabled);
+			//lightBrightness.makeReferenceTo(pass.lightBrightness);
+			for (auto light : pass.lights) {
+				addLight(light);
+			}
 		}
 	};
 }

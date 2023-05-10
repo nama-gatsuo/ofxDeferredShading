@@ -20,6 +20,20 @@ namespace ofxDeferred {
 		void onTexParamChanged(int&);
 		void onMaxBokehCountChanged(int&);
 
+		void refer(DofPass& pass) {
+			enabled.makeReferenceTo(pass.enabled);
+			endPointsCoC.makeReferenceTo(pass.endPointsCoC);
+			foculRange.makeReferenceTo(pass.foculRange);
+			isActiveBokeh.makeReferenceTo(pass.isActiveBokeh);
+			maxBokehCount.makeReferenceTo(pass.maxBokehCount);
+			bokehCocThres.makeReferenceTo(pass.bokehCocThres);
+			bokehLumThres.makeReferenceTo(pass.bokehLumThres);
+			maxBokehRadius.makeReferenceTo(pass.maxBokehRadius);
+			bokehDepthCutoff.makeReferenceTo(pass.bokehDepthCutoff);
+			bokehShapeId.makeReferenceTo(pass.bokehShapeId);
+			blur.refer(pass.blur);
+		}
+
 	private:
 		void applySmallBlur(const ofTexture& read, ofFbo& write);
 		void calcBokeh(const ofTexture& read);

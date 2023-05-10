@@ -95,6 +95,23 @@ namespace ofxDeferred {
 		void setVolume(bool useVolume) { isVolume.set(useVolume); }
 		void setVolumeStrength(float strength) { volumeStrength.set(strength); }
 
+		void refer(ShadowLightPass& pass) {
+			enabled.makeReferenceTo(pass.enabled);
+			darkness.makeReferenceTo(pass.darkness);
+			ambientColor.makeReferenceTo(pass.ambientColor);
+			diffuseColor.makeReferenceTo(pass.diffuseColor);
+			specularColor.makeReferenceTo(pass.specularColor);
+			pos.makeReferenceTo(pass.pos);
+			center.makeReferenceTo(pass.center);
+			biasScalar.makeReferenceTo(pass.biasScalar);
+			isShading.makeReferenceTo(pass.isShading);
+			isVolume.makeReferenceTo(pass.isVolume);
+			isDrawSun.makeReferenceTo(pass.isDrawSun);
+			isFrontCulling.makeReferenceTo(pass.isFrontCulling);
+			scattering.makeReferenceTo(pass.scattering);
+			volumeStrength.makeReferenceTo(pass.volumeStrength);
+		}
+
 		/*void disableLighting() { isLighting = false; }
 		void enableLighting() { isLighting = true; }*/
 

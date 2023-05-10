@@ -27,5 +27,14 @@ namespace ofxDeferred {
 		void setStrength(float str) { strength = str; }
 
 		void debugDraw(const glm::vec2& p, const glm::vec2& size) override;
+
+		void refer(BloomPass& pass) {
+			enabled.makeReferenceTo(pass.enabled);
+			lumaThres.makeReferenceTo(pass.lumaThres);
+			strength.makeReferenceTo(pass.strength);
+			for (int i = 0; i < numPass; i++) {
+				blurs[i]->refer(*(pass.blurs[i].get()));
+			}
+		}
 	};
 }

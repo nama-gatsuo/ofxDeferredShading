@@ -80,7 +80,7 @@ void ofxDeferred::PointLightPass::drawLights(ofPolyRenderMode mode) {
 		ofSetColor(ofFloatColor(light->diffuseColor->r * s, light->diffuseColor->g * s, light->diffuseColor->b * s));
 		ofPushMatrix();
 		ofTranslate(light->position);
-		ofScale(light->radius / 1000.);
+		ofScale(light->radius / 1000.f);
 		sphere.draw(mode);
 		ofPopMatrix();
 		ofPopStyle();

@@ -8,11 +8,11 @@ SsaoPass::SsaoPass(const glm::vec2& size) :
 	
 	for (int i = 0; i < kernelSize; i++) {
 		glm::vec3 sample = glm::normalize(glm::vec3(
-			ofRandom(-1., 1.), ofRandom(-1., 1.), ofRandom(0., 1.)
+			ofRandom(-1.f, 1.f), ofRandom(-1.f, 1.f), ofRandom(0.f, 1.f)
 		));
-		sample *= ofRandom(1.);
+		sample *= ofRandom(1.f);
 		float s = float(i) / kernelSize;
-		s = 0.1 + s * s * 0.9;
+		s = 0.1f + s * s * 0.9f;
 		sample *= s;
 		ssaoKernel.push_back(sample);
 	}
@@ -20,14 +20,14 @@ SsaoPass::SsaoPass(const glm::vec2& size) :
 	ofFloatPixels pix;
 	pix.allocate(4, 4, ofImageType::OF_IMAGE_COLOR);
 	for (int i = 0; i < 16; i++) {
-		pix[i * 3 + 0] = ofRandom(-1., 1.);
-		pix[i * 3 + 1] = ofRandom(-1., 1.);
-		pix[i * 3 + 2] = 0.;
+		pix[i * 3 + 0] = ofRandom(-1.f, 1.f);
+		pix[i * 3 + 1] = ofRandom(-1.f, 1.f);
+		pix[i * 3 + 2] = 0.f;
 	}
 	noiseTex.setFromPixels(pix);
 	noiseTex.update();
 
-	blur.setSampleStep(1.);
+	blur.setSampleStep(1.f);
 	blur.setBlurRes(3);
 	ssao.allocate(size.x, size.y, GL_R8);
 	ssao.getTexture().setRGToRGBASwizzles(true);
@@ -37,15 +37,22 @@ SsaoPass::SsaoPass(const glm::vec2& size) :
 	calcAo.load(passThruPath, shaderPath + "ao/calcAo.frag");
 	applyAo.load(passThruPath, shaderPath + "ao/applyAo.frag");
 
-	group.add(radius.set("occlusion_radius", 5., 0., 50.));
-	group.add(darkness.set("darkness", 1., 0., 1.));
+	group.add(radius.set("occlusion_radius", 5.f, 0.f, 50.f));
+	group.add(darkness.set("darkness", 1.f, 0.f, 1.f));
 }
 
 void SsaoPass::update(const ofCamera& cam) {
 	projection = cam.getProjectionMatrix(ofRectangle(0, 0, size.x, size.y));
 }
 
-void ofxDeferred::SsaoPass::debugDraw(const glm::vec2& p, const glm::vec2& size) {
+void SsaoPass::refer(SsaoPass& pass) {
+	enabled.makeReferenceTo(pass.enabled);
+	radius.makeReferenceTo(pass.radius);
+	darkness.makeReferenceTo(pass.darkness);
+	blur.refer(pass.blur);
+}
+
+void SsaoPass::debugDraw(const glm::vec2& p, const glm::vec2& size) {
 	ssao.draw(p, size.x, size.y);
 	blurred.draw(p + glm::vec2(size.x, 0), size.x, size.y);
 }

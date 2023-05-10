@@ -6,7 +6,12 @@ namespace ofxDeferred {
 	class FogPass : public RenderPass {
 	public:
 
-		FogPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Fog), t(0.f) {
+		FogPass(const glm::vec2& size) : RenderPass(size, RenderPassRegistry::Fog),
+			t(0.f),
+			farClip(0),
+			nearClip(0),
+			fovy(0)
+		{
 			shader.load(passThruPath, shaderPath + "fog.frag");
 
 			group.add(noiseFogStrength.set("noiseFogStrength", 1.f, 0.f, 1.f));
@@ -57,6 +62,20 @@ namespace ofxDeferred {
 		void setColor(const ofFloatColor& c) { fogColor.set(c); }
 		void setNoiseFogDensity(float f) { noiseFogStrength.set(f); }
 		void setDepthFogDensity(float g) { depthFogStrength.set(g); }
+
+		void refer(FogPass& pass) {
+			enabled.makeReferenceTo(pass.enabled);
+			noiseFogStrength.makeReferenceTo(pass.noiseFogStrength);
+			depthFogStrength.makeReferenceTo(pass.depthFogStrength);
+			fogColor.makeReferenceTo(pass.fogColor);
+			fogAmp.makeReferenceTo(pass.fogAmp);
+			fogFreq.makeReferenceTo(pass.fogFreq);
+			fogOffset.makeReferenceTo(pass.fogOffset);
+			fogCenter.makeReferenceTo(pass.fogCenter);
+			fogPower.makeReferenceTo(pass.fogPower);
+			fogRayStart.makeReferenceTo(pass.fogRayStart);
+		}
+
 	private:
 		ofShader shader;
 		glm::vec2 lensOffset;
