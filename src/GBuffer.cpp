@@ -50,10 +50,20 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
 	ofPushStyle();
 	ofEnableDepthTest();
 	ofDisableAlphaBlending();
+	
+	bUseCommonShader = !bUseOtherShader;
+	if (bUseCommonShader) {
+		shader.begin();
+		shader.setUniform1f("lds", 1.0 / (cam.getFarClip() - cam.getNearClip()));
+	}
 
 }
 
 void GBuffer::end() const {
+
+	if (bUseCommonShader) {
+		shader.end();
+	}
 	ofDisableDepthTest();
 	ofPopStyle();
 

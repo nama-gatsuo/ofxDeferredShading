@@ -24,6 +24,7 @@ namespace ofxDeferred {
 		ofFbo fbo;
 		ofShader shader;
 		ofShader debugShader;
+		bool bUseCommonShader;
 	public:
 
 		enum BufferType {
