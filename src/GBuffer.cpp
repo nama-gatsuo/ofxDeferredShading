@@ -55,6 +55,7 @@ void GBuffer::begin(ofCamera &cam, bool bUseOtherShader) {
 	if (bUseCommonShader) {
 		shader.begin();
 		shader.setUniform1f("lds", 1.0 / (cam.getFarClip() - cam.getNearClip()));
+		shader.setUniform1f("isShadow", 0);
 	}
 
 }

@@ -36,3 +36,5 @@ xcuserdata/
 *.db
 *.pdb
 *.ilk
+
+example/bin/data

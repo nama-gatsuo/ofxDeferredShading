@@ -9,7 +9,7 @@
 
 namespace ofxDeferred {
 
-	const static std::string shaderPath("../../../../../addons/ofxDeferredShading/shader/");
+	const static std::string shaderPath("shaders/deferred/");
 	const static std::string passThruPath(shaderPath + "passThru.vert");
 
 	struct RenderInfo {
